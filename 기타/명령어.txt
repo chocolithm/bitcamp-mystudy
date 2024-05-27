@@ -1,0 +1,8 @@
+Git
+- git clone 저장소경로 : 해당 Remote 저장소 Local에 복제
+
+- git add 경로 : 백업파일 등록 (git add . 사용 시 현재폴더 및 하위폴더 전체 등록)
+- git commit -m 주석 : Local 저장소 커밋
+- git push : Remote 저장소 업로드
+
+- git pull : Remote 저장소 변경내용 다운로드

@@ -1,0 +1,38 @@
+휴가: 5층 행정데스크 방문신청
+wifi: Aipalm202_2G / aipalm_202
+웨일온: 210 866 3081 / 111222
+엄진영 강사님: jinyoung.eom@gmail.com
+Git: https://github.com/eomjinyoung/bitcamp-study
+
+
+2024-05-24(금)
+CPU가 RAM에서 명령과 데이터를 받아 처리, 이때 명령과 데이터를 S/W로 칭함
+
+S/W는 System S/W와 Application S/W로 구분
+  - System S/W: H/W 제어 (OS, 드라이버, 임베디드, IoT 등)
+  - Application S/W
+    > Standalone: 외부 S/W의 도움 없이 실행 (MS Office, Photoshop 등)
+    > Client/Server: 외부 S/W와 통신 필요 (카카오톡, 메일 등)
+       설치형과 비설치형으로 세부 구분되며, 그 중 비설치형인 Web Application이 수업목표
+
+Web Application
+  - 웹브라우저가 웹서버로부터 HTML, CSS, JS, images 등을 내부적으로 다운받아 실행
+  - 정적 파일을 그냥 다운받을 수도 있지만, java 등을 통해 동적으로 작성하여 다운받을 수 있음
+
+CLI: Command Line Interface / 글자를 이용하여 명령을 내리는 방식
+
+
+2024-05-27(월)
+GIT: 소프트웨어 형상관리 시스템 (S/W Configuration Management System / SCM)
+  - 버전관리라고도 칭하는데, 버전이란 변경에 대해 번호를 부여하는 것
+  - clone. add, commit, push, pull
+  - .gitignore을 활용하여 백업대상에서 특정파일 제외 가능
+  - 초기 commit 시 email, username 설정 필요 / 초기 push 시 username, password 설정
+    github에서 access token 발행하여 사용
+
+Virtual Box와 Vagrant 사용하여 가상 OS 띄우기
+
+CPU, 기계어, OS의 관계
+  - CPU는 동일하지만 OS가 다를 경우, 각 OS마다 요구하는 포맷이 다르기 때문에 각각의 OS에 맞추어 컴파일 필요
+  - OS는 동일하지만 CPU가 다를 경우에도 각각의 CPU마다 별도 컴파일 필요
+
