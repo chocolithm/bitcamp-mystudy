@@ -3,11 +3,10 @@ Git 메시지 규칙 정리하기
 초기 commit 시 아래 설정 필요
   git config --global user.email "you@example.com"
   git config --global user.name "Your Name"
-
 access 토큰 발행까지 정리
 
 
 가상머신(virtual box / vagrant)
 
 
-윈도우 GCC 설치 (mingw64 사용)
+윈도우 GCC 설치 (mingw64 사용) - 완료
