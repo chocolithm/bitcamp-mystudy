@@ -6,3 +6,13 @@ Git
 - git push : Remote 저장소 업로드
 
 - git pull : Remote 저장소 변경내용 다운로드
+
+- git reset : commit 취소
+
+
+Gradle
+  gradle init
+  gradle compileJava (컴파일만 수행)
+  gradle build (-i : info 출력)
+  gradle clean
+  gradle run (-q : 결과만 출력)

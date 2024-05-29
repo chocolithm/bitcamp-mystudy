@@ -63,11 +63,63 @@ EE 실행요건
 2. App.의 분산 배치 -> 분산 컴포넌트 제작도구
 
 
+2024-05-29(수)
+VSCode Java 포매팅
+  - 폰트는 네이버 D2Coding 폰트 사용
+  - 저장 시 auto formatting 적용 (구글 기준)
+  - code lens 해제, inlay hint 해제
 
+javac -encoding UTF-8 [파일명]
+  - 소스파일이 어떤 규칙에 따라 문자를 저장했는데 컴파일러에게 알려줌
+javac -d [폴더경로] [파일명]
+  - class 파일을 저장할 폴더 지정
+java -classpath (-cp) [폴더경로] [파일명]
+  - class 파일의 위치를 JVM에게 알려줌
+javac -target [버전] [파일명]
+  - 컴파일 후 실행할 버전을 지정
 
+jdk-17까지는 Windows에서 한글이 들어간 java 파일을 컴파일하려 하면 오류 발생
+  - vscode는 utf-8로 파일을 저장하지만 Windows는 MS949 형식으로 텍스트를 읽기 때문에
+    소스파일이 MS949로 저장되었을 거라 추측 -> 컴파일 오류 발생
+  - javac 에서 -encoding 옵션으로 해결
 
+소스파일 폴더와 컴파일 결과파일 폴더 분리
+  - 통상 소스파일은 src, 컴파일 결과는 bin 하위에 보관
 
+개발관리
+  - 개발관리의 편의를 위해 각 응용프로그램을 프로젝트로 구분
 
+프로젝트와 디렉토리
+  - 프로젝트별로 src 폴더. bin 폴더 구분
+  - src 폴더는 main과 test로 구분, 하위에는 사용언어에 따라 java, kotlin 등으로 구분
 
+Git 저장소와 프로젝트 폴더
+  - 통상 저장소 하나당 프로젝트 하나
+  - 하나의 저장소에 여러 프로젝트를 둘 경우, 저장소 단위로 버전이 관리되기 때문에
+    개별 프로젝트 단위 관리가 어려움
+  - 하나의 메인 프로젝트와 여러 서브 프로젝트를 두는 것은 가능
+
+빌드란?
+  - 소스코드를 실행 가능한 소프트웨어로 변환하는 과정
+  - 컴파일 -> 링크 -> 테스트 -> 패키징 -> 배포
+     API 문서 생성 포함
+  - 자바는 빌드도구가 JDK를 통해 컴파일, API 문서생성, 단위테스트, 패키징(Jar) 등을 수행
+
+  Ant : build.xml
+  Maven : pom.xml / 의존 라이브러리 관리기능 추가
+  Gradle : build.gradle / 빌드 과정을 정교하게 제어할 수 있도록 프로그래밍 언어로 빌드스크립트 작성
+              gradle은 maven 호환이기 때문에 의존 라이브러리 저장소 사용 가능
+
+  jar : java archive / 자바 실행과 관련된 파일을 한 파일로 묶은 것
+  war : web archive
+  tar : tape archive
+
+  DSL : Domain-Specific Language
+
+gradle init
+gradle compileJava (컴파일만 수행)
+gradle build (-i : info 출력)
+gradle clean
+gradle run (-q : 결과만 출력)
 
 
