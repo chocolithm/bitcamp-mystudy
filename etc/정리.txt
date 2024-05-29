@@ -70,7 +70,7 @@ VSCode Java 포매팅
   - code lens 해제, inlay hint 해제
 
 javac -encoding UTF-8 [파일명]
-  - 소스파일이 어떤 규칙에 따라 문자를 저장했는데 컴파일러에게 알려줌
+  - 소스파일이 어떤 규칙에 따라 문자를 저장했는지 컴파일러에게 알려줌
 javac -d [폴더경로] [파일명]
   - class 파일을 저장할 폴더 지정
 java -classpath (-cp) [폴더경로] [파일명]
