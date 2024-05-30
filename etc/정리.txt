@@ -123,3 +123,13 @@ gradle clean
 gradle run (-q : 결과만 출력)
 
 
+2024-05-30(목)
+Java Class 파일은 16진수 바이트코드로 구성
+  - sublime 텍스트 에디터를 사용해 HelloWorld.class 직접 작성 체험
+  - javap = 클래스파일 분석
+
+자바 기초 프로그래밍
+  - 명령문 -> 함수 -> 클래스 -> 패키지 -> 모듈
+  - 라이브러리 : 다른 개발자가 만들어 컴파일해 둔 코드 (.lib, .dll - Windows, .so - Linux, Unix)
+  - 로더 : OS가 프로그램 실행 시 기계어를 메모리에 로딩해주고 main()을 호출하는 보조코드
+  - C언어는 소스파일을 컴파일한 후 라이브러리와 묶어 실행파일로 linking

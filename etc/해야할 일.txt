@@ -5,16 +5,18 @@ Git 메시지 규칙 정리하기
   git config --global user.name "Your Name"
 access 토큰 발행까지 정리
 
-
 가상머신(virtual box / vagrant)
-
-
-윈도우 GCC 설치 (mingw64 사용) - 완료
-
 
 VS Java Formatting
 
-빌드도구 & gradle
+바이트코드로 Hello World 작성하기
+https://medium.com/@davethomas_9528/writing-hello-world-in-java-byte-code-34f75428e0ad
+https://docs.oracle.com/javase/specs/jvms/se21/html/jvms-4.html#jvms-4.4
+
+자바의 시작점 (entry point)
 
 
-warning: in the working copy of 'java-lang/gradle/wrapper/gradle-wrapper.properties', LF will be replaced by CRLF the next time Git touches it
+
+빌드도구 & gradle - 완료
+윈도우 GCC 설치 (mingw64 사용) - 완료
+warning: in the working copy of 'java-lang/gradle/wrapper/gradle-wrapper.properties', LF will be replaced by CRLF the next time Git touches it - 완료
