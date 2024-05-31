@@ -133,3 +133,35 @@ Java Class 파일은 16진수 바이트코드로 구성
   - 라이브러리 : 다른 개발자가 만들어 컴파일해 둔 코드 (.lib, .dll - Windows, .so - Linux, Unix)
   - 로더 : OS가 프로그램 실행 시 기계어를 메모리에 로딩해주고 main()을 호출하는 보조코드
   - C언어는 소스파일을 컴파일한 후 라이브러리와 묶어 실행파일로 linking
+
+
+2024-05-31(금)
+  - 어셈블리 한줄은 기계어 한줄과 매핑되기에, 통상 어셈블리 코딩을 기계어 코딩이라 칭함
+  - C언어 컴파일 시 gcc는 어셈블리어로 컴파일하고, 어셈블러가 이를 기계어로 컴파일함
+  - Java에서는 bytecode viewer에서 보이는 내용이 어셈블리어 역할을 암
+
+자바 패키지
+  - 클래스를 분류하는 문법
+
+주석
+  - /* */ traditional comment와 // end-of-line comment
+  - /**  */ 형식으로 주석을 사용하면 javadoc 실행 시 API 문서를 만듦
+  * API는 클래스나 메소드의 설명이 담긴 Interface 문서
+javadoc -encoding UTF-8 -charset UTF-8 -d docs -sourcepath app/src/main/java com.eomcs.lang.ex02
+
+Annotation
+  - 컴파일러나 JVM에게 전달하는 특별한 정보
+  - annotation 주석은 .class 파일에 포함될 수 있음
+
+Literal
+  - 값을 표현한 것
+  - 상세 설명은 pdf 참고
+  - 2진수는 0b, 8진수는 0, 16진수는 0x를 맨 앞에 붙여 표기
+  - 부동소수점 지수 표기법: 숫자 뒤에 e + 지수
+
+
+
+
+
+
+

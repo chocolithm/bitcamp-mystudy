@@ -1,4 +1,19 @@
 퍼블릭 클래스는 소스파일명과 일치해야 하며, 소스파일에 한 개만 존재해야 함
   - 퍼블릭 클래스 안에 별도의 클래스 블록이 있다면, 컴파일 시 별도의 클래스 파일이 생성됨
-  - 즉 클래스파일이 소스파일과 매치되지 않아 클래스파일이 선언된 소스파일을 찾기 어려울 수 있으므로
+  - 즉 클래스파일이 소스파일과 매치되지 않아 클래스파일이 선언된 소스파일을 찾기 어려우므로
     소스파일과 클래스파일은 1대1로 매칭
+
+패키지 내 소스파일을 컴파일 할 때에 javac -d 옵션은 main까지,
+java -cp 옵션도 main까지 준 후 실행파일에 패키지 경로 작성
+  - javac -d app/build/classes/java/main app/src/main/java/study/lang/Test.java
+  - java -cp app/build/classes/java/main study.lang.Test   <- 패키지는 .으로 구분
+
+클래스. 변수. 메소드 등 작성 시 javadoc 주석 달기
+
+
+String
+
+
+
+Arrays
+  - import java.util.Arrays;
