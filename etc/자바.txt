@@ -11,9 +11,22 @@ java -cp 옵션도 main까지 준 후 실행파일에 패키지 경로 작성
 클래스. 변수. 메소드 등 작성 시 javadoc 주석 달기
 
 
+정규표현식
+\\s+ : 여러 개 공백
+
+
 String
-
-
+  - String.equals : String끼리 비교할 때
+  - String.substring(start, end) : 문자열 일부분
+  - String.toUpperCase() : 대문자로 변환
+  - String.toLowerCase() : 소문자로 변환
+  - String.split("구분자") : 구분자로 나눈 배열 반환
 
 Arrays
   - import java.util.Arrays;
+  - Arrays.sort(arr) : 배열 정렬
+
+
+Collections
+  - import java.util.Collections;
+  - Collections.frequency(Arrays.asList(arr), "찾을값") : 배열 내에서 특정 값 개수를 찾을 때

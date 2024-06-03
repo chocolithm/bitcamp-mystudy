@@ -17,6 +17,8 @@ https://docs.oracle.com/javase/specs/jvms/se21/html/jvms-4.html#jvms-4.4
 
 자바 리터럴
 
+문자 인코딩 정리
+
 
 빌드도구 & gradle - 완료
 윈도우 GCC 설치 (mingw64 사용) - 완료
