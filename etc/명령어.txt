@@ -16,3 +16,4 @@ Gradle
   gradle build (-i : info 출력)
   gradle clean
   gradle run (-q : 결과만 출력)
+  gradle tasks (--all : 상세히 출력)

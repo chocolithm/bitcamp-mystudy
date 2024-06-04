@@ -22,6 +22,10 @@ String
   - String.toLowerCase() : 소문자로 변환
   - String.split("구분자") : 구분자로 나눈 배열 반환
 
+
+Math
+
+
 Arrays
   - import java.util.Arrays;
   - Arrays.sort(arr) : 배열 정렬
