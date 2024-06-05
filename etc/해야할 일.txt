@@ -19,6 +19,10 @@ https://docs.oracle.com/javase/specs/jvms/se21/html/jvms-4.html#jvms-4.4
 
 문자 인코딩 정리
 
+ANSI Escape 문자로 문자 스타일 주기
+  - \033[ + 속성 + m + 출력내용 + \033[0m
+  - 1 볼드체, 31 빨간색, 여러 속성 사이에는 세미콜론
+
 
 빌드도구 & gradle - 완료
 윈도우 GCC 설치 (mingw64 사용) - 완료

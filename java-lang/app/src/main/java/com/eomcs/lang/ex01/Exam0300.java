@@ -27,4 +27,5 @@ class Exam0300 {
 // 2) 실행하기
 // - $ java -cp bin/main com.eomcs.lang.ex01.Exam0300
 
-// -> jdk18 이후는 기본 문자집합이 utf-8로 지정되어 있어 오류 발생하지 않음
+// Java SE 18 버전부터는 기본 인코딩을 UTF-8 가정한다.
+// 따라서 Windows OS에서 -encoding 옵션을 붙일 필요가 없다.

@@ -21,6 +21,10 @@ String
   - String.toUpperCase() : 대문자로 변환
   - String.toLowerCase() : 소문자로 변환
   - String.split("구분자") : 구분자로 나눈 배열 반환
+  - String.join("구분자", "배열") : 배열을 구분자로 합쳐 반환
+  - String.valueOf(대상값) : 대상값을 String으로 변환
+  - String.contains("문자") : 포함여부 true/false
+  - String.matches("문자") : 포함여부 true/false / 정규표현식 가능
 
 
 Math
