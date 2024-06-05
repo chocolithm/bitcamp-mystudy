@@ -38,3 +38,10 @@ Arrays
 Collections
   - import java.util.Collections;
   - Collections.frequency(Arrays.asList(arr), "찾을값") : 배열 내에서 특정 값 개수를 찾을 때
+
+
+Scanner
+  - new Scanner(System.in)
+  - Scanner.hasNextLine()
+  - Scanner.nextLine()
+  - Scanner.close()
