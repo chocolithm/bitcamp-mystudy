@@ -271,3 +271,23 @@ IntelliJ
 Statement & Expression
   - Statement : 어떤 작업을 수행하는 단위
   - Expression : 값을 반환하는 문장
+
+
+2024-06-10(월)
+조건문
+  - 자바에는 if ~ else if ~ else 구문이 존재하지 않으며, if ~ else 문을 줄맞춤한 것에 불과
+  - switch case 문에서 case 값으로는 리터럴만 가능 / 변수는 컴파일 시 값이 정해지지 않아 불가
+    하지만 상수는 가능 (final int GUEST = 0;)  com.eomcs.lang.ex06.Exam0241 참고
+
+배열
+  - 배열의 각 요소에는 메모리의 주소가 저장됨 / 각 요소는 객체 또는 인스턴스라 칭함
+  - 배열은 배열 메모리의 주소를 저장하는 변수로서, 레퍼런스라고 칭함
+  - 배열의 최대 크기는 Integer.MAX_VALUE - 2 와 같음 (VM Limit)
+
+배열 레퍼런스와 가비지
+  - 메모리 사용량이 일정수준 이상 증가하면, 사용하지 않는 객체를 JVM이 자동 감지하여 제거
+  - Reference Counting : 객체의 참조 횟수를 추적하여 0이 되면 제거
+  - Reference Tracing : 참조 추적 알고리즘을 사용하여 객체의 참조여부 분석
+
+
+2024-06-11(화)
