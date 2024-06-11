@@ -19,6 +19,7 @@ java -cp 옵션도 main까지 준 후 실행파일에 패키지 경로 작성
 
 String
   - String.equals : String끼리 비교할 때
+  - String.equalsIgnoreCase : 대소문자 구분 없이 비교
   - String.substring(start, end) : 문자열 일부분
   - String.toUpperCase() : 대문자로 변환
   - String.toLowerCase() : 소문자로 변환
@@ -27,6 +28,7 @@ String
   - String.valueOf(대상값) : 대상값을 String으로 변환
   - String.contains("문자") : 포함여부 true/false
   - String.matches("문자") : 포함여부 true/false / 정규표현식 가능
+  - String.intern() : 상수풀에 해당 String 객체가 있으면 그 주소를, 없으면 생성 후 주소를 반환
 
 
 Integer
@@ -51,7 +53,11 @@ Collections
 Scanner
   - new Scanner(System.in)
   - Scanner.hasNextLine()
-  - Scanner.nextLine()
+  - Scanner.nextLine() : 줄바꿈코드까지 읽은 후 줄바꿈코드를 제거한 값을 반환
+  - Scanner.nextFloat() : 공백 전까지 읽은 후 공백 제거 및 Float로 변환하여 반환
+  - Scanner.nextInt() : 공백 전까지 읽은 후 공백 제거 및 int로 변환하여 반환
+  - Scanner.nextBoolean() : 공백 전까지 읽은 후 공백 제거 및 Boolean로 변환하여 반환
+  - Scanner.next() : 공백 전까지 읽은 후 공백 제거하여 변환하여 반환
   - Scanner.close()
 
 
