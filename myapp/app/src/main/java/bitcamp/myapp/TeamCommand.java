@@ -42,21 +42,12 @@ public class TeamCommand {
       }
 
       String userName = UserCommand.users[userNo - 1].name;
-      int included = 0;
+      boolean included = isUserIncluded(team, userName);
 
-      for (int i = 0; i < team.userCnt; i++) {
-        if (team.users[i].equals(userName)) {
-          included = 1;
-          break;
-        }
-      }
-
-      if (included == 0) {
-        team.users[team.userCnt] = userName;
-        team.userCnt++;
-        System.out.printf("'%s'님을 추가했습니다.\n", userName);
-      } else {
+      if (included) {
         System.out.printf("'%s'님은 현재 팀원입니다.\n", userName);
+      } else {
+        addUser(team, userName);
       }
     }
   }
@@ -91,7 +82,7 @@ public class TeamCommand {
     }
 
     Team team = teams[teamNo - 1];
-    String isDelete = "";
+    String isDelete;
     team.name = Prompt.input(String.format("팀명(%s)? ", team.name));
 
     // 팀원 삭제
@@ -122,21 +113,12 @@ public class TeamCommand {
       }
 
       String userName = UserCommand.users[userNo - 1].name;
-      int included = 0;
+      boolean included = isUserIncluded(team, userName);
 
-      for (int i = 0; i < team.userCnt; i++) {
-        if (team.users[i].equals(userName)) {
-          included = 1;
-          break;
-        }
-      }
-
-      if (included == 0) {
-        team.users[team.userCnt] = userName;
-        team.userCnt++;
-        System.out.printf("'%s'님을 추가했습니다.\n", userName);
-      } else {
+      if (included) {
         System.out.printf("'%s'님은 현재 팀원입니다.\n", userName);
+      } else {
+        addUser(team, userName);
       }
     }
   }
@@ -153,5 +135,20 @@ public class TeamCommand {
     }
     teams[--teamLength] = null;
     System.out.println("삭제했습니다.");
+  }
+
+  static void addUser(Team team, String userName) {
+    team.users[team.userCnt] = userName;
+    team.userCnt++;
+    System.out.printf("'%s'님을 추가했습니다.\n", userName);
+  }
+
+  static boolean isUserIncluded(Team team, String userName) {
+    for (int i = 0; i < team.userCnt; i++) {
+      if (team.users[i].equals(userName)) {
+        return true;
+      }
+    }
+    return false;
   }
 }
