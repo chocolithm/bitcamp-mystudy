@@ -1,13 +1,17 @@
 package bitcamp.myapp;
 
-public class App {
+import java.util.Scanner;
+
+public class App05 {
+
+  static Scanner keyboardScanner = new Scanner(System.in);
 
   static String[] mainMenus = new String[] {"회원", "팀", "프로젝트", "게시판", "도움말", "종료"};
   static String[][] subMenus = {
-      {"등록", "목록", "조회", "변경", "삭제"},
-      {"등록", "목록", "조회", "변경", "삭제"},
-      {"등록", "목록", "조회", "변경", "삭제"},
-      {"등록", "목록", "조회", "변경", "삭제"}
+      {"등록a", "목록", "조회", "변경", "삭제"},
+      {"등록b", "목록", "조회", "변경", "삭제"},
+      {"등록c", "목록", "조회", "변경", "삭제"},
+      {"등록d", "목록", "조회", "변경", "삭제"}
   };
 
   public static void main(String[] args) {
@@ -17,7 +21,7 @@ public class App {
     String command;
     while (true) {
       try {
-        command = Prompt.prompt("메인>");
+        command = prompt("메인");
 
         if (command.equals("menu")) {
           printMenu();
@@ -44,7 +48,7 @@ public class App {
 
     System.out.println("종료합니다.");
 
-    Prompt.close();
+    keyboardScanner.close();
   }
 
   static void printMenu() {
@@ -77,6 +81,11 @@ public class App {
     System.out.println("9. 이전");
   }
 
+  static String prompt(String title) {
+    System.out.printf("%s> ", title);
+    return keyboardScanner.nextLine();
+  }
+
   static boolean isValidateMenu(int menuNo, String[] menus) {
     return menuNo >= 1 && menuNo <= menus.length;
   }
@@ -88,7 +97,7 @@ public class App {
   static void processMenu(String menuTitle, String[] menus) {
     printSubMenu(menuTitle, menus);
     while (true) {
-      String command = Prompt.prompt("메인/" + menuTitle + ">");
+      String command = prompt("메인/" + menuTitle);
       if (command.equals("menu")) {
         printSubMenu(menuTitle, menus);
         continue;
@@ -102,40 +111,11 @@ public class App {
         if (subMenuTitle == null) {
           System.out.println("유효한 메뉴 번호가 아닙니다.");
         } else {
-          System.out.printf("[%s]\n", subMenuTitle);
-
-          switch (menuTitle) {
-            case "회원":
-              UserCommand.executeUserCommand(subMenuTitle);
-              break;
-            case "팀":
-              executeTeamCommand(subMenuTitle);
-              break;
-            case "프로젝트":
-              executeProjectCommand(subMenuTitle);
-              break;
-            case "게시판":
-              executeBoardCommand(subMenuTitle);
-              break;
-            default:
-              System.out.println("해당 메뉴가 없습니다.");
-          }
+          System.out.println(subMenuTitle);
         }
       } catch (NumberFormatException ex) {
         System.out.println("숫자로 메뉴 번호를 입력하세요.");
       }
     }
-  }
-
-  static void executeTeamCommand(String subMenuTitle) {
-
-  }
-
-  static void executeProjectCommand(String subMenuTitle) {
-
-  }
-
-  static void executeBoardCommand(String subMenuTitle) {
-
   }
 }
