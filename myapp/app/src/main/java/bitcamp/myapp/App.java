@@ -17,7 +17,7 @@ public class App {
     String command;
     while (true) {
       try {
-        command = Prompt.prompt("메인>");
+        command = Prompt.input("메인>");
 
         if (command.equals("menu")) {
           printMenu();
@@ -88,7 +88,7 @@ public class App {
   static void processMenu(String menuTitle, String[] menus) {
     printSubMenu(menuTitle, menus);
     while (true) {
-      String command = Prompt.prompt("메인/" + menuTitle + ">");
+      String command = Prompt.input("메인/" + menuTitle + ">");
       if (command.equals("menu")) {
         printSubMenu(menuTitle, menus);
         continue;
@@ -109,7 +109,7 @@ public class App {
               UserCommand.executeUserCommand(subMenuTitle);
               break;
             case "팀":
-              executeTeamCommand(subMenuTitle);
+              TeamCommand.executeTeamCommand(subMenuTitle);
               break;
             case "프로젝트":
               executeProjectCommand(subMenuTitle);
@@ -125,10 +125,6 @@ public class App {
         System.out.println("숫자로 메뉴 번호를 입력하세요.");
       }
     }
-  }
-
-  static void executeTeamCommand(String subMenuTitle) {
-
   }
 
   static void executeProjectCommand(String subMenuTitle) {

@@ -29,10 +29,10 @@ public class UserCommand {
 
   static void addUser() {
     User user = new User();
-    user.name = Prompt.prompt("이름? ");
-    user.email = Prompt.prompt("이메일? ");
-    user.password = Prompt.prompt("암호? ");
-    user.tel = Prompt.prompt("연락처? ");
+    user.name = Prompt.input("이름? ");
+    user.email = Prompt.input("이메일? ");
+    user.password = Prompt.input("암호? ");
+    user.tel = Prompt.input("연락처? ");
     users[userLength++] = user;
     System.out.println("등록되었습니다.");
   }
@@ -47,7 +47,7 @@ public class UserCommand {
   }
 
   static void viewUser() {
-    int userNo = Integer.parseInt(Prompt.prompt("회원번호? "));
+    int userNo = Integer.parseInt(Prompt.input("회원번호? "));
     if (userNo < 1 || userNo > userLength) {
       System.out.println("없는 번호입니다.");
       return;
@@ -59,21 +59,21 @@ public class UserCommand {
   }
 
   static void updateUser() {
-    int userNo = Integer.parseInt(Prompt.prompt("회원번호? "));
+    int userNo = Integer.parseInt(Prompt.input("회원번호? "));
     if (userNo < 1 || userNo > userLength) {
       System.out.println("없는 번호입니다.");
       return;
     }
     User user = users[userNo - 1];
-    user.name = Prompt.prompt(String.format("이름(%s)? ", user.name));
-    user.email = Prompt.prompt(String.format("이메일(%s)? ", user.email));
-    user.password = Prompt.prompt("암호? ");
-    user.tel = Prompt.prompt(String.format("연락처(%s)? ", user.tel));
+    user.name = Prompt.input(String.format("이름(%s)? ", user.name));
+    user.email = Prompt.input(String.format("이메일(%s)? ", user.email));
+    user.password = Prompt.input("암호? ");
+    user.tel = Prompt.input(String.format("연락처(%s)? ", user.tel));
     System.out.println("변경되엇습니다.");
   }
 
   static void deleteUser() {
-    int userNo = Integer.parseInt(Prompt.prompt("회원번호? "));
+    int userNo = Integer.parseInt(Prompt.input("회원번호? "));
     if (userNo < 1 || userNo > userLength) {
       System.out.println("없는 번호입니다.");
       return;
