@@ -1,4 +1,4 @@
-package study.oop.clazz.vo;
+package study.oop.clazz.domain;
 
 public class Score {
   private String name;
@@ -13,20 +13,24 @@ public class Score {
     this.kor = kor;
     this.eng = eng;
     this.math = math;
+    this.compute();
   }
 
   public void compute() {
     this.sum = this.kor + this.eng + this.math;
     this.aver = (float) this.sum / 3;
-    this.compute();
   }
 
-  public int getSum() {
-    return this.sum;
+  public String getName() {
+    return name;
   }
 
-  public float getAver() {
-    return this.aver;
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public int getKor() {
+    return kor;
   }
 
   public void setKor(int kor) {
@@ -34,8 +38,8 @@ public class Score {
     this.compute();
   }
 
-  public int getKor() {
-    return this.kor;
+  public int getEng() {
+    return eng;
   }
 
   public void setEng(int eng) {
@@ -43,8 +47,8 @@ public class Score {
     this.compute();
   }
 
-  public int getEng() {
-    return this.eng;
+  public int getMath() {
+    return math;
   }
 
   public void setMath(int math) {
@@ -52,15 +56,11 @@ public class Score {
     this.compute();
   }
 
-  public int getMath() {
-    return this.math;
+  public int getSum() {
+    return sum;
   }
 
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getName() {
-    return this.name;
+  public float getAver() {
+    return aver;
   }
 }

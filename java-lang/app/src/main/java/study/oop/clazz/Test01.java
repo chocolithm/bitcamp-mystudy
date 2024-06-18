@@ -1,5 +1,7 @@
 package study.oop.clazz;
 
+import study.oop.clazz.util.Calculator;
+
 // 연습: 클래스 문법을 메서드 분류하는 용도로 사용
 // 1) 메서드 분류
 // 2) static 필드 사용
@@ -27,10 +29,9 @@ public class Test01 {
     System.out.printf("result = %d\n", c1.getResult());
 
     c1.clear();
-    c1.plus(2);
+    c1.plus(4);
+    c1.minus(2);
     c1.multiple(7);
-    c1.divide(3);
-
     System.out.printf("result2 = %d\n", c1.getResult());
   }
 }
