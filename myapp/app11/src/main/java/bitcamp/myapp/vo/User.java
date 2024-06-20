@@ -2,6 +2,7 @@ package bitcamp.myapp.vo;
 
 // 메모리 설계도
 public class User {
+
   private static int seqNo;
 
   private int no;
