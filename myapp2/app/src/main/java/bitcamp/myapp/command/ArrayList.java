@@ -49,4 +49,8 @@ public class ArrayList {
     }
     return list[index];
   }
+
+  public boolean contains(Object obj) {
+    return indexOf(obj) != -1;
+  }
 }
