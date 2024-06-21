@@ -35,21 +35,19 @@ public class UserCommand {
     user.setPassword(Prompt.input("암호?"));
     user.setTel(Prompt.input("연락처?"));
     user.setNo(User.getNextSeqNo());
-    userList.add(user);
-    System.out.println("등록했습니다.");
+    this.userList.add(user);
   }
 
   private void listUser() {
     System.out.println("번호 이름 이메일");
-    for (Object obj : userList.toArray()) {
-      User user = (User) obj;
+    for (User user : this.userList.toArray()) {
       System.out.printf("%d %s %s\n", user.getNo(), user.getName(), user.getEmail());
     }
   }
 
   private void viewUser() {
     int userNo = Prompt.inputInt("회원번호?");
-    User user = userList.findByNo(userNo);
+    User user = this.userList.findByNo(userNo);
     if (user == null) {
       System.out.println("없는 회원입니다.");
       return;
@@ -62,7 +60,7 @@ public class UserCommand {
 
   private void updateUser() {
     int userNo = Prompt.inputInt("회원번호?");
-    User user = userList.findByNo(userNo);
+    User user = this.userList.findByNo(userNo);
     if (user == null) {
       System.out.println("없는 회원입니다.");
       return;
@@ -77,16 +75,15 @@ public class UserCommand {
 
   private void deleteUser() {
     int userNo = Prompt.inputInt("회원번호?");
-    User deletedUser = userList.findByNo(userNo);
-    if (deletedUser != null) {
-      userList.remove(userList.indexOf(deletedUser));
-      System.out.printf("'%s' 회원을 삭제했습니다.\n", deletedUser.getNo());
+    User user = this.userList.delete(userNo);
+    if (user != null) {
+      System.out.printf("'%s' 회원을 삭제했습니다.", user.getNo());
     } else {
       System.out.println("없는 회원입니다.");
     }
   }
 
   public UserList getUserList() {
-    return userList;
+    return this.userList;
   }
 }

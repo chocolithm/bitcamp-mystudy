@@ -11,19 +11,19 @@ public class UserCommand {
     System.out.printf("[%s]\n", command);
     switch (command) {
       case "등록":
-        this.addUser();
+        addUser();
         break;
       case "조회":
-        this.viewUser();
+        viewUser();
         break;
       case "목록":
-        this.listUser();
+        listUser();
         break;
       case "변경":
-        this.updateUser();
+        updateUser();
         break;
       case "삭제":
-        this.deleteUser();
+        deleteUser();
         break;
     }
   }
@@ -72,7 +72,7 @@ public class UserCommand {
     user.setEmail(Prompt.input("이메일(%s)?", user.getEmail()));
     user.setPassword(Prompt.input("암호?"));
     user.setTel(Prompt.input("연락처(%s)?", user.getTel()));
-    System.out.println("변경했습니다.");
+    System.out.println("변경 했습니다.");
   }
 
   private void deleteUser() {
@@ -80,7 +80,7 @@ public class UserCommand {
     User deletedUser = userList.findByNo(userNo);
     if (deletedUser != null) {
       userList.remove(userList.indexOf(deletedUser));
-      System.out.printf("'%s' 회원을 삭제했습니다.\n", deletedUser.getNo());
+      System.out.printf("'%s' 회원을 삭제 했습니다.\n", deletedUser.getName());
     } else {
       System.out.println("없는 회원입니다.");
     }

@@ -2,7 +2,6 @@ package bitcamp.myapp.command;
 
 import bitcamp.myapp.util.Prompt;
 import bitcamp.myapp.vo.Board;
-
 import java.util.Date;
 
 public class BoardCommand {
@@ -13,19 +12,19 @@ public class BoardCommand {
     System.out.printf("[%s]\n", command);
     switch (command) {
       case "등록":
-        this.addBoard();
+        addBoard();
         break;
       case "조회":
-        this.viewBoard();
+        viewBoard();
         break;
       case "목록":
-        this.listBoard();
+        listBoard();
         break;
       case "변경":
-        this.updateBoard();
+        updateBoard();
         break;
       case "삭제":
-        this.deleteBoard();
+        deleteBoard();
         break;
     }
   }
@@ -37,7 +36,6 @@ public class BoardCommand {
     board.setCreatedDate(new Date());
     board.setNo(Board.getNextSeqNo());
     boardList.add(board);
-    System.out.println("등록됐습니다.");
   }
 
   private void listBoard() {
@@ -83,9 +81,10 @@ public class BoardCommand {
     Board deletedBoard = boardList.findByNo(boardNo);
     if (deletedBoard != null) {
       boardList.remove(boardList.indexOf(deletedBoard));
-      System.out.printf("%d번 글을 삭제했습니다.\n", deletedBoard.getNo());
+      System.out.printf("%d번 게시글을 삭제 했습니다.\n", deletedBoard.getNo());
     } else {
       System.out.println("없는 게시글입니다.");
     }
   }
+
 }
