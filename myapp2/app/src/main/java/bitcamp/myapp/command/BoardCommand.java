@@ -12,39 +12,46 @@ public class BoardCommand {
     System.out.printf("[%s]\n", command);
     switch (command) {
       case "등록":
-        addBoard();
+        this.addBoard();
         break;
       case "조회":
-        viewBoard();
+        this.viewBoard();
         break;
       case "목록":
-        listBoard();
+        this.listBoard();
         break;
       case "변경":
-        updateBoard();
+        this.updateBoard();
         break;
       case "삭제":
-        deleteBoard();
+        this.deleteBoard();
         break;
     }
   }
 
-  private void addBoard() {
-    Board board = new Board();
-    board.setTitle(Prompt.input("제목?"));
-    board.setContent(Prompt.input("내용?"));
-    board.setCreatedDate(new Date());
-    board.setNo(Board.getNextSeqNo());
-    boardList.add(board);
+  private void deleteBoard() {
+    int boardNo = Prompt.inputInt("게시글 번호?");
+    Board deletedBoard = boardList.findByNo(boardNo);
+    if (deletedBoard != null) {
+      boardList.remove(boardList.indexOf(deletedBoard));
+      System.out.printf("%d번 게시글을 삭제 했습니다.\n", deletedBoard.getNo());
+    } else {
+      System.out.println("없는 게시글입니다.");
+    }
   }
 
-  private void listBoard() {
-    System.out.println("번호 제목 작성일 조회수");
-    for (Object obj : boardList.toArray()) {
-      Board board = (Board) obj;
-      System.out.printf("%d %s %tY-%3$tm-%3$td %d\n",
-          board.getNo(), board.getTitle(), board.getCreatedDate(), board.getViewCount());
+  private void updateBoard() {
+    int boardNo = Prompt.inputInt("게시글 번호?");
+    Board board = boardList.findByNo(boardNo);
+    if (board == null) {
+      System.out.println("없는 게시글입니다.");
+      return;
     }
+
+    board.setViewCount(board.getViewCount() + 1);
+    board.setTitle(Prompt.input("제목(%s)?", board.getTitle()));
+    board.setContent(Prompt.input("내용(%s)?", board.getContent()));
+    System.out.println("변경 했습니다.");
   }
 
   private void viewBoard() {
@@ -62,29 +69,22 @@ public class BoardCommand {
     System.out.printf("조회수: %d\n", board.getViewCount());
   }
 
-  private void updateBoard() {
-    int boardNo = Prompt.inputInt("게시글 번호?");
-    Board board = boardList.findByNo(boardNo);
-    if (board == null) {
-      System.out.println("없는 게시글입니다.");
-      return;
+  private void listBoard() {
+    System.out.println("번호 제목 작성일 조회수");
+    for (Object obj : boardList.toArray()) {
+      Board board = (Board) obj;
+      System.out.printf("%d %s %tY-%3$tm-%3$td %d\n",
+          board.getNo(), board.getTitle(), board.getCreatedDate(), board.getViewCount());
     }
-
-    board.setViewCount(board.getViewCount() + 1);
-    board.setTitle(Prompt.input("제목(%s)?", board.getTitle()));
-    board.setContent(Prompt.input("내용(%s)?", board.getContent()));
-    System.out.println("변경 했습니다.");
   }
 
-  private void deleteBoard() {
-    int boardNo = Prompt.inputInt("게시글 번호?");
-    Board deletedBoard = boardList.findByNo(boardNo);
-    if (deletedBoard != null) {
-      boardList.remove(boardList.indexOf(deletedBoard));
-      System.out.printf("%d번 게시글을 삭제 했습니다.\n", deletedBoard.getNo());
-    } else {
-      System.out.println("없는 게시글입니다.");
-    }
+  private void addBoard() {
+    Board board = new Board();
+    board.setTitle(Prompt.input("제목?"));
+    board.setContent(Prompt.input("내용?"));
+    board.setCreatedDate(new Date());
+    board.setNo(Board.getNextSeqNo());
+    boardList.add(board);
   }
 
 }

@@ -1,11 +1,20 @@
 package bitcamp.myapp.command;
 
+import java.util.Arrays;
+
 public class ArrayList {
-  private static final int MAX_SIZE = 100;
+
+  private static final int MAX_SIZE = 3;
+
   private Object[] list = new Object[MAX_SIZE];
   private int size = 0;
 
   public void add(Object obj) {
+    if(size == list.length) {
+      Object[] arr = new Object[size * 2];
+      arr = Arrays.copyOf(list, size * 2);
+      list = arr;
+    }
     list[size++] = obj;
   }
 
@@ -13,8 +22,7 @@ public class ArrayList {
     if (index < 0 || index >= size) {
       return null;
     }
-
-    Object deletedObj = get(index);
+    Object deletedObj = list[index];
     for (int i = index + 1; i < size; i++) {
       list[i - 1] = list[i];
     }
@@ -47,10 +55,12 @@ public class ArrayList {
     if (index < 0 || index >= size) {
       return null;
     }
+    java.util.ArrayList l;
     return list[index];
   }
 
   public boolean contains(Object obj) {
     return indexOf(obj) != -1;
   }
+
 }

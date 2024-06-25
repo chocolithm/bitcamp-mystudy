@@ -11,19 +11,19 @@ public class UserCommand {
     System.out.printf("[%s]\n", command);
     switch (command) {
       case "등록":
-        addUser();
+        this.addUser();
         break;
       case "조회":
-        viewUser();
+        this.viewUser();
         break;
       case "목록":
-        listUser();
+        this.listUser();
         break;
       case "변경":
-        updateUser();
+        this.updateUser();
         break;
       case "삭제":
-        deleteUser();
+        this.deleteUser();
         break;
     }
   }
@@ -35,13 +35,12 @@ public class UserCommand {
     user.setPassword(Prompt.input("암호?"));
     user.setTel(Prompt.input("연락처?"));
     user.setNo(User.getNextSeqNo());
-    userList.add(user);
-    System.out.println("등록했습니다.");
+    userList.append(user);
   }
 
   private void listUser() {
     System.out.println("번호 이름 이메일");
-    for (Object obj : userList.toArray()) {
+    for (Object obj : userList.getArray()) {
       User user = (User) obj;
       System.out.printf("%d %s %s\n", user.getNo(), user.getName(), user.getEmail());
     }
@@ -79,7 +78,7 @@ public class UserCommand {
     int userNo = Prompt.inputInt("회원번호?");
     User deletedUser = userList.findByNo(userNo);
     if (deletedUser != null) {
-      userList.remove(userList.indexOf(deletedUser));
+      userList.delete(userList.index(deletedUser));
       System.out.printf("'%s' 회원을 삭제 했습니다.\n", deletedUser.getName());
     } else {
       System.out.println("없는 회원입니다.");
@@ -89,4 +88,5 @@ public class UserCommand {
   public UserList getUserList() {
     return userList;
   }
+
 }

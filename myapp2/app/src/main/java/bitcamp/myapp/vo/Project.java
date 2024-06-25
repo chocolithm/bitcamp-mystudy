@@ -1,6 +1,6 @@
 package bitcamp.myapp.vo;
 
-import bitcamp.myapp.command.UserList;
+import bitcamp.myapp.command.ArrayList;
 
 public class Project {
 
@@ -11,7 +11,7 @@ public class Project {
   private String description;
   private String startDate;
   private String endDate;
-  private UserList members = new UserList();
+  private ArrayList members = new ArrayList();
 
   public static int getNextSeqNo() {
     return ++seqNo;
@@ -57,7 +57,7 @@ public class Project {
     this.endDate = endDate;
   }
 
-  public UserList getMembers() {
+  public ArrayList getMembers() {
     return members;
   }
 }
