@@ -137,6 +137,7 @@ public class ProjectCommand {
       if (str.equalsIgnoreCase("y")) {
         project.getMembers().remove(i);
         System.out.printf("'%s' 팀원을 삭제합니다.\n", user.getName());
+        i--;
       } else {
         System.out.printf("'%s' 팀원을 유지합니다.\n", user.getName());
       }
