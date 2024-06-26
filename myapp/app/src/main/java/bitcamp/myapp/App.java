@@ -7,7 +7,8 @@ import bitcamp.myapp.util.Prompt;
 
 public class App {
 
-  String[] mainMenus = new String[] {"회원", "프로젝트", "게시판", "공지사항", "도움말", "종료"};
+
+  String[] mainMenus = new String[]{"회원", "프로젝트", "게시판", "공지사항", "도움말", "종료"};
   String[][] subMenus = {
       {"등록", "목록", "조회", "변경", "삭제"},
       {"등록", "목록", "조회", "변경", "삭제"},
@@ -17,16 +18,17 @@ public class App {
   };
 
   UserCommand userCommand = new UserCommand();
-  ProjectCommand projectCommand = new ProjectCommand(userCommand.getUserList());
   BoardCommand boardCommand = new BoardCommand();
-  BoardCommand noticedCommand = new BoardCommand();
+  BoardCommand noticeCommand = new BoardCommand();
+  ProjectCommand projectCommand = new ProjectCommand(userCommand.getUserList());
+
 
   public static void main(String[] args) {
     new App().execute();
   }
 
   void execute() {
-    printMenu(); // 메서드에 묶인 코드를 실행하는 것을 "메서드를 호출(call)한다"라고 부른다.
+    printMenu();
 
     String command;
     while (true) {
@@ -51,6 +53,7 @@ public class App {
         System.out.println("숫자로 메뉴 번호를 입력하세요.");
       }
     }
+
     System.out.println("종료합니다.");
 
     Prompt.close();
@@ -126,7 +129,7 @@ public class App {
               boardCommand.executeBoardCommand(subMenuTitle);
               break;
             case "공지사항":
-              noticedCommand.executeBoardCommand(subMenuTitle);
+              noticeCommand.executeBoardCommand(subMenuTitle);
               break;
             default:
               System.out.printf("%s 메뉴의 명령을 처리할 수 없습니다.\n", menuTitle);

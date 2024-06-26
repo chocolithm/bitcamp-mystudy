@@ -1,5 +1,6 @@
 package bitcamp.myapp.command;
 
+import bitcamp.myapp.util.LinkedList;
 import bitcamp.myapp.util.Prompt;
 import bitcamp.myapp.vo.Board;
 
@@ -7,7 +8,7 @@ import java.util.Date;
 
 public class BoardCommand {
 
-  BoardList boardList = new BoardList();
+  LinkedList boardList = new LinkedList();
 
   public void executeBoardCommand(String command) {
     System.out.printf("[%s]\n", command);
@@ -37,7 +38,6 @@ public class BoardCommand {
     board.setCreatedDate(new Date());
     board.setNo(Board.getNextSeqNo());
     boardList.add(board);
-    System.out.println("등록됐습니다.");
   }
 
   private void listBoard() {
@@ -51,7 +51,7 @@ public class BoardCommand {
 
   private void viewBoard() {
     int boardNo = Prompt.inputInt("게시글 번호?");
-    Board board = boardList.findByNo(boardNo);
+    Board board = (Board) boardList.get(boardList.indexOf(new Board(boardNo)));
     if (board == null) {
       System.out.println("없는 게시글입니다.");
       return;
@@ -66,7 +66,7 @@ public class BoardCommand {
 
   private void updateBoard() {
     int boardNo = Prompt.inputInt("게시글 번호?");
-    Board board = boardList.findByNo(boardNo);
+    Board board = (Board) boardList.get(boardList.indexOf(new Board(boardNo)));
     if (board == null) {
       System.out.println("없는 게시글입니다.");
       return;
@@ -80,10 +80,10 @@ public class BoardCommand {
 
   private void deleteBoard() {
     int boardNo = Prompt.inputInt("게시글 번호?");
-    Board deletedBoard = boardList.findByNo(boardNo);
+    Board deletedBoard = (Board) boardList.get(boardList.indexOf(new Board(boardNo)));
     if (deletedBoard != null) {
       boardList.remove(boardList.indexOf(deletedBoard));
-      System.out.printf("%d번 글을 삭제했습니다.\n", deletedBoard.getNo());
+      System.out.printf("%d번 게시글을 삭제 했습니다.\n", deletedBoard.getNo());
     } else {
       System.out.println("없는 게시글입니다.");
     }
