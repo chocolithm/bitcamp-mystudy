@@ -1,5 +1,7 @@
 package bitcamp.myapp.vo;
 
+import java.util.Objects;
+
 // 메모리 설계도
 public class User {
 
@@ -10,6 +12,29 @@ public class User {
   private String email;
   private String password;
   private String tel;
+
+  public User() {
+
+  }
+
+  public User(int no) {
+    this.no = no;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    User user = (User) o;
+    return no == user.no;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(no);
+  }
 
   public static int getNextSeqNo() {
     return ++seqNo;
