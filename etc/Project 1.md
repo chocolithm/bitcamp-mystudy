@@ -1,4 +1,8 @@
-메뉴 (서브메뉴)
+# 미니프로젝트
+- 주제 : 가계부
+  팀원 : 강슬기, 이가람, 강윤상
+  
+  메뉴 (서브메뉴)
   수입 (등록, 조회, 변경, 삭제)
   지출 (등록, 조회, 변경, 삭제)
   카테고리 (등록, 목록, 변경, 삭제)
@@ -39,33 +43,35 @@ Package vo
 
 Package command
   ## Class IncomeCommand
-    executeIncomeCommand();
+    executeIncomeCommand(String subMenuTitle);
     addIncome();
     viewIncome();
     updateIncome();
     deleteIncome();
 
   ## Class ExpenseCommand
-    executeExpenseCommand();
+    executeExpenseCommand(String subMenuTitle);
     addExpense();
     viewExpense();
     updateExpense();
     deleteExpense();
 
   ## Class CategoryCommand
-    executeCategoryCommand();
+    executeCategoryCommand(String subMenuTitle);
     addCategory();
     listCategory(String transactionType);
     updateCategory();
     deleteCategory();
 
   ## Class StatisticsCommand
-    executeStatisticsCommand();
-    getByYear(String year); //연도별 조회
-    getByMonth(String year, String month); //이번달 조회, 월별 조회
-    getByCategory(); //카테고리별 조회
-    getTotalIncome(); //총수입 조회
-    getTotalExpense(); //총지출 조회
+    executeStatisticsCommand(String subMenuTitle);
+    getTransactionByCategory(Category category); //카테고리별 조회
+    getTransactionByDate(String year);
+    getTransactionByDate(String year, String month);
+    getTotalIncome(String year); //기간별 총수입 조회
+    getTotalIncome(String year, String month); //기간별 총수입 조회
+    getTotalExpense(String year); //기간별 총지출 조회
+    getTotalExpense(String year, String month); //기간별 총지출 조회
     - 조회사항 : 총수입, 총지출, 합계, 목록
 
 
