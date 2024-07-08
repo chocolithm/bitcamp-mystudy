@@ -1,15 +1,25 @@
 package book.designpattern.ch04;
 
-public class NYPizzaStore {
+public class NYPizzaStore extends PizzaStore {
+  @Override
   public Pizza createPizza(String item) {
+    Pizza pizza = null;
+    PizzaIngredientFactory ingredientFactory = new NYPizzaIngredientFactory();
+
+
     if(item.equals("cheese")) {
-      return new NYStyleCheesePizza();
+      pizza = new CheesePizza(ingredientFactory);
+      pizza.setName("뉴욕 스타일 치즈 피자");
     } else if(item.equals("pepperoni")) {
-      return new NYStylePepperoniPizza();
+      pizza = new PepperoniPizza(ingredientFactory);
+      pizza.setName("뉴욕 스타일 페페로니 피자");
     } else if(item.equals("clam")) {
-      return new NYStyleClamPizza();
+      pizza = new ClamPizza(ingredientFactory);
+      pizza.setName("뉴욕 스타일 조개 피자");
     } else if(item.equals("veggie")) {
-      return new NYStyleVeggiePizza();
+      pizza = new VeggiePizza(ingredientFactory);
+      pizza.setName("뉴욕 스타일 야채 피자");
     }
+    return pizza;
   }
 }
