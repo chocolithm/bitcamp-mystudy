@@ -1,12 +1,11 @@
 package bitcamp.myapp.command;
 
-import bitcamp.myapp.util.ArrayList;
 import bitcamp.myapp.util.Prompt;
 import bitcamp.myapp.vo.User;
 
 public class UserCommand {
 
-  ArrayList userList = new ArrayList();
+  UserList userList = new UserList();
 
   public void executeUserCommand(String command) {
     System.out.printf("[%s]\n", command);
@@ -36,12 +35,12 @@ public class UserCommand {
     user.setPassword(Prompt.input("암호?"));
     user.setTel(Prompt.input("연락처?"));
     user.setNo(User.getNextSeqNo());
-    userList.add(user);
+    userList.append(user);
   }
 
   private void listUser() {
     System.out.println("번호 이름 이메일");
-    for (Object obj : userList.toArray()) {
+    for (Object obj : userList.getArray()) {
       User user = (User) obj;
       System.out.printf("%d %s %s\n", user.getNo(), user.getName(), user.getEmail());
     }
@@ -49,7 +48,7 @@ public class UserCommand {
 
   private void viewUser() {
     int userNo = Prompt.inputInt("회원번호?");
-    User user = (User) userList.get(userList.indexOf(new User(userNo)));
+    User user = userList.findByNo(userNo);
     if (user == null) {
       System.out.println("없는 회원입니다.");
       return;
@@ -62,7 +61,7 @@ public class UserCommand {
 
   private void updateUser() {
     int userNo = Prompt.inputInt("회원번호?");
-    User user = (User) userList.get(userList.indexOf(new User(userNo)));
+    User user = userList.findByNo(userNo);
     if (user == null) {
       System.out.println("없는 회원입니다.");
       return;
@@ -77,16 +76,16 @@ public class UserCommand {
 
   private void deleteUser() {
     int userNo = Prompt.inputInt("회원번호?");
-    User deletedUser = (User) userList.get(userList.indexOf(new User(userNo)));
+    User deletedUser = userList.findByNo(userNo);
     if (deletedUser != null) {
-      userList.remove(userList.indexOf(deletedUser));
+      userList.delete(userList.index(deletedUser));
       System.out.printf("'%s' 회원을 삭제 했습니다.\n", deletedUser.getName());
     } else {
       System.out.println("없는 회원입니다.");
     }
   }
 
-  public ArrayList getUserList() {
+  public UserList getUserList() {
     return userList;
   }
 

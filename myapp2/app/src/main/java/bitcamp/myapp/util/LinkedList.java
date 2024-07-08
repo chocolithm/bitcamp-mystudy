@@ -1,12 +1,35 @@
 package bitcamp.myapp.util;
 
-public class LinkedList extends AbstractList{
+public class LinkedList {
 
-  private Node first;
-  private Node last;
+  Node first;
+  Node last;
+  int size;
 
-  @Override
-  public void add(Object value) {
+  public static void main(String[] args) {
+    LinkedList list = new LinkedList();
+    list.append("홍길동");
+    list.append("임꺽정");
+    list.append("유관순");
+    list.append("안중근");
+    list.append("윤봉길");
+    list.append("김구");
+
+    list.delete(2);
+    list.printAll();
+
+    list.delete(2);
+    list.printAll();
+
+    list.delete(2);
+    list.printAll();
+
+    list.delete(2);
+    list.printAll();
+
+  }
+
+  public void append(Object value) {
     Node newNode = new Node(value);
 
     if (first == null) {
@@ -18,8 +41,7 @@ public class LinkedList extends AbstractList{
     size++;
   }
 
-  @Override
-  public Object get(int index) {
+  public Object getValue(int index) {
     if (index < 0 || index >= size) {
       return null;
     }
@@ -37,8 +59,7 @@ public class LinkedList extends AbstractList{
     return null;
   }
 
-  @Override
-  public Object remove(int index) {
+  public Object delete(int index) {
     if (index < 0 || index >= size) {
       return null;
     }
@@ -76,13 +97,12 @@ public class LinkedList extends AbstractList{
     return deletedNode.value;
   }
 
-  @Override
-  public int indexOf(Object value) {
+  public int index(Object value) {
     Node cursor = first;
     int currentIndex = 0;
 
     while (cursor != null) {
-      if (cursor.value.equals(value)) {
+      if (cursor.value == value) {
         return currentIndex;
       }
       cursor = cursor.next;
@@ -91,8 +111,7 @@ public class LinkedList extends AbstractList{
     return -1;
   }
 
-  @Override
-  public Object[] toArray() {
+  public Object[] getArray() {
     Object[] arr = new Object[size];
 
     Node cursor = first;
@@ -104,13 +123,16 @@ public class LinkedList extends AbstractList{
     return arr;
   }
 
-  public class Node {
+  public int size() {
+    return size;
+  }
 
-    Object value;
-    Node next;
-
-    public Node(Object value) {
-      this.value = value;
+  public void printAll() {
+    Node cursor = first;
+    while (cursor != null) {
+      System.out.print(cursor.value + ",");
+      cursor = cursor.next;
     }
+    System.out.println();
   }
 }

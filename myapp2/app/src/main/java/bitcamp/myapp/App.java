@@ -8,7 +8,7 @@ import bitcamp.myapp.util.Prompt;
 public class App {
 
 
-  String[] mainMenus = new String[]{"회원", "프로젝트", "게시판", "공지사항", "도움말", "종료"};
+  String[] mainMenus = new String[] {"회원", "프로젝트", "게시판", "공지사항", "도움말", "종료"};
   String[][] subMenus = {
       {"등록", "목록", "조회", "변경", "삭제"},
       {"등록", "목록", "조회", "변경", "삭제"},
