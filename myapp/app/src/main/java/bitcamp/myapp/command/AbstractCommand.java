@@ -7,6 +7,7 @@ public abstract class AbstractCommand implements Command {
 
     public AbstractCommand(String menuTitle) {
         this.menuTitle = menuTitle;
+        //test
     }
 
     @Override
