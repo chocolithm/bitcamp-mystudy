@@ -5,7 +5,7 @@ import bitcamp.myapp.util.Prompt;
 import bitcamp.myapp.vo.Project;
 import bitcamp.myapp.vo.User;
 
-public class ProjectCommand {
+public class ProjectCommand implements Command {
 
   LinkedList projectList = new LinkedList();
   LinkedList userList;
@@ -14,9 +14,9 @@ public class ProjectCommand {
     this.userList = userList;
   }
 
-  public void executeProjectCommand(String command) {
-    System.out.printf("[%s]\n", command);
-    switch (command) {
+  public void execute(String name) {
+    System.out.printf("[%s]\n", name);
+    switch (name) {
       case "등록":
         this.addProject();
         break;

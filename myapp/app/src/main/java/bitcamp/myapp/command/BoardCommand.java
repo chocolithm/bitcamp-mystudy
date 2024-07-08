@@ -6,13 +6,13 @@ import bitcamp.myapp.vo.Board;
 
 import java.util.Date;
 
-public class BoardCommand {
+public class BoardCommand implements Command {
 
   LinkedList boardList = new LinkedList();
 
-  public void executeBoardCommand(String command) {
-    System.out.printf("[%s]\n", command);
-    switch (command) {
+  public void execute(String name) {
+    System.out.printf("[%s]\n", name);
+    switch (name) {
       case "등록":
         this.addBoard();
         break;
