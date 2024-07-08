@@ -103,14 +103,4 @@ public class LinkedList extends AbstractList {
 
     return arr;
   }
-
-  private static class Node {
-
-    Object value;
-    Node next;
-
-    public Node(Object value) {
-      this.value = value;
-    }
-  }
 }

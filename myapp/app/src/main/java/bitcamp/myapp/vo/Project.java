@@ -1,7 +1,6 @@
 package bitcamp.myapp.vo;
 
 import bitcamp.myapp.util.ArrayList;
-
 import java.util.Objects;
 
 public class Project {
@@ -29,10 +28,12 @@ public class Project {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o)
+    if (this == o) {
       return true;
-    if (o == null || getClass() != o.getClass())
+    }
+    if (o == null || getClass() != o.getClass()) {
       return false;
+    }
     Project project = (Project) o;
     return no == project.no;
   }
