@@ -1,10 +1,10 @@
 package bitcamp.myapp.command;
 
+import bitcamp.myapp.util.Prompt;
 import bitcamp.myapp.util.Stack;
 
-public class HelpCommand implements Command {
-
+public class HistoryCommand implements Command {
   public void execute(Stack menuPath) {
-    System.out.println("도움말입니다!");
+    Prompt.printHistory();
   }
 }

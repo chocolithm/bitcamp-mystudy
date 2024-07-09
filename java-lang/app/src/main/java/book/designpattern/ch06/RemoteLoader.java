@@ -8,6 +8,7 @@ public class RemoteLoader {
     Light kitchenLight = new Light("Kitchen");
     GarageDoor garageDoor = new GarageDoor("Garage");
     Stereo stereo = new Stereo("Living Room");
+    CeilingFan ceilingFan = new CeilingFan("Living Room");
 
     LightOnCommand livingRoomLightOnCommand = new LightOnCommand(livingRoomLight);
     LightOffCommand livingRoomLightOffCommand = new LightOffCommand(livingRoomLight);
@@ -20,20 +21,18 @@ public class RemoteLoader {
     StereoOnWithCDCommand stereoOnWithCD = new StereoOnWithCDCommand(stereo);
     StereoOffCommand stereoOff = new StereoOffCommand(stereo);
 
-    remoteControl.setCommand(0, livingRoomLightOnCommand, livingRoomLightOffCommand);
-    remoteControl.setCommand(1, kitchenLightOnCommand, kitchenLightOffCommand);
-    remoteControl.setCommand(2, garageDoorUp, garageDoorDown);
-    remoteControl.setCommand(3, stereoOnWithCD, stereoOff);
+    CeilingFanHighCommand ceilingFanHighCommand = new CeilingFanHighCommand(ceilingFan);
+    CeilingFanMediumCommand ceilingFanMediumCommand = new CeilingFanMediumCommand(ceilingFan);
+    CeilingFanLowCommand ceilingFanLowCommand = new CeilingFanLowCommand(ceilingFan);
+    CeilingFanOffCommand ceilingFanOffCommand = new CeilingFanOffCommand(ceilingFan);
 
-    System.out.println(remoteControl);
+    remoteControl.setCommand(0, ceilingFanHighCommand, ceilingFanOffCommand);
+    remoteControl.setCommand(1, ceilingFanMediumCommand, ceilingFanOffCommand);
+    remoteControl.setCommand(2, ceilingFanLowCommand, ceilingFanOffCommand);
 
     remoteControl.onButtonWasPushed(0);
-    remoteControl.offButtonWasPushed(0);
-    System.out.println(remoteControl);
+    remoteControl.onButtonWasPushed(1);
     remoteControl.undoButtonWasPushed();
-    remoteControl.offButtonWasPushed(0);
     remoteControl.onButtonWasPushed(0);
-    System.out.println(remoteControl);
-    remoteControl.undoButtonWasPushed();
   }
 }

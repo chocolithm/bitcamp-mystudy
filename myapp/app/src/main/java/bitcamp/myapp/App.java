@@ -9,7 +9,7 @@ import java.util.Map;
 public class App {
 
 
-  String[] menus = {"회원", "프로젝트", "게시판", "도움말", "종료"};
+  String[] menus = {"회원", "프로젝트", "게시판", "도움말", "명령내역", "종료"};
   Stack menuPath = new Stack();
 
   Map<String, Command> commandMap = new HashMap<>();
@@ -23,6 +23,7 @@ public class App {
     commandMap.put("게시판", new BoardCommand("게시판", boardList));
     commandMap.put("프로젝트", new ProjectCommand("프로젝트", projectList, userList));
     commandMap.put("도움말", new HelpCommand());
+    commandMap.put("명령내역", new HistoryCommand());
   }
 
   public static void main(String[] args) {

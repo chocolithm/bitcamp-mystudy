@@ -1,22 +1,25 @@
 package bitcamp.myapp.command;
 
-import bitcamp.myapp.util.LinkedList;
+import bitcamp.myapp.util.List;
 import bitcamp.myapp.util.Prompt;
 import bitcamp.myapp.vo.User;
 
 public class UserCommand extends AbstractCommand {
 
-  String[] menus = {"등록", "목록", "조회", "변경", "삭제"};
-  LinkedList userList = new LinkedList();
+  List userList;
+  private String[] menus = {"등록", "목록", "조회", "변경", "삭제"};
 
-  public UserCommand(String menuTitle) {
+  public UserCommand(String menuTitle, List userList) {
     super(menuTitle);
+    this.userList = userList;
   }
 
+  @Override
   protected String[] getMenus() {
     return menus;
   }
 
+  @Override
   protected void processMenu(String menuName) {
     System.out.printf("[%s]\n", menuName);
     switch (menuName) {
@@ -93,9 +96,5 @@ public class UserCommand extends AbstractCommand {
     } else {
       System.out.println("없는 회원입니다.");
     }
-  }
-
-  public LinkedList getUserList() {
-    return userList;
   }
 }

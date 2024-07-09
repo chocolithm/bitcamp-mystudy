@@ -25,6 +25,23 @@ public class Board {
     return ++seqNo;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Board board = (Board) o;
+    return no == board.no;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(no);
+  }
+
   public int getNo() {
     return no;
   }
@@ -63,20 +80,5 @@ public class Board {
 
   public void setViewCount(int viewCount) {
     this.viewCount = viewCount;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o)
-      return true;
-    if (o == null || getClass() != o.getClass())
-      return false;
-    Board board = (Board) o;
-    return no == board.no;
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hashCode(no);
   }
 }
