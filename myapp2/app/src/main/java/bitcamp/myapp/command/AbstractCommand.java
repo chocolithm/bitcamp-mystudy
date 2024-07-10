@@ -1,7 +1,8 @@
 package bitcamp.myapp.command;
 
 import bitcamp.myapp.util.Prompt;
-import bitcamp.myapp.util.Stack;
+
+import java.util.Stack;
 
 public abstract class AbstractCommand implements Command {
 
