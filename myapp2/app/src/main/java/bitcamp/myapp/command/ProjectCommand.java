@@ -1,5 +1,6 @@
 package bitcamp.myapp.command;
 
+import bitcamp.myapp.util.Iterator;
 import bitcamp.myapp.util.List;
 import bitcamp.myapp.util.Prompt;
 import bitcamp.myapp.vo.Project;
@@ -102,8 +103,9 @@ public class ProjectCommand extends AbstractCommand {
 
   private void listProject() {
     System.out.println("번호 프로젝트 기간");
-    for (Object obj : projectList.toArray()) {
-      Project project = (Project) obj;
+    Iterator iterator = projectList.iterator();
+    while (iterator.hasNext()) {
+      Project project = (Project) iterator.next();
       System.out.printf("%d %s %s ~ %s\n",
           project.getNo(), project.getTitle(), project.getStartDate(), project.getEndDate());
     }

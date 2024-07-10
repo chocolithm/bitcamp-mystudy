@@ -1,5 +1,6 @@
 package bitcamp.myapp.command;
 
+import bitcamp.myapp.util.Iterator;
 import bitcamp.myapp.util.List;
 import bitcamp.myapp.util.Prompt;
 import bitcamp.myapp.vo.Board;
@@ -85,8 +86,9 @@ public class BoardCommand extends AbstractCommand {
 
   private void listBoard() {
     System.out.println("번호 제목 작성일 조회수");
-    for (Object obj : boardList.toArray()) {
-      Board board = (Board) obj;
+    Iterator iterator = boardList.iterator();
+    while (iterator.hasNext()) {
+      Board board = (Board) iterator.next();
       System.out.printf("%d %s %tY-%3$tm-%3$td %d\n",
           board.getNo(), board.getTitle(), board.getCreatedDate(), board.getViewCount());
     }

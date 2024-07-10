@@ -16,4 +16,8 @@ public interface List {
   Object[] toArray();
 
   int size();
+
+  boolean contains(Object obj);
+
+  Iterator iterator();
 }

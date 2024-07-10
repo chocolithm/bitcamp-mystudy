@@ -1,6 +1,8 @@
 package bitcamp.myapp.vo;
 
 import bitcamp.myapp.util.ArrayList;
+import bitcamp.myapp.util.List;
+
 import java.util.Objects;
 
 public class Project {
@@ -12,7 +14,12 @@ public class Project {
   private String description;
   private String startDate;
   private String endDate;
-  private ArrayList members = new ArrayList();
+  private List members;
+
+  // 인스턴스 블록 : 모든 생성자에 포함됨
+  {
+    members = new ArrayList();
+  }
 
   public Project() {
 
@@ -83,7 +90,7 @@ public class Project {
     this.endDate = endDate;
   }
 
-  public ArrayList getMembers() {
+  public List getMembers() {
     return members;
   }
 }

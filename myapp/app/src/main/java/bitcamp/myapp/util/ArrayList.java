@@ -75,9 +75,4 @@ public class ArrayList extends AbstractList {
     java.util.ArrayList l;
     return list[index];
   }
-
-  public boolean contains(Object obj) {
-    return indexOf(obj) != -1;
-  }
-
 }

@@ -8,4 +8,12 @@ public abstract class AbstractList implements List {
   public int size() {
     return this.size;
   }
+
+  public Iterator iterator() {
+    return new ListIterator(this);
+  }
+
+  public boolean contains(Object obj) {
+    return indexOf(obj) != -1;
+  }
 }
