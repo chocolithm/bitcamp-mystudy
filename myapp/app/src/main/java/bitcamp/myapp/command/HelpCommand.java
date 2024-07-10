@@ -1,6 +1,6 @@
 package bitcamp.myapp.command;
 
-import bitcamp.myapp.util.Stack;
+import java.util.Stack;
 
 public class HelpCommand implements Command {
   public void execute(Stack menuPath) {

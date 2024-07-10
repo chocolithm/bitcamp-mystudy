@@ -1,10 +1,10 @@
 package bitcamp.myapp.command;
 
-import bitcamp.myapp.util.Iterator;
-import bitcamp.myapp.util.List;
 import bitcamp.myapp.util.Prompt;
 import bitcamp.myapp.vo.Board;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 public class BoardCommand extends AbstractCommand {
 
@@ -47,22 +47,24 @@ public class BoardCommand extends AbstractCommand {
 
   private void deleteBoard() {
     int boardNo = Prompt.inputInt("게시글 번호?");
-    Board deletedBoard = (Board) boardList.get(boardList.indexOf(new Board(boardNo)));
-    if (deletedBoard != null) {
-      boardList.remove(boardList.indexOf(deletedBoard));
-      System.out.printf("%d번 게시글을 삭제 했습니다.\n", deletedBoard.getNo());
-    } else {
+    int index = boardList.indexOf(new Board(boardNo));
+    if (index == -1) {
       System.out.println("없는 게시글입니다.");
+      return;
     }
+
+    Board deletedBoard = (Board) boardList.remove(index);
+    System.out.printf("%d번 게시글을 삭제 했습니다.\n", deletedBoard.getNo());
   }
 
   private void updateBoard() {
     int boardNo = Prompt.inputInt("게시글 번호?");
-    Board board = (Board) boardList.get(boardList.indexOf(new Board(boardNo)));
-    if (board == null) {
+    int index = boardList.indexOf(new Board(boardNo));
+    if (index == -1) {
       System.out.println("없는 게시글입니다.");
       return;
     }
+    Board board = (Board) boardList.get(index);
 
     board.setViewCount(board.getViewCount() + 1);
     board.setTitle(Prompt.input("제목(%s)?", board.getTitle()));
@@ -72,11 +74,12 @@ public class BoardCommand extends AbstractCommand {
 
   private void viewBoard() {
     int boardNo = Prompt.inputInt("게시글 번호?");
-    Board board = (Board) boardList.get(boardList.indexOf(new Board(boardNo)));
-    if (board == null) {
+    int index = boardList.indexOf(new Board(boardNo));
+    if (index == -1) {
       System.out.println("없는 게시글입니다.");
       return;
     }
+    Board board = (Board) boardList.get(index);
 
     board.setViewCount(board.getViewCount() + 1);
     System.out.printf("제목: %s\n", board.getTitle());

@@ -1,11 +1,14 @@
 package bitcamp.myapp.util;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class Prompt {
 
   static Scanner keyboardScanner = new Scanner(System.in);
-  static Queue inputQueue = new Queue();
+  static Queue inputQueue = new LinkedList();
 
   public static String input(String format, Object... args) {
     String promptTitle = String.format(format + " ", args);
@@ -31,8 +34,9 @@ public class Prompt {
 
   public static void printHistory() {
     System.out.println("[명령내역]--------------------");
-    for (int i = 0; i < inputQueue.size(); i++) {
-      System.out.println(inputQueue.get(i));
+    Iterator iterator = inputQueue.iterator();
+    while (iterator.hasNext()) {
+      System.out.println(iterator.next());
     }
     System.out.println("--------------------------- 끝");
   }

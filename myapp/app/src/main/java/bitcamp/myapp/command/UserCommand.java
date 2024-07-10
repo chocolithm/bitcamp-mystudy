@@ -1,9 +1,10 @@
 package bitcamp.myapp.command;
 
-import bitcamp.myapp.util.Iterator;
-import bitcamp.myapp.util.List;
 import bitcamp.myapp.util.Prompt;
 import bitcamp.myapp.vo.User;
+
+import java.util.Iterator;
+import java.util.List;
 
 public class UserCommand extends AbstractCommand {
 
@@ -61,11 +62,13 @@ public class UserCommand extends AbstractCommand {
 
   private void viewUser() {
     int userNo = Prompt.inputInt("회원번호?");
-    User user = (User) userList.get(userList.indexOf(new User(userNo)));
-    if (user == null) {
+    int index = userList.indexOf(new User(userNo));
+    if (index == -1) {
       System.out.println("없는 회원입니다.");
       return;
     }
+
+    User user = (User) userList.get(index);
 
     System.out.printf("이름: %s\n", user.getName());
     System.out.printf("이메일: %s\n", user.getEmail());
@@ -74,11 +77,13 @@ public class UserCommand extends AbstractCommand {
 
   private void updateUser() {
     int userNo = Prompt.inputInt("회원번호?");
-    User user = (User) userList.get(userList.indexOf(new User(userNo)));
-    if (user == null) {
+    int index = userList.indexOf(new User(userNo));
+    if (index == -1) {
       System.out.println("없는 회원입니다.");
       return;
     }
+
+    User user = (User) userList.get(index);
 
     user.setName(Prompt.input("이름(%s)?", user.getName()));
     user.setEmail(Prompt.input("이메일(%s)?", user.getEmail()));
@@ -89,12 +94,13 @@ public class UserCommand extends AbstractCommand {
 
   private void deleteUser() {
     int userNo = Prompt.inputInt("회원번호?");
-    User deletedUser = (User) userList.get(userList.indexOf(new User(userNo)));
-    if (deletedUser != null) {
-      userList.remove(userList.indexOf(deletedUser));
-      System.out.printf("'%s' 회원을 삭제 했습니다.\n", deletedUser.getName());
-    } else {
+    int index = userList.indexOf(new User(userNo));
+    if (index == -1) {
       System.out.println("없는 회원입니다.");
+      return;
     }
+
+    User deletedUser = (User) userList.remove(index);
+    System.out.printf("'%s' 회원을 삭제 했습니다.\n", deletedUser.getName());
   }
 }
