@@ -31,8 +31,8 @@
   String pw;
   String name;
   boolean isAdmin;
-  List<Book> borrowedBookList;
   Date joinDate;
+  List<Book> borrowedBookList;
 
   <Class Book>
   String name;
@@ -58,7 +58,8 @@
   CRUD
 
   <Class LibraryController>
-  findBook(String text)  //검색
+  searchBook(String title)  //검색
+  searchBook(Date date)  //검색
   borrowBook(User loginUser, Book book)  //대출
   returnBook(User loginUser, Book book)  //반납
   showStatus(User user)  //대출현황
@@ -78,9 +79,10 @@
 
 ## 메인
 [연체 중인 도서가 있을 시 알림 표출]
-1. 도서검색  //LibraryController -> findBook()
-2. 대출현황  //LibraryController -> showStatus()
-3. 이용안내  //LibraryController -> showGuide()
+1. 도서검색  //LibraryController -> searchBook(title)
+2. 신간도서  //LibraryController -> searchBook(date)
+3. 대출현황  //LibraryController -> showStatus(loginUser)
+4. 이용안내  //LibraryController -> showGuide()
 0. 로그아웃  //Login -> logout()
 
 ## 관리자 화면
@@ -94,7 +96,7 @@
 ## 메인 > 도서검색
 도서 제목? <<제목>>
 
-번호    분류    제목            대출여부
+번호    분류    도서명          대출여부
 1       과학    인터스텔라      대출가능
 2       인문    군주론          대출중
 
@@ -104,10 +106,19 @@
 
 
 ## 메인 > 대출현황
-사용자 : 홍길동
-분류    제목        대출일      반납예정일      상태
-과학    인터스텔라  2024-07-11  2024-07-25      정상
-인문    군주론      2024-06-11  2024-06-25      연체
+분류    도서명        대출일      반납예정일      상태
+과학    인터스텔라    2024-07-11  2024-07-25      정상
+인문    군주론        2024-06-11  2024-06-25      연체
+
+
+## 메인 > 신간도서
+번호    등록일      분류    제목            대출여부
+1       2024-06-11  인문    군주론          대출중
+2       2024-07-10  과학    인터스텔라      대출가능
+
+대출하시겠습니까? <<y/n>>
+도서 번호? <<번호>>
+대출되었습니다. / 대출이 불가한 도서입니다.
 
 
 ## 메인 > 이용안내
@@ -121,3 +132,15 @@
 2. 수정
 3. 삭제
 0. 이전
+
+## 관리자 > 도서관리
+1. 목록
+2. 수정
+3. 삭제
+0. 이전
+
+## 관리자 > 대출기록
+번호    사용자    도서명       대출일      반납일      상태
+1       윤상      인터스텔라1  2024-07-11  2024-07-25  정상
+2       윤상      인터스텔라2  2024-07-11  2024-07-25  연체
+3       윤상      인터스텔라3  2024-07-11  2024-07-11  반납
