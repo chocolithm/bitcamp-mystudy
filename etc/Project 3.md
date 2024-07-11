@@ -4,12 +4,6 @@
   발표 : 7/17 수 16시
 
 
-추가할 기능?
-  - 통계
-  - 관리자
-  - 연체 관리
-
-
 # 클래스 구조
 <Package util>
   <Class Prompt>
@@ -21,7 +15,7 @@
   logout();
 
   <Class Dummy>
-  Dummy data
+  Dummydata
 
 
 <Package vo>
