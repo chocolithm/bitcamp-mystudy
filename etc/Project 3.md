@@ -4,11 +4,6 @@
   발표 : 7/17 수 16시
 
 
-추가할 기능?
-  - 통계
-  - 관리자
-  - 연체 관리
-
 
 # 클래스 구조
 <Package util>
@@ -21,7 +16,7 @@
   logout();
 
   <Class Dummy>
-  Dummy data
+  Dummydata
 
 
 <Package vo>
@@ -44,20 +39,20 @@
   Date returnDate;
 
 
-<Package controller>
+<Package Command>
 
-  <Class UserController>
+  <Class UserCommand>
   List<User> userList;
   ---------------------
   addUser()
   deleteUser()
 
-  <Class BookController>
+  <Class BookCommand>
   List<Book> bookList;
   ---------------------
   CRUD
 
-  <Class LibraryController>
+  <Class LibraryCommand>
   searchBook(String title)  //검색
   searchBook(Date date)  //검색
   borrowBook(User loginUser, Book book)  //대출
@@ -72,22 +67,22 @@
 
 ## 로그인
 1. 로그인  //Login -> login()
-2. 회원가입  //UserController -> addUser()
+2. 회원가입  //UserCommand -> addUser()
 0. 종료
 
 -----------------------------------------------------
 
 ## 메인
 [연체 중인 도서가 있을 시 알림 표출]
-1. 도서검색  //LibraryController -> searchBook(title)
-2. 신간도서  //LibraryController -> searchBook(date)
-3. 대출현황  //LibraryController -> showStatus(loginUser)
-4. 이용안내  //LibraryController -> showGuide()
+1. 도서검색  //LibraryCommand -> searchBook(title)
+2. 신간도서  //LibraryCommand -> searchBook(date)
+3. 대출현황  //LibraryCommand -> showStatus(loginUser)
+4. 이용안내  //LibraryCommand -> showGuide()
 0. 로그아웃  //Login -> logout()
 
 ## 관리자 화면
-1. 사용자관리  //UserController
-2. 도서관리  //BookController
+1. 사용자관리  //UserCommand
+2. 도서관리  //BookCommand
 3. 대출기록  
 0. 로그아웃  //Login -> logout()
 
