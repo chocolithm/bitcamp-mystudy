@@ -13,14 +13,13 @@ public class Project {
   private String description;
   private String startDate;
   private String endDate;
-  private List members;
+  private List<User> members;
 
-  {
-    members = new ArrayList();
+  { // 인스턴스 블록
+    members = new ArrayList<>();
   }
 
   public Project() {
-
   }
 
   public Project(int no) {
@@ -88,7 +87,7 @@ public class Project {
     this.endDate = endDate;
   }
 
-  public List getMembers() {
+  public List<User> getMembers() {
     return members;
   }
 }

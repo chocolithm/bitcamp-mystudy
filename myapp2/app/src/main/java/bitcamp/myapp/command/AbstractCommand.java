@@ -1,26 +1,24 @@
 package bitcamp.myapp.command;
 
 import bitcamp.myapp.util.Prompt;
-
 import java.util.Stack;
 
 public abstract class AbstractCommand implements Command {
 
   protected String menuTitle;
 
-
   public AbstractCommand(String menuTitle) {
     this.menuTitle = menuTitle;
   }
 
   @Override
-  public void execute(Stack menuPath) {
+  public void execute(Stack<String> menuPath) {
     menuPath.push(menuTitle);
 
     printMenus();
 
     while (true) {
-      String command = Prompt.input(String.format("%s>", getMenuPath(menuPath)));
+      String command = Prompt.input("%s>", getMenuPathTitle(menuPath));
       if (command.equals("menu")) {
         printMenus();
         continue;
@@ -64,15 +62,15 @@ public abstract class AbstractCommand implements Command {
     return menuNo >= 1 && menuNo <= menus.length;
   }
 
-  private String getMenuPath(Stack menuPath) {
-    StringBuilder title = new StringBuilder();
+  private String getMenuPathTitle(Stack<String> menuPath) {
+    StringBuilder strBuilder = new StringBuilder();
     for (int i = 0; i < menuPath.size(); i++) {
-      if (i > 0) {
-        title.append("/");
+      if (strBuilder.length() > 0) {
+        strBuilder.append("/");
       }
-      title.append(menuPath.get(i));
+      strBuilder.append(menuPath.get(i));
     }
-    return title.toString();
+    return strBuilder.toString();
   }
 
   // 구체적인 동작은 서브 클래스에서 정의한다.

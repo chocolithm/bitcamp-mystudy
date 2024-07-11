@@ -1,27 +1,34 @@
 package bitcamp.myapp;
 
-import bitcamp.myapp.command.*;
-import bitcamp.myapp.util.*;
-
+import bitcamp.myapp.command.BoardCommand;
+import bitcamp.myapp.command.Command;
+import bitcamp.myapp.command.HelpCommand;
+import bitcamp.myapp.command.HistoryCommand;
+import bitcamp.myapp.command.ProjectCommand;
+import bitcamp.myapp.command.UserCommand;
+import bitcamp.myapp.util.Prompt;
+import bitcamp.myapp.vo.Board;
+import bitcamp.myapp.vo.Project;
+import bitcamp.myapp.vo.User;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class App {
 
 
   String[] menus = {"회원", "프로젝트", "게시판", "도움말", "명령내역", "종료"};
-  Stack menuPath = new Stack();
+  Stack<String> menuPath = new Stack<>();
 
   Map<String, Command> commandMap = new HashMap<>();
 
   public App() {
-    List userList = new ArrayList();
-    List projectList = new LinkedList();
-    List boardList = new LinkedList();
+    List<User> userList = new ArrayList<>();
+    List<Project> projectList = new LinkedList<>();
+    List<Board> boardList = new LinkedList<>();
 
     commandMap.put("회원", new UserCommand("회원", userList));
     commandMap.put("게시판", new BoardCommand("게시판", boardList));
@@ -29,6 +36,7 @@ public class App {
     commandMap.put("도움말", new HelpCommand());
     commandMap.put("명령내역", new HistoryCommand());
   }
+
 
   public static void main(String[] args) {
     new App().execute();
@@ -100,22 +108,21 @@ public class App {
 
   void processMenu(String menuTitle) {
     Command command = commandMap.get(menuTitle);
-    if(command == null) {
+    if (command == null) {
       System.out.printf("%s 메뉴의 명령을 처리할 수 없습니다.\n", menuTitle);
       return;
     }
-
     command.execute(menuPath);
   }
 
-  private String getMenuPathTitle(Stack menuPath) {
-    StringBuilder title = new StringBuilder();
+  private String getMenuPathTitle(Stack<String> menuPath) {
+    StringBuilder strBuilder = new StringBuilder();
     for (int i = 0; i < menuPath.size(); i++) {
-      if(title.length() > 0) {
-        title.append("/");
+      if (strBuilder.length() > 0) {
+        strBuilder.append("/");
       }
-      title.append(menuPath.get(i));
+      strBuilder.append(menuPath.get(i));
     }
-    return title.toString();
+    return strBuilder.toString();
   }
 }
