@@ -2,7 +2,7 @@ package bitcamp.myapp.command.user;
 
 import bitcamp.myapp.command.Command;
 import bitcamp.myapp.vo.User;
-import bitcamp.util.util.Prompt;
+import bitcamp.util.Prompt;
 import java.util.List;
 
 public class UserDeleteCommand implements Command {
@@ -16,7 +16,7 @@ public class UserDeleteCommand implements Command {
   @Override
   public void execute(String menuName) {
     System.out.printf("[%s]\n", menuName);
-    
+
     int userNo = Prompt.inputInt("회원번호?");
     int index = userList.indexOf(new User(userNo));
     if (index == -1) {

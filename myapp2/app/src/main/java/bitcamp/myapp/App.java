@@ -1,7 +1,7 @@
 package bitcamp.myapp;
 
-import bitcamp.menu.menu.MenuGroup;
-import bitcamp.menu.menu.MenuItem;
+import bitcamp.menu.MenuGroup;
+import bitcamp.menu.MenuItem;
 import bitcamp.myapp.command.HelpCommand;
 import bitcamp.myapp.command.HistoryCommand;
 import bitcamp.myapp.command.board.BoardAddCommand;

@@ -1,6 +1,6 @@
-package bitcamp.menu.menu;
+package bitcamp.menu;
 
-import bitcamp.util.util.Prompt;
+import bitcamp.util.Prompt;
 import java.util.ArrayList;
 import java.util.Stack;
 

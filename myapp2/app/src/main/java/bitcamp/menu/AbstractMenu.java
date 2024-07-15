@@ -1,4 +1,4 @@
-package bitcamp.menu.menu;
+package bitcamp.menu;
 
 import java.util.Objects;
 
