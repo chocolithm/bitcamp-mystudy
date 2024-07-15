@@ -1,4 +1,4 @@
-package bitcamp.myapp.util;
+package bitcamp.util;
 
 import java.util.Iterator;
 import java.util.LinkedList;
