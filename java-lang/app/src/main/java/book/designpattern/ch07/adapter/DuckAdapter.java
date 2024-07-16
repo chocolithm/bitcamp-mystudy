@@ -1,4 +1,4 @@
-package book.designpattern.ch07;
+package book.designpattern.ch07.adapter;
 
 public class DuckAdapter implements Turkey {
   Duck duck;

@@ -1,4 +1,4 @@
-package book.designpattern.ch07;
+package book.designpattern.ch07.adapter;
 
 import java.util.Enumeration;
 import java.util.Iterator;

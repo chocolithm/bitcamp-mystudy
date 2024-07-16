@@ -1,4 +1,4 @@
-package book.designpattern.ch07;
+package book.designpattern.ch07.adapter;
 
 public class DuckTestDrive {
   public static void main(String[] args) {
