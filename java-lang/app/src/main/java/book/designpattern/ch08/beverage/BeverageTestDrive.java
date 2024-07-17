@@ -1,4 +1,4 @@
-package book.designpattern.ch08;
+package book.designpattern.ch08.beverage;
 
 public class BeverageTestDrive {
   public static void main(String[] args) {
