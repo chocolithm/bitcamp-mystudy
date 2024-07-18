@@ -6,28 +6,26 @@ import java.util.Stack;
 
 public class MenuGroup extends AbstractMenu {
   private MenuGroup parent;
-  private Stack<String> menuPath;
   private ArrayList<Menu> children;
   private String exitMenuTitle = "이전";
 
   public MenuGroup(String title) {
     super(title);
-    menuPath = new Stack<>();
     children = new ArrayList<>();
   }
 
   public void execute() {
-    menuPath.push(title);
+
+    String menuPath = getMenuPath();
 
     printMenu();
 
     while (true) {
-      String command = Prompt.input("%s>", getMenuPathTitle());
+      String command = Prompt.input("%s>", menuPath);
       if (command.equals("menu")) {
         printMenu();
         continue;
       } else if (command.equals("0")) {
-        menuPath.pop();
         return;
       }
 
@@ -63,20 +61,27 @@ public class MenuGroup extends AbstractMenu {
     System.out.printf("0. %s\n", exitMenuTitle);
   }
 
-  private String getMenuPathTitle() {
+  private String getMenuPath() {
+    Stack<String> menuPathStack = new Stack<>();
+    MenuGroup menuGroup = this;
+    while (menuGroup != null) {
+      menuPathStack.push(menuGroup.title);
+      menuGroup = menuGroup.parent;
+    }
+
     StringBuilder strBuilder = new StringBuilder();
-    for (int i = 0; i < menuPath.size(); i++) {
+    while (!menuPathStack.isEmpty()) {
       if (strBuilder.length() > 0) {
         strBuilder.append("/");
       }
-      strBuilder.append(menuPath.get(i));
+      strBuilder.append(menuPathStack.pop());
     }
+
     return strBuilder.toString();
   }
 
   private void setParent(MenuGroup parent) {
     this.parent = parent;
-    this.menuPath = parent.menuPath;
   }
 
   public void add(Menu child) {

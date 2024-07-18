@@ -23,17 +23,20 @@ import bitcamp.myapp.command.user.UserViewCommand;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.Project;
 import bitcamp.myapp.vo.User;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class App {
   MenuGroup mainMenu = new MenuGroup("메인");
+  List<User> userList = new ArrayList<>();
+  List<Project> projectList = new LinkedList<>();
+  List<Board> boardList = new LinkedList<>();
 
   public App() {
-    List<User> userList = new ArrayList<>();
-    List<Project> projectList = new LinkedList<>();
-    List<Board> boardList = new LinkedList<>();
 
 
     MenuGroup userMenu = new MenuGroup("회원");
@@ -68,5 +71,157 @@ public class App {
 
   public static void main(String[] args) {
     new App().mainMenu.execute();
+  }
+
+  private void loadData() {
+    loadUsers();
+    loadProjects();
+    loadBoards();
+    System.out.println("데이터를 로딩했습니다.");
+  }
+
+  private void loadUsers() {
+    try (FileInputStream in = new FileInputStream("user.data")) {
+      // user 데이터 개수 : 파일에서 2바이트를 읽는다.
+      int userLength = (in.read() << 8) | in.read();
+      int maxUserNo = 0;
+      int len;
+      byte[] bytes;
+
+      for (int i = 0; i < userLength; i++) {
+        // 한 개의 User 데이터 바이트 배열 크기 : 파일에서 2바이트를 읽는다.
+        len = (in.read() << 8) | in.read();
+
+        // 한 개의 User 데이터 바이트 배열 : 위에서 지정한 개수만큼 바이트 배열을 읽는다.
+        bytes = new byte[len];
+        in.read(bytes);
+
+        // User 바이트 배열을 가지고 User 객체를 생성
+        User user = User.valueOf(bytes);
+        userList.add(user);
+
+        if (user.getNo() > maxUserNo) {
+          maxUserNo = user.getNo();
+        }
+      }
+
+      User.initSeqNo(maxUserNo);
+
+    } catch (IOException e) {
+      System.out.println("회원 정보 로딩 중 오류 발생!");
+    }
+  }
+
+  private void loadProjects() {
+    try (FileInputStream in = new FileInputStream("project.data")) {
+      int projectLength = in.read() << 8 | in.read();
+      int maxProjectNo = 0;
+      int len;
+      byte[] bytes;
+
+      for (int i = 0; i < projectLength; i++) {
+        len = in.read() << 8 | in.read();
+        bytes = new byte[len];
+        in.read(bytes);
+
+        Project project = Project.valueOf(bytes);
+        projectList.add(project);
+
+        if (project.getNo() > maxProjectNo) {
+          maxProjectNo = project.getNo();
+        }
+      }
+
+      Project.initSeqNo(maxProjectNo);
+    } catch (IOException e) {
+      System.out.println("게시판 정보 로딩 중 오류 발생!");
+    }
+  }
+
+  private void loadBoards() {
+    try (FileInputStream in = new FileInputStream("board.data")) {
+      int boardLength = in.read() << 8 | in.read();
+      int maxBoardNo = 0;
+      int len;
+      byte[] bytes;
+
+      for (int i = 0; i < boardLength; i++) {
+        len = in.read() << 8 | in.read();
+        bytes = new byte[len];
+        in.read(bytes);
+
+        Board board = Board.valueOf(bytes);
+        boardList.add(board);
+
+        if (board.getNo() > maxBoardNo) {
+          maxBoardNo = board.getNo();
+        }
+      }
+
+      Board.initSeqNo(maxBoardNo);
+    } catch (IOException e) {
+      System.out.println("게시판 정보 로딩 중 오류 발생!");
+    }
+  }
+
+  private void saveData() {
+    saveUsers();
+    saveProjects();
+    saveBoards();
+    System.out.println("데이터를 저장했습니다.");
+  }
+
+  private void saveUsers() {
+    try (FileOutputStream out = new FileOutputStream("user.data");) {
+      // 몇 개의 데이터르 읽을지 알려주기 위해 저장 데이터의 개수를 출력
+      out.write(userList.size() >> 8);
+      out.write(userList.size());
+      byte[] bytes;
+
+      for (User user : userList) {
+        bytes = user.getBytes();
+        out.write(bytes.length >> 8);
+        out.write(bytes.length);
+        out.write(bytes);
+      }
+    } catch (IOException e) {
+      System.out.println("회원 정보 저장 중 오류 발생!");
+    }
+  }
+
+  private void saveProjects() {
+    try (FileOutputStream out = new FileOutputStream("project.data")) {
+      out.write(projectList.size() >> 8);
+      out.write(projectList.size());
+      byte[] bytes;
+
+      for (Project project : projectList) {
+        bytes = project.getBytes();
+        out.write(bytes.length >> 8);
+        out.write(bytes.length);
+        out.write(bytes);
+      }
+
+    } catch (IOException e) {
+      System.out.println("프로젝트 정보 저장 중 오류 발생!");
+    }
+  }
+
+  private void saveBoards() {
+    try (FileOutputStream out = new FileOutputStream("board.data")) {
+      out.write(boardList.size() >> 8);
+      out.write(boardList.size());
+      byte[] bytes;
+
+      for (Board board : boardList) {
+        bytes = board.getBytes();
+        out.write(bytes.length >> 8);
+        out.write(bytes.length);
+        out.write(bytes);
+      }
+
+    } catch (IOException e) {
+      System.out.println("게시판 정보 저장 중 오류 발생!");
+    }
   }
 }
