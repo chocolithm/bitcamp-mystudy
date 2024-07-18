@@ -1,5 +1,9 @@
 package bitcamp.myapp.vo;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -28,6 +32,89 @@ public class Project {
 
   public static int getNextSeqNo() {
     return ++seqNo;
+  }
+
+  public static void initSeqNo(int no) {
+    seqNo = no;
+  }
+
+  public static Project valueOf(byte[] bytes) throws IOException {
+    try (ByteArrayInputStream in = new ByteArrayInputStream(bytes)) {
+      Project project = new Project();
+      byte[] buf = new byte[1000];
+      int len;
+
+      project.setNo(in.read() << 24 | in.read() << 16 | in.read() << 8 | in.read());
+
+      len = in.read() << 8 | in.read();
+      in.read(buf, 0, len);
+      project.setTitle(new String(buf, 0, len, StandardCharsets.UTF_8));
+
+      len = in.read() << 8 | in.read();
+      in.read(buf, 0, len);
+      project.setDescription(new String(buf, 0, len, StandardCharsets.UTF_8));
+
+      len = in.read() << 8 | in.read();
+      in.read(buf, 0, len);
+      project.setStartDate(new String(buf, 0, len, StandardCharsets.UTF_8));
+
+      len = in.read() << 8 | in.read();
+      in.read(buf, 0, len);
+      project.setEndDate(new String(buf, 0, len, StandardCharsets.UTF_8));
+
+      int memberLength = in.read() << 8 | in.read();
+      for (int i = 0; i < memberLength; i++) {
+        len = (in.read() << 8) | in.read();
+
+        bytes = new byte[len];
+        in.read(bytes);
+
+        User member = User.valueOf(bytes);
+        project.getMembers().add(member);
+      }
+
+      return project;
+    }
+  }
+
+  public byte[] getBytes() throws IOException {
+    try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+      out.write(no >> 24);
+      out.write(no >> 16);
+      out.write(no >> 8);
+      out.write(no);
+
+      byte[] bytes = title.getBytes(StandardCharsets.UTF_8);
+      out.write(bytes.length >> 8);
+      out.write(bytes.length);
+      out.write(title.getBytes(StandardCharsets.UTF_8));
+
+      bytes = description.getBytes(StandardCharsets.UTF_8);
+      out.write(bytes.length >> 8);
+      out.write(bytes.length);
+      out.write(description.getBytes(StandardCharsets.UTF_8));
+
+      bytes = startDate.getBytes(StandardCharsets.UTF_8);
+      out.write(bytes.length >> 8);
+      out.write(bytes.length);
+      out.write(startDate.getBytes(StandardCharsets.UTF_8));
+
+      bytes = endDate.getBytes(StandardCharsets.UTF_8);
+      out.write(bytes.length >> 8);
+      out.write(bytes.length);
+      out.write(endDate.getBytes(StandardCharsets.UTF_8));
+
+      out.write(members.size() >> 8);
+      out.write(members.size());
+      for (User user : members) {
+        byte[] memberByte = user.getBytes();
+        out.write(memberByte.length >> 8);
+        out.write(memberByte.length);
+        out.write(memberByte);
+      }
+
+      return out.toByteArray();
+    }
   }
 
   @Override
