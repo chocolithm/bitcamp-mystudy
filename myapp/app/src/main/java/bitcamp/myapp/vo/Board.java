@@ -1,11 +1,10 @@
 package bitcamp.myapp.vo;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
-public class Board implements Serializable {
+public class Board implements Serializable, SequenceNo {
 
   private static int seqNo;
 
@@ -38,7 +37,7 @@ public class Board implements Serializable {
     board.setNo(Integer.parseInt(values[0]));
     board.setTitle(values[1]);
     board.setContent(values[2]);
-    board.setCreatedDate(new SimpleDateFormat("yyyy-MM-dd").parse(values[3]));
+    board.setCreatedDate(new Date(Long.parseLong(values[3])));
     board.setViewCount(Integer.parseInt(values[4]));
 
     return board;
@@ -49,7 +48,7 @@ public class Board implements Serializable {
         .append(no).append(",")
         .append(title).append(",")
         .append(content).append(",")
-        .append(new SimpleDateFormat("yyyy-MM-dd").format(createdDate)).append(",")
+        .append(createdDate.getTime()).append(",")
         .append(viewCount).toString();
   }
 
@@ -70,6 +69,7 @@ public class Board implements Serializable {
     return Objects.hashCode(no);
   }
 
+  @Override
   public int getNo() {
     return no;
   }

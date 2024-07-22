@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 // 메모리 설계도
-public class User implements Serializable {
+public class User implements Serializable, SequenceNo {
 
   private static int seqNo;
 
@@ -83,6 +83,7 @@ public class User implements Serializable {
         '}';
   }
 
+  @Override
   public int getNo() {
     return no;
   }
