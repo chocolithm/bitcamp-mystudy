@@ -1,13 +1,13 @@
 package bitcamp.myapp.vo;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.io.Serializable;
 import java.util.Objects;
 
-// 메모리 설계도
-public class User {
+// Serializable 인터페이스
+// - 추상 메서드가 없다.
+// - 직렬화/역직렬화를 승인한다는 표시로 사용한다.
+// - 유사한 예) Cloneable 인터페이스
+public class User implements Serializable, SequenceNo {
 
   private static int seqNo;
 
@@ -36,63 +36,52 @@ public class User {
     return seqNo;
   }
 
-  public static User valueOf(byte[] bytes) throws IOException {
-    try (ByteArrayInputStream in = new ByteArrayInputStream(bytes)) {
-      User user = new User();
-      byte[] buf = new byte[1000];
-      int len;
-
-      user.setNo(in.read() << 24 | in.read() << 16 | in.read() << 8 | in.read());
-
-      len = in.read() << 8 | in.read();
-      in.read(buf, 0, len);
-      user.setName(new String(buf, 0, len, StandardCharsets.UTF_8));
-
-      len = in.read() << 8 | in.read();
-      in.read(buf, 0, len);
-      user.setEmail(new String(buf, 0, len, StandardCharsets.UTF_8));
-
-      len = in.read() << 8 | in.read();
-      in.read(buf, 0, len);
-      user.setPassword(new String(buf, 0, len, StandardCharsets.UTF_8));
-
-      len = in.read() << 8 | in.read();
-      in.read(buf, 0, len);
-      user.setTel(new String(buf, 0, len, StandardCharsets.UTF_8));
-
-      return user;
-    }
+  public static User valueOf(String csv) {
+    String[] values = csv.split(","); // csv: "1,홍길동,hong@test.com,1111,010-1111-2222"
+    User user = new User();
+    user.setNo(Integer.parseInt(values[0]));
+    user.setName(values[1]);
+    user.setEmail(values[2]);
+    user.setPassword(values[3]);
+    user.setTel(values[4]);
+    return user;
   }
 
-  public byte[] getBytes() throws IOException {
-    try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-      out.write(no >> 24);
-      out.write(no >> 16);
-      out.write(no >> 8);
-      out.write(no);
+  public static void main(String[] args) {
+    User user = new User();
+    user.setNo(100);
+    user.setName("홍길동");
+    user.setEmail("hong@test.com");
+    user.setPassword("1111");
+    user.setTel("010-1111-2222");
 
-      byte[] bytes = name.getBytes(StandardCharsets.UTF_8);
-      out.write(bytes.length >> 8);
-      out.write(bytes.length);
-      out.write(name.getBytes(StandardCharsets.UTF_8));
+    String csv = user.toCsvString();
+    System.out.println(csv);
 
-      bytes = email.getBytes(StandardCharsets.UTF_8);
-      out.write(bytes.length >> 8);
-      out.write(bytes.length);
-      out.write(email.getBytes(StandardCharsets.UTF_8));
+    User user2 = User.valueOf(csv);
+    System.out.println(user2);
 
-      bytes = password.getBytes(StandardCharsets.UTF_8);
-      out.write(bytes.length >> 8);
-      out.write(bytes.length);
-      out.write(password.getBytes(StandardCharsets.UTF_8));
+  }
 
-      bytes = tel.getBytes(StandardCharsets.UTF_8);
-      out.write(bytes.length >> 8);
-      out.write(bytes.length);
-      out.write(tel.getBytes(StandardCharsets.UTF_8));
+  public String toCsvString() {
+    return new StringBuilder()
+        .append(no).append(",")
+        .append(name).append(",")
+        .append(email).append(",")
+        .append(password).append(",")
+        .append(tel)
+        .toString();
+  }
 
-      return out.toByteArray();
-    }
+  @Override
+  public String toString() {
+    return "User{" +
+        "no=" + no +
+        ", name='" + name + '\'' +
+        ", email='" + email + '\'' +
+        ", password='" + password + '\'' +
+        ", tel='" + tel + '\'' +
+        '}';
   }
 
   @Override

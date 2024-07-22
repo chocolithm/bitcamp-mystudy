@@ -1,14 +1,11 @@
 package bitcamp.myapp.vo;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Project {
+public class Project implements Serializable, SequenceNo {
 
   private static int seqNo;
 
@@ -42,82 +39,49 @@ public class Project {
     return seqNo;
   }
 
-  public static Project valueOf(byte[] bytes) throws IOException {
-    try (ByteArrayInputStream in = new ByteArrayInputStream(bytes)) {
-      Project project = new Project();
-      byte[] buf = new byte[1000];
-      int len;
+  public static Project valueOf(String csv) {
+    String[] values = csv.split(",");
 
-      project.setNo(in.read() << 24 | in.read() << 16 | in.read() << 8 | in.read());
+    Project project = new Project();
+    project.setNo(Integer.parseInt(values[0]));
+    project.setTitle(values[1]);
+    project.setDescription(values[2]);
+    project.setStartDate(values[3]);
+    project.setEndDate(values[4]);
 
-      len = in.read() << 8 | in.read();
-      in.read(buf, 0, len);
-      project.setTitle(new String(buf, 0, len, StandardCharsets.UTF_8));
-
-      len = in.read() << 8 | in.read();
-      in.read(buf, 0, len);
-      project.setDescription(new String(buf, 0, len, StandardCharsets.UTF_8));
-
-      len = in.read() << 8 | in.read();
-      in.read(buf, 0, len);
-      project.setStartDate(new String(buf, 0, len, StandardCharsets.UTF_8));
-
-      len = in.read() << 8 | in.read();
-      in.read(buf, 0, len);
-      project.setEndDate(new String(buf, 0, len, StandardCharsets.UTF_8));
-
-      int memberLength = in.read() << 8 | in.read();
-      for (int i = 0; i < memberLength; i++) {
-        len = (in.read() << 8) | in.read();
-        bytes = new byte[len];
-        in.read(bytes);
-
-        User user = User.valueOf(bytes);
-        project.getMembers().add(user);
-      }
-
-      return project;
+    String[] members = values[5].split("#");
+    for (String member : members) {
+      String[] items = member.split("_");
+      User user = new User();
+      user.setNo(Integer.parseInt(items[0]));
+      user.setName(items[1]);
+      user.setEmail(items[2]);
+      user.setPassword(items[3]);
+      user.setTel(items[4]);
+      project.getMembers().add(user);
     }
+
+    return project;
   }
 
-  public byte[] getBytes() throws IOException {
-    try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-      out.write(no >> 24);
-      out.write(no >> 16);
-      out.write(no >> 8);
-      out.write(no);
+  public String toCsvString() {
 
-      byte[] bytes = title.getBytes(StandardCharsets.UTF_8);
-      out.write(bytes.length >> 8);
-      out.write(bytes.length);
-      out.write(title.getBytes(StandardCharsets.UTF_8));
-
-      bytes = description.getBytes(StandardCharsets.UTF_8);
-      out.write(bytes.length >> 8);
-      out.write(bytes.length);
-      out.write(description.getBytes(StandardCharsets.UTF_8));
-
-      bytes = startDate.getBytes(StandardCharsets.UTF_8);
-      out.write(bytes.length >> 8);
-      out.write(bytes.length);
-      out.write(startDate.getBytes(StandardCharsets.UTF_8));
-
-      bytes = endDate.getBytes(StandardCharsets.UTF_8);
-      out.write(bytes.length >> 8);
-      out.write(bytes.length);
-      out.write(endDate.getBytes(StandardCharsets.UTF_8));
-
-      out.write(members.size() >> 8);
-      out.write(members.size());
-      for (User user : members) {
-        byte[] memberBytes = user.getBytes();
-        out.write(memberBytes.length >> 8);
-        out.write(memberBytes.length);
-        out.write(memberBytes);
+    StringBuilder membersBuilder = new StringBuilder();
+    for (User member : members) {
+      if (membersBuilder.length() > 0) {
+        membersBuilder.append("#");
       }
-
-      return out.toByteArray();
+      membersBuilder.append(member.toCsvString().replaceAll(",", "_"));
     }
+
+    return new StringBuilder()
+        .append(no).append(",")
+        .append(title).append(",")
+        .append(description).append(",")
+        .append(startDate).append(",")
+        .append(endDate).append(",")
+        .append(membersBuilder.toString())
+        .toString();
   }
 
   @Override

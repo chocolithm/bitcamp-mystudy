@@ -22,28 +22,38 @@ import bitcamp.myapp.command.user.UserUpdateCommand;
 import bitcamp.myapp.command.user.UserViewCommand;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.Project;
+import bitcamp.myapp.vo.SequenceNo;
 import bitcamp.myapp.vo.User;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import bitcamp.util.Prompt;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class App {
+
+
   MenuGroup mainMenu = new MenuGroup("메인");
+
   List<User> userList = new ArrayList<>();
   List<Project> projectList = new LinkedList<>();
   List<Board> boardList = new LinkedList<>();
 
   public App() {
 
+    loadData();
 
     MenuGroup userMenu = new MenuGroup("회원");
     userMenu.add(new MenuItem("등록", new UserAddCommand(userList)));
     userMenu.add(new MenuItem("목록", new UserListCommand(userList)));
     userMenu.add(new MenuItem("조회", new UserViewCommand(userList)));
-    userMenu.add(new MenuItem("수정", new UserUpdateCommand(userList)));
+    userMenu.add(new MenuItem("변경", new UserUpdateCommand(userList)));
     userMenu.add(new MenuItem("삭제", new UserDeleteCommand(userList)));
     mainMenu.add(userMenu);
 
@@ -52,7 +62,7 @@ public class App {
     projectMenu.add(new MenuItem("등록", new ProjectAddCommand(projectList, memberHandler)));
     projectMenu.add(new MenuItem("목록", new ProjectListCommand(projectList)));
     projectMenu.add(new MenuItem("조회", new ProjectViewCommand(projectList)));
-    projectMenu.add(new MenuItem("수정", new ProjectUpdateCommand(projectList, memberHandler)));
+    projectMenu.add(new MenuItem("변경", new ProjectUpdateCommand(projectList, memberHandler)));
     projectMenu.add(new MenuItem("삭제", new ProjectDeleteCommand(projectList)));
     mainMenu.add(projectMenu);
 
@@ -60,168 +70,236 @@ public class App {
     boardMenu.add(new MenuItem("등록", new BoardAddCommand(boardList)));
     boardMenu.add(new MenuItem("목록", new BoardListCommand(boardList)));
     boardMenu.add(new MenuItem("조회", new BoardViewCommand(boardList)));
-    boardMenu.add(new MenuItem("수정", new BoardUpdateCommand(boardList)));
+    boardMenu.add(new MenuItem("변경", new BoardUpdateCommand(boardList)));
     boardMenu.add(new MenuItem("삭제", new BoardDeleteCommand(boardList)));
     mainMenu.add(boardMenu);
 
     mainMenu.add(new MenuItem("도움말", new HelpCommand()));
     mainMenu.add(new MenuItem("명령내역", new HistoryCommand()));
+
+    mainMenu.setExitMenuTitle("종료");
   }
 
 
   public static void main(String[] args) {
-    new App().mainMenu.execute();
+    new App().execute();
+  }
+
+  void execute() {
+    String appTitle = "[프로젝트 관리 시스템]";
+    String line = "----------------------------------";
+
+    try {
+      mainMenu.execute();
+
+    } catch (Exception ex) {
+      System.out.println("실행 오류!");
+      ex.printStackTrace();
+
+    } finally {
+      saveData();
+    }
+
+    System.out.println("종료합니다.");
+
+    Prompt.close();
   }
 
   private void loadData() {
-    loadUsers();
-    loadProjects();
-    loadBoards();
-    System.out.println("데이터를 로딩했습니다.");
+    //    loadUsers();
+    //    loadProjects();
+    //    loadBoards();
+
+    loadJson(userList, "user.json", User.class);
+    loadJson(projectList, "project.json", Project.class);
+    loadJson(boardList, "board.json", Board.class);
+    System.out.println("데이터를 로딩 했습니다.");
   }
 
-  private void loadUsers() {
-    try (FileInputStream in = new FileInputStream("user.data")) {
-      // user 데이터 개수 : 파일에서 2바이트를 읽는다.
-      int userLength = (in.read() << 8) | in.read();
-      int maxUserNo = 0;
-      int len;
-      byte[] bytes;
+  private <E> void loadJson(List<E> list, String filename, Class<E> elementType) {
+    try (BufferedReader in = new BufferedReader(new FileReader(filename))) {
 
-      for (int i = 0; i < userLength; i++) {
-        // 한 개의 User 데이터 바이트 배열 크기 : 파일에서 2바이트를 읽는다.
-        len = (in.read() << 8) | in.read();
-
-        // 한 개의 User 데이터 바이트 배열 : 위에서 지정한 개수만큼 바이트 배열을 읽는다.
-        bytes = new byte[len];
-        in.read(bytes);
-
-        // User 바이트 배열을 가지고 User 객체를 생성
-        User user = User.valueOf(bytes);
-        userList.add(user);
-
-        if (user.getNo() > maxUserNo) {
-          maxUserNo = user.getNo();
-        }
+      StringBuilder strBuilder = new StringBuilder();
+      String line;
+      while ((line = in.readLine()) != null) {
+        strBuilder.append(line);
       }
 
-      User.initSeqNo(maxUserNo);
+      list.addAll((List<E>) new GsonBuilder()
+          .setDateFormat("yyyy-MM-dd HH:mm:ss")
+          .create()
+          .fromJson(
+              strBuilder.toString(),
+              TypeToken.getParameterized(List.class, elementType)));
 
-    } catch (IOException e) {
-      System.out.println("회원 정보 로딩 중 오류 발생!");
+      int maxNo = 0;
+      for (Class<?> type : elementType.getInterfaces()) {
+        if (type == SequenceNo.class) {
+          for (Object element : list) {
+            SequenceNo seqObj = (SequenceNo) element;
+            if (seqObj.getNo() > maxNo) {
+              maxNo = seqObj.getNo();
+            }
+
+            Method method = elementType.getMethod("initSeqNo", int.class);
+            method.invoke(null, maxNo);
+          }
+        }
+      }
+    } catch (Exception e) {
+      System.out.printf("%s 정보 로딩 중 오류 발생!\n", filename);
+      // e.printStackTrace();
     }
   }
 
-  private void loadProjects() {
-    try (FileInputStream in = new FileInputStream("project.data")) {
-      int projectLength = in.read() << 8 | in.read();
-      int maxProjectNo = 0;
-      int len;
-      byte[] bytes;
-
-      for (int i = 0; i < projectLength; i++) {
-        len = in.read() << 8 | in.read();
-        bytes = new byte[len];
-        in.read(bytes);
-
-        Project project = Project.valueOf(bytes);
-        projectList.add(project);
-
-        if (project.getNo() > maxProjectNo) {
-          maxProjectNo = project.getNo();
-        }
-      }
-
-      Project.initSeqNo(maxProjectNo);
-    } catch (IOException e) {
-      System.out.println("게시판 정보 로딩 중 오류 발생!");
-    }
-  }
-
-  private void loadBoards() {
-    try (FileInputStream in = new FileInputStream("board.data")) {
-      int boardLength = in.read() << 8 | in.read();
-      int maxBoardNo = 0;
-      int len;
-      byte[] bytes;
-
-      for (int i = 0; i < boardLength; i++) {
-        len = in.read() << 8 | in.read();
-        bytes = new byte[len];
-        in.read(bytes);
-
-        Board board = Board.valueOf(bytes);
-        boardList.add(board);
-
-        if (board.getNo() > maxBoardNo) {
-          maxBoardNo = board.getNo();
-        }
-      }
-
-      Board.initSeqNo(maxBoardNo);
-    } catch (IOException e) {
-      System.out.println("게시판 정보 로딩 중 오류 발생!");
-    }
-  }
+  //  private void loadUsers() {
+  //    try (BufferedReader in = new BufferedReader(new FileReader("user.json"))) {
+  //
+  //      StringBuilder strBuilder = new StringBuilder();
+  //      String line;
+  //      while ((line = in.readLine()) != null) {
+  //        strBuilder.append(line);
+  //      }
+  //
+  //      userList.addAll(new Gson().fromJson(
+  //          strBuilder.toString(),
+  //          new TypeToken<ArrayList<User>>() {
+  //          }));
+  //
+  //      int maxUserNo = 0;
+  //      for (User user : userList) {
+  //        if (user.getNo() > maxUserNo) {
+  //          maxUserNo = user.getNo();
+  //        }
+  //      }
+  //
+  //      User.initSeqNo(maxUserNo);
+  //
+  //    } catch (IOException e) {
+  //      System.out.println("회원 정보 로딩 중 오류 발생!");
+  //      // e.printStackTrace();
+  //    }
+  //  }
+  //
+  //  private void loadProjects() {
+  //    try (BufferedReader in = new BufferedReader(new FileReader("project.json"))) {
+  //
+  //      StringBuilder strBuilder = new StringBuilder();
+  //      String line;
+  //      while ((line = in.readLine()) != null) {
+  //        strBuilder.append(line);
+  //      }
+  //
+  //      projectList.addAll(new Gson().fromJson(
+  //          strBuilder.toString(),
+  //          new TypeToken<ArrayList<Project>>() {
+  //          }));
+  //
+  //      int maxProjectNo = 0;
+  //      for (Project project : projectList) {
+  //        if (project.getNo() > maxProjectNo) {
+  //          maxProjectNo = project.getNo();
+  //        }
+  //      }
+  //
+  //      Project.initSeqNo(maxProjectNo);
+  //
+  //    } catch (IOException e) {
+  //      System.out.println("프로젝트 정보 로딩 중 오류 발생!");
+  //      // e.printStackTrace();
+  //    }
+  //  }
+  //
+  //  private void loadBoards() {
+  //    try (BufferedReader in = new BufferedReader(new FileReader("board.json"))) {
+  //
+  //      StringBuilder strBuilder = new StringBuilder();
+  //      String line;
+  //      while ((line = in.readLine()) != null) {
+  //        strBuilder.append(line);
+  //      }
+  //
+  //      boardList.addAll(new GsonBuilder()
+  //          .setDateFormat("yyyy-MM-dd HH:mm:ss")
+  //          .create()
+  //          .fromJson(
+  //              strBuilder.toString(),
+  //              new TypeToken<ArrayList<Board>>() {
+  //              }));
+  //
+  //      int maxBoardNo = 0;
+  //      for (Board board : boardList) {
+  //        if (board.getNo() > maxBoardNo) {
+  //          maxBoardNo = board.getNo();
+  //        }
+  //      }
+  //
+  //      Board.initSeqNo(maxBoardNo);
+  //
+  //    } catch (IOException e) {
+  //      System.out.println("게시글 정보 로딩 중 오류 발생!");
+  //      // e.printStackTrace();
+  //    }
+  //  }
 
   private void saveData() {
-    saveUsers();
-    saveProjects();
-    saveBoards();
-    System.out.println("데이터를 저장했습니다.");
+    //    saveUsers();
+    //    saveProjects();
+    //    saveBoards();
+
+    saveJson(userList, "user.json");
+    saveJson(projectList, "project.json");
+    saveJson(boardList, "board.json");
+    System.out.println("데이터를 저장 했습니다.");
   }
 
-  private void saveUsers() {
-    try (FileOutputStream out = new FileOutputStream("user.data");) {
-      // 몇 개의 데이터르 읽을지 알려주기 위해 저장 데이터의 개수를 출력
-      out.write(userList.size() >> 8);
-      out.write(userList.size());
-      byte[] bytes;
+  private <E> void saveJson(Object obj, String filename) {
+    try (FileWriter out = new FileWriter(filename)) {
 
-      for (User user : userList) {
-        bytes = user.getBytes();
-        out.write(bytes.length >> 8);
-        out.write(bytes.length);
-        out.write(bytes);
-      }
+      out.write(new GsonBuilder()
+          .setDateFormat("yyyy-MM-dd HH:mm:ss")
+          .create()
+          .toJson(obj));
+
     } catch (IOException e) {
-      System.out.println("회원 정보 저장 중 오류 발생!");
+      System.out.printf("%s 정보 저장 중 오류 발생!\n", filename);
+      e.printStackTrace();
     }
   }
 
-  private void saveProjects() {
-    try (FileOutputStream out = new FileOutputStream("project.data")) {
-      out.write(projectList.size() >> 8);
-      out.write(projectList.size());
-      byte[] bytes;
-
-      for (Project project : projectList) {
-        bytes = project.getBytes();
-        out.write(bytes.length >> 8);
-        out.write(bytes.length);
-        out.write(bytes);
-      }
-
-    } catch (IOException e) {
-      System.out.println("프로젝트 정보 저장 중 오류 발생!");
-    }
-  }
-
-  private void saveBoards() {
-    try (FileOutputStream out = new FileOutputStream("board.data")) {
-      out.write(boardList.size() >> 8);
-      out.write(boardList.size());
-      byte[] bytes;
-
-      for (Board board : boardList) {
-        bytes = board.getBytes();
-        out.write(bytes.length >> 8);
-        out.write(bytes.length);
-        out.write(bytes);
-      }
-
-    } catch (IOException e) {
-      System.out.println("게시판 정보 저장 중 오류 발생!");
-    }
-  }
+  //  private void saveUsers() {
+  //    try (FileWriter out = new FileWriter("user.json")) {
+  //
+  //      out.write(new Gson().toJson(userList));
+  //
+  //    } catch (IOException e) {
+  //      System.out.println("회원 정보 저장 중 오류 발생!");
+  //      e.printStackTrace();
+  //    }
+  //  }
+  //
+  //  private void saveProjects() {
+  //    try (FileWriter out = new FileWriter("project.json")) {
+  //
+  //      out.write(new Gson().toJson(projectList));
+  //
+  //    } catch (IOException e) {
+  //      System.out.println("프로젝트 정보 저장 중 오류 발생!");
+  //      e.printStackTrace();
+  //    }
+  //  }
+  //
+  //  private void saveBoards() {
+  //    try (FileWriter out = new FileWriter("board.json")) {
+  //
+  //      out.write(new GsonBuilder()
+  //          .setDateFormat("yyyy-MM-dd HH:mm:ss")
+  //          .create()
+  //          .toJson(boardList));
+  //
+  //    } catch (IOException e) {
+  //      System.out.println("게시글 정보 저장 중 오류 발생!");
+  //      e.printStackTrace();
+  //    }
+  //  }
 }
