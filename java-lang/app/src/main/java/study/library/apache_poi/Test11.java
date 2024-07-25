@@ -26,5 +26,7 @@ public class Test11 {
     }
 
     System.out.println("엑셀 파일 읽기 완료!");
+
+    workbook.close();
   }
 }

@@ -1,25 +1,30 @@
 package bitcamp.myapp.command.project;
 
 import bitcamp.myapp.command.Command;
+import bitcamp.myapp.dao.ProjectDao;
 import bitcamp.myapp.vo.Project;
-import java.util.List;
 
 public class ProjectListCommand implements Command {
 
-  private List<Project> projectList;
+  private ProjectDao projectDao;
 
-  public ProjectListCommand(List<Project> projectList) {
-    this.projectList = projectList;
+  public ProjectListCommand(ProjectDao projectDao) {
+    this.projectDao = projectDao;
   }
 
   @Override
   public void execute(String menuName) {
     System.out.printf("[%s]\n", menuName);
-
     System.out.println("번호 프로젝트 기간");
-    for (Project project : projectList) {
-      System.out.printf("%d %s %s ~ %s\n",
-          project.getNo(), project.getTitle(), project.getStartDate(), project.getEndDate());
+
+    try {
+      for (Project project : projectDao.list()) {
+        System.out.printf("%d %s %s ~ %s\n",
+            project.getNo(), project.getTitle(), project.getStartDate(), project.getEndDate());
+      }
+    } catch (Exception e) {
+      System.out.println("프로젝트 목록 조회 중 오류 발생!");
+      e.printStackTrace();
     }
   }
 }
