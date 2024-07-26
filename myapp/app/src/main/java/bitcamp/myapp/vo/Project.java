@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Project implements Serializable, SequenceNo {
+public class Project implements Serializable {
 
-  private static int seqNo;
+  private static final long serialVersionUID = 1L;
 
   private int no;
   private String title;
@@ -27,14 +27,6 @@ public class Project implements Serializable, SequenceNo {
     this.no = no;
   }
 
-  public static int getNextSeqNo() {
-    return ++seqNo;
-  }
-
-  public static void initSeqNo(int no) {
-    seqNo = no;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -51,8 +43,7 @@ public class Project implements Serializable, SequenceNo {
   public int hashCode() {
     return Objects.hashCode(no);
   }
-
-  @Override
+  
   public int getNo() {
     return no;
   }

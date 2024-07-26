@@ -13,30 +13,26 @@ public class ProjectMemberHandler {
     this.userDao = userDao;
   }
 
-  public void addMembers(Project project) {
+  public void addMembers(Project project) throws Exception {
     while (true) {
       int userNo = Prompt.inputInt("추가할 팀원 번호?(종료: 0)");
       if (userNo == 0) {
         break;
       }
 
-      try {
-        User user = userDao.findBy(userNo);
-        if (user == null) {
-          System.out.println("없는 팀원입니다.");
-          continue;
-        }
-
-        if (project.getMembers().contains(user)) {
-          System.out.printf("'%s'은 현재 팀원입니다.\n", user.getName());
-          continue;
-        }
-
-        project.getMembers().add(user);
-        System.out.printf("'%s'을 추가했습니다.\n", user.getName());
-      } catch (Exception e) {
-        System.out.println("팀원 추가 중 오류 발생!");
+      User user = userDao.findBy(userNo);
+      if (user == null) {
+        System.out.println("없는 팀원입니다.");
+        continue;
       }
+
+      if (project.getMembers().contains(user)) {
+        System.out.printf("'%s'은 현재 팀원입니다.\n", user.getName());
+        continue;
+      }
+
+      project.getMembers().add(user);
+      System.out.printf("'%s'을 추가했습니다.\n", user.getName());
     }
   }
 

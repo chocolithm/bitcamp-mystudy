@@ -16,9 +16,9 @@ public class UserViewCommand implements Command {
   @Override
   public void execute(String menuName) {
     System.out.printf("[%s]\n", menuName);
-    int userNo = Prompt.inputInt("회원번호?");
 
     try {
+      int userNo = Prompt.inputInt("회원번호?");
       User user = userDao.findBy(userNo);
       if (user == null) {
         System.out.println("없는 회원입니다.");

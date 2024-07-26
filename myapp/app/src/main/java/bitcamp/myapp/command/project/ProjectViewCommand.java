@@ -17,9 +17,9 @@ public class ProjectViewCommand implements Command {
   @Override
   public void execute(String menuName) {
     System.out.printf("[%s]\n", menuName);
-    int projectNo = Prompt.inputInt("프로젝트 번호?");
 
     try {
+      int projectNo = Prompt.inputInt("프로젝트 번호?");
       Project project = projectDao.findBy(projectNo);
       if (project == null) {
         System.out.println("없는 프로젝트입니다.");

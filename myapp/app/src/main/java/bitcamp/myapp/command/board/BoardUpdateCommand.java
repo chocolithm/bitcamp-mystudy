@@ -29,11 +29,8 @@ public class BoardUpdateCommand implements Command {
       board.setTitle(Prompt.input("제목(%s)?", board.getTitle()));
       board.setContent(Prompt.input("내용(%s)?", board.getContent()));
 
-      if (boardDao.update(board)) {
-        System.out.println("변경 했습니다.");
-      } else {
-        System.out.println("변경 실패!");
-      }
+      boardDao.update(board);
+      System.out.println("변경 했습니다.");
     } catch (Exception e) {
       System.out.println("게시글 데이터 변경 중 오류 발생!");
       e.printStackTrace();

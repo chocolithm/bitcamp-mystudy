@@ -1,16 +1,16 @@
 package bitcamp.myapp.command.board;
 
 import bitcamp.myapp.command.Command;
+import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.Board;
 import bitcamp.util.Prompt;
-import java.util.List;
 
 public class BoardViewCommand implements Command {
 
-  private List<Board> boardList;
+  private BoardDao boardDao;
 
-  public BoardViewCommand(List<Board> list) {
-    this.boardList = list;
+  public BoardViewCommand(BoardDao boardDao) {
+    this.boardDao = boardDao;
   }
 
   @Override
@@ -18,13 +18,11 @@ public class BoardViewCommand implements Command {
     System.out.printf("[%s]\n", menuName);
 
     int boardNo = Prompt.inputInt("게시글 번호?");
-    int index = boardList.indexOf(new Board(boardNo));
-    if (index == -1) {
+    Board board = boardDao.findBy(boardNo);
+    if (board == null) {
       System.out.println("없는 게시글입니다.");
       return;
     }
-
-    Board board = boardList.get(index);
 
     board.setViewCount(board.getViewCount() + 1);
     System.out.printf("제목: %s\n", board.getTitle());

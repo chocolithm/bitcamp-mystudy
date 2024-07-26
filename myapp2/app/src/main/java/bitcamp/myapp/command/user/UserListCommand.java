@@ -1,15 +1,15 @@
 package bitcamp.myapp.command.user;
 
 import bitcamp.myapp.command.Command;
+import bitcamp.myapp.dao.UserDao;
 import bitcamp.myapp.vo.User;
-import java.util.List;
 
 public class UserListCommand implements Command {
 
-  private List<User> userList;
+  private UserDao userDao;
 
-  public UserListCommand(List<User> list) {
-    this.userList = list;
+  public UserListCommand(UserDao userDao) {
+    this.userDao = userDao;
   }
 
   @Override
@@ -17,7 +17,7 @@ public class UserListCommand implements Command {
     System.out.printf("[%s]\n", menuName);
 
     System.out.println("번호 이름 이메일");
-    for (User user : userList) {
+    for (User user : userDao.list()) {
       System.out.printf("%d %s %s\n", user.getNo(), user.getName(), user.getEmail());
     }
   }

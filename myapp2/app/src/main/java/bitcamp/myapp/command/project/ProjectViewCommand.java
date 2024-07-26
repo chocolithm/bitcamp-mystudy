@@ -1,17 +1,17 @@
 package bitcamp.myapp.command.project;
 
 import bitcamp.myapp.command.Command;
+import bitcamp.myapp.dao.ProjectDao;
 import bitcamp.myapp.vo.Project;
 import bitcamp.myapp.vo.User;
 import bitcamp.util.Prompt;
-import java.util.List;
 
 public class ProjectViewCommand implements Command {
 
-  private List<Project> projectList;
+  private ProjectDao projectDao;
 
-  public ProjectViewCommand(List<Project> projectList) {
-    this.projectList = projectList;
+  public ProjectViewCommand(ProjectDao projectDao) {
+    this.projectDao = projectDao;
   }
 
   @Override
@@ -19,13 +19,11 @@ public class ProjectViewCommand implements Command {
     System.out.printf("[%s]\n", menuName);
 
     int projectNo = Prompt.inputInt("프로젝트 번호?");
-    int index = projectList.indexOf(new Project(projectNo));
-    if (index == -1) {
+    Project project = projectDao.findBy(projectNo);
+    if (project == null) {
       System.out.println("없는 프로젝트입니다.");
       return;
     }
-
-    Project project = projectList.get(index);
 
     System.out.printf("프로젝트명: %s\n", project.getTitle());
     System.out.printf("설명: %s\n", project.getDescription());

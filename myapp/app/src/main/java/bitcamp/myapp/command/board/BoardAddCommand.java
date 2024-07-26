@@ -18,12 +18,12 @@ public class BoardAddCommand implements Command {
   public void execute(String menuName) {
     System.out.printf("[%s]\n", menuName);
 
-    Board board = new Board();
-    board.setTitle(Prompt.input("제목?"));
-    board.setContent(Prompt.input("내용?"));
-    board.setCreatedDate(new Date());
-
     try {
+      Board board = new Board();
+      board.setTitle(Prompt.input("제목?"));
+      board.setContent(Prompt.input("내용?"));
+      board.setCreatedDate(new Date());
+
       boardDao.insert(board);
     } catch (Exception e) {
       System.out.println("게시글 데이터 등록 중 오류 발생!");

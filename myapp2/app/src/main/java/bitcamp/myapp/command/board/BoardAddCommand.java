@@ -1,17 +1,17 @@
 package bitcamp.myapp.command.board;
 
 import bitcamp.myapp.command.Command;
+import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.Board;
 import bitcamp.util.Prompt;
 import java.util.Date;
-import java.util.List;
 
 public class BoardAddCommand implements Command {
 
-  private List<Board> boardList;
+  private BoardDao boardDao;
 
-  public BoardAddCommand(List<Board> list) {
-    this.boardList = list;
+  public BoardAddCommand(BoardDao boardDao) {
+    this.boardDao = boardDao;
   }
 
   @Override
@@ -22,7 +22,7 @@ public class BoardAddCommand implements Command {
     board.setTitle(Prompt.input("제목?"));
     board.setContent(Prompt.input("내용?"));
     board.setCreatedDate(new Date());
-    board.setNo(Board.getNextSeqNo());
-    boardList.add(board);
+
+    boardDao.insert(board);
   }
 }
