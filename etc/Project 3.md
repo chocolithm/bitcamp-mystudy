@@ -34,6 +34,8 @@
   String author;
   String category;
   boolean isBorrowed;
+  boolean isReserved;
+  String 예약한사람
   Date registerDate;
   Date borrowDate;
   Date returnDate;
@@ -74,16 +76,17 @@
 
 ## 메인
 [연체 중인 도서가 있을 시 알림 표출]
-1. 도서검색  //LibraryCommand -> searchBook(title)
+1. 도서대출  //LibraryCommand -> searchBook(title)
+2. 도서반납  //LibraryCommand -> returnBook()
 2. 신간도서  //LibraryCommand -> searchBook(date)
-3. 대출현황  //LibraryCommand -> showStatus(loginUser)
+3. 대출현황  //LibraryCommand -> showStatus()
 4. 이용안내  //LibraryCommand -> showGuide()
 0. 로그아웃  //Login -> logout()
 
 ## 관리자 화면
 1. 사용자관리  //UserCommand
 2. 도서관리  //BookCommand
-3. 대출기록  
+<!-- 3. 대출기록   -->
 0. 로그아웃  //Login -> logout()
 
 -----------------------------------------------------
@@ -94,10 +97,20 @@
 번호    분류    도서명          대출여부
 1       과학    인터스텔라      대출가능
 2       인문    군주론          대출중
+3       인문    군주론          예약중
 
-대출하시겠습니까? <<y/n>>
-도서 번호? <<번호>>
-대출되었습니다. / 대출이 불가한 도서입니다.
+도서 번호(0 이전)? <<번호>>
+대출되었습니다. / 대출 중인 도서입니다. 예약하시겠습니까? / 대출이 불가한 도서입니다.
+
+
+## 메인 > 도서반납
+번호    분류    도서명        대출일      반납예정일      상태
+1       과학    인터스텔라    2024-07-11  2024-07-25      정상
+2       인문    군주론        2024-06-11  2024-06-25      연체
+
+도서 번호(0 이전)? <<번호>>
+'인터스텔라'를 연장하시겠습니까? y/n
+y : 연장되었습니다. / n : 반납하였습니다.
 
 
 ## 메인 > 대출현황
@@ -129,9 +142,10 @@
 0. 이전
 
 ## 관리자 > 도서관리
-1. 목록
-2. 수정
-3. 삭제
+1. 등록
+2. 목록
+3. 수정
+4. 삭제
 0. 이전
 
 ## 관리자 > 대출기록
