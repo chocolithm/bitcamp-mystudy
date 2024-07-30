@@ -1,73 +1,37 @@
 # 미니프로젝트
-<<<<<<< HEAD
 - 주제 : TicTacToe 게임 만들기
   팀원 : 강윤상, 이가람, 이민석
   기간 : 7/30(화) ~ 8/5(월)
-=======
-- 주제 : Tictactoe
-  팀원 : 이가람 이민석 강윤상
-  발표 : 
->>>>>>> 341773356c835a61b779651d03c6df4128871ba1
 
 
 
 # 클래스 구조
-<<<<<<< HEAD
-<Project TictactoeServer>
-
-<Project TictactoeCommon>
-  <Package menu>
-  <Package util>
-    <Class Prompt>
-    <Class History>
-    <Class Ansi>
-
-<Project TictactoeClient>
 
 
 
-
-
-# 화면예시
-=======
 <Project Server>
+2차원 배열 사용
+String[][] {
+  {"", "", ""}
+  {"", "", ""}
+  {"", "", ""}
+}
 
 <Project Common>
+  <Package menu>
   <Package command>
     <Package user>
     <Package game>
   <Pakcage vo>
     <Class User>  
+  <Package util>
+    <Class Prompt>
+    <Class History>
+    <Class Ansi>
 
 <Project Client>
 
 # 화면예시
-
------------------------------------------------------
-
-## 로그인
-1. 로그인  //Login -> login()
-2. 회원가입  //UserCommand -> addUser()
-0. 종료
-
------------------------------------------------------
-
-## 메인
-[연체 중인 도서가 있을 시 알림 표출]
-1. 도서대출  //LibraryCommand -> searchBook(title)
-2. 도서반납  //LibraryCommand -> returnBook()
-2. 신간도서  //LibraryCommand -> searchBook(date)
-3. 대출현황  //LibraryCommand -> showStatus()
-4. 이용안내  //LibraryCommand -> showGuide()
-0. 로그아웃  //Login -> logout()
-
-## 관리자 화면
-1. 사용자관리  //UserCommand
-2. 도서관리  //BookCommand
-<!-- 3. 대출기록   -->
-0. 로그아웃  //Login -> logout()
-
------------
 
 # 서버 시작
 사용자를 입력하세요 : 강윤상
@@ -108,14 +72,3 @@ Warning! 이미 입력된 칸입니다.
 ├───┼───┼───┤
 | 7 | 8 | 9 │
 └───┴───┴───┘
-
-
-
-1차원 배열
-{0, 1, 2 ,3, 4, 5, 6 ,7, 8}
-{
-  {"", "", ""}
-  {"", "", ""}
-  {"", "", ""}
-}
->>>>>>> 341773356c835a61b779651d03c6df4128871ba1
