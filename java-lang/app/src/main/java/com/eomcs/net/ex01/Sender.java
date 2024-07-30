@@ -34,7 +34,7 @@ public class Sender {
     out.println("임꺽정입니다. 안녕하세요!");
     System.out.println("서버에 데이터 보냈음!");
 
-    //    keyscan.nextLine(); // 서버가 보낸 문자열을 읽지 않고 대기함!
+    keyscan.nextLine(); // 서버가 보낸 문자열을 읽지 않고 대기함!
 
     // 4) 상대편에서 보낸 문자열을 한 줄 읽는다.
     // => 상대편이 한 줄 데이터를 보낼 때까지 리턴하지 않는다.
