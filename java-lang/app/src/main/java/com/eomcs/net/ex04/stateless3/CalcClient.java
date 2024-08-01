@@ -21,7 +21,7 @@ public class CalcClient {
       System.out.print("값? ");
       int value = Integer.parseInt(keyScan.nextLine());
 
-      try (Socket socket = new Socket("localhost", 8888);
+      try (Socket socket = new Socket("192.168.0.23", 8888);
           DataOutputStream out = new DataOutputStream(socket.getOutputStream());
           DataInputStream in = new DataInputStream(socket.getInputStream())) {
 

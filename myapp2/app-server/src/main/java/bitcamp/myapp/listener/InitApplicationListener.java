@@ -11,39 +11,52 @@ import bitcamp.myapp.dao.UserDao;
 import bitcamp.myapp.dao.skel.BoardDaoSkel;
 import bitcamp.myapp.dao.skel.ProjectDaoSkel;
 import bitcamp.myapp.dao.skel.UserDaoSkel;
-import java.io.FileOutputStream;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class InitApplicationListener implements ApplicationListener {
+
   UserDao userDao;
-  ProjectDao projectDao;
   BoardDao boardDao;
+  ProjectDao projectDao;
 
   @Override
-  public void onStartup(ApplicationContext context) {
-    userDao = new ListUserDao();
-    projectDao = new ListProjectDao(userDao);
-    boardDao = new ListBoardDao();
+  public void onStart(ApplicationContext ctx) throws Exception {
+    userDao = new ListUserDao("data.xlsx");
+    boardDao = new ListBoardDao("data.xlsx");
+    projectDao = new ListProjectDao("data.xlsx", userDao);
 
-    context.setAttributes("userDaoSkel", new UserDaoSkel(userDao));
-    context.setAttributes("projectDaoSkel", new ProjectDaoSkel(projectDao));
-    context.setAttributes("boardDaoSkel", new BoardDaoSkel(boardDao));
+    UserDaoSkel userDaoSkel = new UserDaoSkel(userDao);
+    BoardDaoSkel boardDaoSkel = new BoardDaoSkel(boardDao);
+    ProjectDaoSkel projectDaoSkel = new ProjectDaoSkel(projectDao);
+
+    ctx.setAttribute("userDaoSkel", userDaoSkel);
+    ctx.setAttribute("boardDaoSkel", boardDaoSkel);
+    ctx.setAttribute("projectDaoSkel", projectDaoSkel);
   }
 
   @Override
-  public void onShutdown(ApplicationContext context) {
-    try (XSSFWorkbook workbook = new XSSFWorkbook()) {
-      ((ListUserDao) userDao).save(workbook);
-      ((ListProjectDao) projectDao).save(workbook);
-      ((ListBoardDao) boardDao).save(workbook);
-
-      try (FileOutputStream out = new FileOutputStream("data.xlsx")) {
-        workbook.write(out);
-      }
-      System.out.println("데이터를 저장 했습니다.");
+  public void onShutdown(ApplicationContext ctx) throws Exception {
+    try {
+      ((ListUserDao) userDao).save();
     } catch (Exception e) {
-      System.out.println("데이터 저장 중 오류 발생!");
+      System.out.println("회원 데이터 저장 중 오류 발생!");
       e.printStackTrace();
+      System.out.println();
+    }
+
+    try {
+      ((ListBoardDao) boardDao).save();
+    } catch (Exception e) {
+      System.out.println("게시글 데이터 저장 중 오류 발생!");
+      e.printStackTrace();
+      System.out.println();
+    }
+
+    try {
+      ((ListProjectDao) projectDao).save();
+    } catch (Exception e) {
+      System.out.println("프로젝트 데이터 저장 중 오류 발생!");
+      e.printStackTrace();
+      System.out.println();
     }
   }
 }

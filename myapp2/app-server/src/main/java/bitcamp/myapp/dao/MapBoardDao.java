@@ -5,24 +5,27 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class ListBoardDao implements BoardDao {
+public class MapBoardDao implements BoardDao {
 
   private static final String DEFAULT_DATANAME = "boards";
   private int seqNo;
-  private List<Board> boardList = new ArrayList<>();
+  private Map<Integer, Board> boardMap = new HashMap<>();
+  private List<Integer> boardNoList = new ArrayList<>();
   private String path;
   private String dataName;
 
-  public ListBoardDao(String path) {
+  public MapBoardDao(String path) {
     this(path, DEFAULT_DATANAME);
   }
 
-  public ListBoardDao(String path, String dataName) {
+  public MapBoardDao(String path, String dataName) {
     this.path = path;
     this.dataName = dataName;
 
@@ -42,14 +45,15 @@ public class ListBoardDao implements BoardDao {
 
           board.setViewCount(Integer.parseInt(row.getCell(4).getStringCellValue()));
 
-          boardList.add(board);
+          boardMap.put(board.getNo(), board);
+          boardNoList.add(board.getNo());
 
         } catch (Exception e) {
           System.out.printf("%s 번 게시글의 데이터 형식이 맞지 않습니다.\n", row.getCell(0).getStringCellValue());
         }
       }
 
-      seqNo = boardList.getLast().getNo();
+      seqNo = boardNoList.getLast();
 
     } catch (Exception e) {
       System.out.println("게시글 데이터 로딩 중 오류 발생!");
@@ -77,7 +81,8 @@ public class ListBoardDao implements BoardDao {
 
       // 데이터 저장
       int rowNo = 1;
-      for (Board board : boardList) {
+      for (Integer boardNo : boardNoList) {
+        Board board = boardMap.get(boardNo);
         Row dataRow = sheet.createRow(rowNo++);
         dataRow.createCell(0).setCellValue(String.valueOf(board.getNo()));
         dataRow.createCell(1).setCellValue(board.getTitle());
@@ -102,44 +107,41 @@ public class ListBoardDao implements BoardDao {
   @Override
   public boolean insert(Board board) throws Exception {
     board.setNo(++seqNo);
-    boardList.add(board);
+    boardMap.put(board.getNo(), board);
+    boardNoList.add(board.getNo());
     return true;
   }
 
   @Override
   public List<Board> list() throws Exception {
-    return boardList.stream().toList();
+    ArrayList<Board> boards = new ArrayList<>();
+    for (Integer boardNo : boardNoList) {
+      boards.add(boardMap.get(boardNo));
+    }
+    return boards;
   }
 
   @Override
   public Board findBy(int no) throws Exception {
-    for (Board board : boardList) {
-      if (board.getNo() == no) {
-        return board;
-      }
-    }
-    return null;
+    return boardMap.get(no);
   }
 
   @Override
   public boolean update(Board board) throws Exception {
-    int index = boardList.indexOf(board);
-    if (index == -1) {
+    if (!boardMap.containsKey(board.getNo())) {
       return false;
     }
 
-    boardList.set(index, board);
+    boardMap.put(board.getNo(), board);
     return true;
   }
 
   @Override
   public boolean delete(int no) throws Exception {
-    int index = boardList.indexOf(new Board(no));
-    if (index == -1) {
+    if (boardMap.remove(no) == null) {
       return false;
     }
-
-    boardList.remove(index);
+    boardNoList.remove(Integer.valueOf(no));
     return true;
   }
 }

@@ -16,20 +16,20 @@ public class UserDeleteCommand implements Command {
   @Override
   public void execute(String menuName) {
     System.out.printf("[%s]\n", menuName);
+    int userNo = Prompt.inputInt("회원번호?");
 
     try {
-      int userNo = Prompt.inputInt("회원번호?");
       User deletedUser = userDao.findBy(userNo);
       if (deletedUser == null) {
         System.out.println("없는 회원입니다.");
         return;
       }
 
-      userDao.delete(deletedUser);
+      userDao.delete(userNo);
       System.out.printf("'%s' 회원을 삭제 했습니다.\n", deletedUser.getName());
+
     } catch (Exception e) {
-      System.out.println("회원 삭제 중 오류 발생!");
-      e.printStackTrace();
+      System.out.println("삭제 중 오류 발생!");
     }
   }
 }

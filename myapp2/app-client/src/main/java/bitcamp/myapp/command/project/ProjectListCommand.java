@@ -15,16 +15,16 @@ public class ProjectListCommand implements Command {
   @Override
   public void execute(String menuName) {
     System.out.printf("[%s]\n", menuName);
+    System.out.println("번호 프로젝트 기간");
 
     try {
-      System.out.println("번호 프로젝트 기간");
       for (Project project : projectDao.list()) {
         System.out.printf("%d %s %s ~ %s\n",
             project.getNo(), project.getTitle(), project.getStartDate(), project.getEndDate());
       }
     } catch (Exception e) {
-      System.out.println("프로젝트 목록 조회 중 오류 발생");
-      e.printStackTrace();
+      System.out.println("목록 조회 중 오류 발생!");
     }
   }
+
 }

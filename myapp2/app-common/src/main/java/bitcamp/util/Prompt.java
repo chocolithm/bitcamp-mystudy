@@ -1,6 +1,5 @@
 package bitcamp.util;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
@@ -34,9 +33,8 @@ public class Prompt {
 
   public static void printHistory() {
     System.out.println("[명령 내역]----------------");
-    Iterator<String> iterator = inputQueue.iterator();
-    while (iterator.hasNext()) {
-      System.out.println(iterator.next());
+    for (String log : inputQueue) {
+      System.out.println(log);
     }
     System.out.println("------------------------ 끝");
   }

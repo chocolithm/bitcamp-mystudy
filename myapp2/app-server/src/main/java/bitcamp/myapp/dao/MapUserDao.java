@@ -4,24 +4,27 @@ import bitcamp.myapp.vo.User;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class ListUserDao implements UserDao {
+public class MapUserDao implements UserDao {
 
   private static final String DEFAULT_DATANAME = "users";
   private int seqNo;
-  private List<User> userList = new ArrayList<>();
+  private Map<Integer, User> userMap = new HashMap<>();
+  private List<Integer> userNoList = new ArrayList<>();
   private String path;
   private String dataName;
 
-  public ListUserDao(String path) {
+  public MapUserDao(String path) {
     this(path, DEFAULT_DATANAME);
   }
 
-  public ListUserDao(String path, String dataName) {
+  public MapUserDao(String path, String dataName) {
     this.path = path;
     this.dataName = dataName;
 
@@ -38,14 +41,15 @@ public class ListUserDao implements UserDao {
           user.setPassword(row.getCell(3).getStringCellValue());
           user.setTel(row.getCell(4).getStringCellValue());
 
-          userList.add(user);
+          userMap.put(user.getNo(), user);
+          userNoList.add(user.getNo());
 
         } catch (Exception e) {
           System.out.printf("%s 번 회원의 데이터 형식이 맞지 않습니다.\n", row.getCell(0).getStringCellValue());
         }
       }
 
-      seqNo = userList.getLast().getNo();
+      seqNo = userNoList.getLast();
 
     } catch (Exception e) {
       System.out.println("회원 데이터 로딩 중 오류 발생!");
@@ -73,7 +77,8 @@ public class ListUserDao implements UserDao {
 
       // 데이터 저장
       int rowNo = 1;
-      for (User user : userList) {
+      for (Integer userNo : userNoList) {
+        User user = userMap.get(userNo);
         Row dataRow = sheet.createRow(rowNo++);
         dataRow.createCell(0).setCellValue(String.valueOf(user.getNo()));
         dataRow.createCell(1).setCellValue(user.getName());
@@ -95,44 +100,41 @@ public class ListUserDao implements UserDao {
   @Override
   public boolean insert(User user) throws Exception {
     user.setNo(++seqNo);
-    userList.add(user);
+    userMap.put(user.getNo(), user);
+    userNoList.add(user.getNo());
     return true;
   }
 
   @Override
   public List<User> list() throws Exception {
-    return userList.stream().toList();
+    ArrayList<User> users = new ArrayList<>();
+    for (Integer userNo : userNoList) {
+      users.add(userMap.get(userNo));
+    }
+    return users;
   }
 
   @Override
   public User findBy(int no) throws Exception {
-    for (User user : userList) {
-      if (user.getNo() == no) {
-        return user;
-      }
-    }
-    return null;
+    return userMap.get(no);
   }
 
   @Override
   public boolean update(User user) throws Exception {
-    int index = userList.indexOf(user);
-    if (index == -1) {
+    if (!userMap.containsKey(user.getNo())) {
       return false;
     }
 
-    userList.set(index, user);
+    userMap.put(user.getNo(), user);
     return true;
   }
 
   @Override
   public boolean delete(int no) throws Exception {
-    int index = userList.indexOf(new User(no));
-    if (index == -1) {
+    if (userMap.remove(no) == null) {
       return false;
     }
-
-    userList.remove(index);
+    userNoList.remove(Integer.valueOf(no));
     return true;
   }
 }

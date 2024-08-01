@@ -32,9 +32,9 @@ public class ProjectAddCommand implements Command {
       projectDao.insert(project);
 
       System.out.println("등록했습니다.");
+
     } catch (Exception e) {
-      System.out.println("프로젝트 등록 중 오류 발생!");
-      e.printStackTrace();
+      System.out.println("등록 중 오류 발생!");
     }
   }
 }

@@ -16,7 +16,6 @@ public class UserAddCommand implements Command {
   @Override
   public void execute(String menuName) {
     System.out.printf("[%s]\n", menuName);
-
     try {
       User user = new User();
       user.setName(Prompt.input("이름?"));
@@ -26,8 +25,7 @@ public class UserAddCommand implements Command {
 
       userDao.insert(user);
     } catch (Exception e) {
-      System.out.println("회원 등록 중 오류 발생!");
-      e.printStackTrace();
+      System.out.println("등록 중 오류 발생!");
     }
   }
 }

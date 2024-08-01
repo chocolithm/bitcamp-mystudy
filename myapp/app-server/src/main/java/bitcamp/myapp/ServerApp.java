@@ -17,11 +17,11 @@ import java.util.List;
 public class ServerApp {
 
   List<ApplicationListener> listeners = new ArrayList<>();
-  ApplicationContext appCtx = new ApplicationContext();
+  ApplicationContext ctx = new ApplicationContext();
 
   UserDaoSkel userDaoSkel;
-  BoardDaoSkel boardDaoSkel;
   ProjectDaoSkel projectDaoSkel;
+  BoardDaoSkel boardDaoSkel;
 
   public static void main(String[] args) {
     ServerApp app = new ServerApp();
@@ -45,16 +45,15 @@ public class ServerApp {
     // 애플리케이션이 시작될 때 리스너에게 알린다.
     for (ApplicationListener listener : listeners) {
       try {
-        listener.onStartup(appCtx);
+        listener.onStartup(ctx);
       } catch (Exception e) {
         System.out.println("리스너 실행 중 오류 발생!");
       }
     }
-
-    // 서버에서 사용할 Dao Skeloton 객체를 준비한다.
-    userDaoSkel = (UserDaoSkel) appCtx.getAttribute("userDaoSkel");
-    boardDaoSkel = (BoardDaoSkel) appCtx.getAttribute("boardDaoSkel");
-    projectDaoSkel = (ProjectDaoSkel) appCtx.getAttribute("projectDaoSkel");
+    
+    userDaoSkel = (UserDaoSkel) ctx.getAttribute("userDaoSkel");
+    boardDaoSkel = (BoardDaoSkel) ctx.getAttribute("boardDaoSkel");
+    projectDaoSkel = (ProjectDaoSkel) ctx.getAttribute("projectDaoSkel");
 
     System.out.println("서버 프로젝트 관리 시스템 시작!");
 
@@ -62,7 +61,14 @@ public class ServerApp {
       System.out.println("서버 실행 중...");
 
       while (true) {
-        processRequest(serverSocket.accept());
+        Socket socket = serverSocket.accept();
+
+        new Thread() {
+          @Override
+          public void run() {
+            processRequest(socket);
+          }
+        }.start();
       }
 
     } catch (Exception e) {
@@ -75,19 +81,19 @@ public class ServerApp {
     // 애플리케이션이 종료될 때 리스너에게 알린다.
     for (ApplicationListener listener : listeners) {
       try {
-        listener.onShutdown(appCtx);
+        listener.onShutdown(ctx);
       } catch (Exception e) {
         System.out.println("리스너 실행 중 오류 발생!");
       }
     }
   }
 
-  private void processRequest(Socket s) {
+  void processRequest(Socket socket) {
     String remoteHost = null;
     int port = 0;
 
-    try (Socket socket = s) {
-      InetSocketAddress addr = (InetSocketAddress) s.getRemoteSocketAddress();
+    try (Socket s = socket) {
+      InetSocketAddress addr = (InetSocketAddress) socket.getRemoteSocketAddress();
       remoteHost = addr.getHostString();
       port = addr.getPort();
       System.out.printf("%s:%d 클라이언트와 연결되었음!\n", remoteHost, port);
@@ -115,4 +121,5 @@ public class ServerApp {
       System.out.printf("%s:%d 클라이언트 요청 처리 중 오류 발생!\n", remoteHost, port);
     }
   }
+
 }

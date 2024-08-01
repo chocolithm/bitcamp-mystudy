@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.json.JSONObject;
@@ -17,7 +18,28 @@ public class ChatServer {
   Map<String, SocketClient> chatRoom = Collections.synchronizedMap(new HashMap<>());
 
   public static void main(String[] args) {
+    try {
+      ChatServer chatServer = new ChatServer();
+      chatServer.start();
 
+      System.out.println("---------------------------");
+      System.out.println("서버를 종료하려면 q 입력하고 엔터");
+      System.out.println("---------------------------");
+
+      Scanner scanner = new Scanner(System.in);
+      while (true) {
+        String key = scanner.nextLine();
+        if (key.equals("q")) {
+          break;
+        }
+      }
+
+      scanner.close();
+      chatServer.stop();
+    } catch (Exception e) {
+      System.out.println("[서버] " + e.getMessage());
+      // TODO: handle exception
+    }
   }
 
   public void start() throws IOException {

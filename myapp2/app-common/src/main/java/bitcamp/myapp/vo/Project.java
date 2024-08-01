@@ -14,11 +14,8 @@ public class Project implements Serializable {
   private String description;
   private String startDate;
   private String endDate;
-  private List<User> members;
-
-  { // 인스턴스 블록
-    members = new ArrayList<>();
-  }
+  private List<User> members = new ArrayList<>();
+  ;
 
   public Project() {
   }

@@ -1,16 +1,17 @@
 package bitcamp.myapp.dao.skel;
 
+import static bitcamp.net.ResponseStatus.ERROR;
+import static bitcamp.net.ResponseStatus.FAILURE;
+import static bitcamp.net.ResponseStatus.SUCCESS;
+
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.Board;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
-import static bitcamp.net.ResponseStatus.ERROR;
-import static bitcamp.net.ResponseStatus.FAILURE;
-import static bitcamp.net.ResponseStatus.SUCCESS;
-
 public class BoardDaoSkel {
+
   private BoardDao boardDao;
 
   public BoardDaoSkel(BoardDao boardDao) {
@@ -19,17 +20,20 @@ public class BoardDaoSkel {
 
   public void service(ObjectInputStream in, ObjectOutputStream out) throws Exception {
     String command = in.readUTF();
+
     Board board = null;
     int no = 0;
 
     switch (command) {
       case "insert":
         board = (Board) in.readObject();
-        if (boardDao.insert(board)) {
-          out.writeUTF(SUCCESS);
-        } else {
-          out.writeUTF(FAILURE);
-        }
+        boardDao.insert(board);
+        out.writeUTF(SUCCESS);
+        break;
+      case "list":
+        List<Board> list = boardDao.list();
+        out.writeUTF(SUCCESS);
+        out.writeObject(list);
         break;
       case "get":
         no = in.readInt();
@@ -37,15 +41,6 @@ public class BoardDaoSkel {
         if (board != null) {
           out.writeUTF(SUCCESS);
           out.writeObject(board);
-        } else {
-          out.writeUTF(FAILURE);
-        }
-        break;
-      case "list":
-        List<Board> list = boardDao.list();
-        if (list != null) {
-          out.writeUTF(SUCCESS);
-          out.writeObject(list);
         } else {
           out.writeUTF(FAILURE);
         }
@@ -59,8 +54,8 @@ public class BoardDaoSkel {
         }
         break;
       case "delete":
-        board = (Board) in.readObject();
-        if (boardDao.delete(board)) {
+        no = in.readInt();
+        if (boardDao.delete(no)) {
           out.writeUTF(SUCCESS);
         } else {
           out.writeUTF(FAILURE);
@@ -73,4 +68,5 @@ public class BoardDaoSkel {
 
     out.flush();
   }
+
 }

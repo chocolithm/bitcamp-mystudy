@@ -27,8 +27,9 @@ public class HttpServer {
       while (true) {
         String str = in.nextLine();
         System.out.println(str);
-        if (str.equals(""))
+        if (str.equals("")) {
           break;
+        }
       }
 
       // HTTP 응답 프로토콜에 따라 클라이언트에게 데이터를 보낸다.

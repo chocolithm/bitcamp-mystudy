@@ -8,8 +8,10 @@ repositories {
 
 dependencies {
     implementation project(':app-common')
+
     implementation 'org.apache.poi:poi-ooxml:5.3.0'
-    implementation 'com.google.code.gson:gson:2.11.0'
+    //implementation 'com.google.code.gson:gson:2.11.0'
+
     testImplementation libs.junit.jupiter
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation libs.guava

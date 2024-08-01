@@ -48,7 +48,7 @@ public class Board implements Serializable {
   public int hashCode() {
     return Objects.hashCode(no);
   }
-
+  
   public int getNo() {
     return no;
   }

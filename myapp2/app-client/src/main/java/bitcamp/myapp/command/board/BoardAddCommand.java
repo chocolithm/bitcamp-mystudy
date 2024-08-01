@@ -17,7 +17,6 @@ public class BoardAddCommand implements Command {
   @Override
   public void execute(String menuName) {
     System.out.printf("[%s]\n", menuName);
-
     try {
       Board board = new Board();
       board.setTitle(Prompt.input("제목?"));
@@ -26,8 +25,8 @@ public class BoardAddCommand implements Command {
 
       boardDao.insert(board);
     } catch (Exception e) {
-      System.out.println("게시글 등록 중 오류 발생!");
-      e.printStackTrace();
+      System.out.println("등록 중 오류 발생!");
     }
   }
+
 }

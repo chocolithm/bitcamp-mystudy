@@ -28,31 +28,24 @@ import bitcamp.myapp.dao.UserDao;
 import bitcamp.myapp.dao.stub.BoardDaoStub;
 import bitcamp.myapp.dao.stub.ProjectDaoStub;
 import bitcamp.myapp.dao.stub.UserDaoStub;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 public class InitApplicationListener implements ApplicationListener {
-  UserDao userDao;
-  ProjectDao projectDao;
-  BoardDao boardDao;
 
-  ObjectOutputStream out;
-  ObjectInputStream in;
+  UserDao userDao;
+  BoardDao boardDao;
+  ProjectDao projectDao;
 
   @Override
-  public void onStartup(ApplicationContext context) {
-    out = (ObjectOutputStream) context.getAttribute("outputStream");
-    in = (ObjectInputStream) context.getAttribute("inputStream");
+  public void onStart(ApplicationContext ctx) throws Exception {
 
-    userDao = new UserDaoStub(in, out, "users");
-    projectDao = new ProjectDaoStub(in, out, "projects");
-    boardDao = new BoardDaoStub(in, out, "boards");
+    String host = (String) ctx.getAttribute("host");
+    int port = (int) ctx.getAttribute("port");
 
-    context.setAttributes("userDao", userDao);
-    context.setAttributes("projectDao", projectDao);
-    context.setAttributes("boardDao", boardDao);
+    userDao = new UserDaoStub(host, port, "users");
+    boardDao = new BoardDaoStub(host, port, "boards");
+    projectDao = new ProjectDaoStub(host, port, "projects");
 
-    MenuGroup mainMenu = context.getMainMenu();
+    MenuGroup mainMenu = ctx.getMainMenu();
 
     MenuGroup userMenu = new MenuGroup("회원");
     userMenu.add(new MenuItem("등록", new UserAddCommand(userDao)));
@@ -64,7 +57,8 @@ public class InitApplicationListener implements ApplicationListener {
 
     MenuGroup projectMenu = new MenuGroup("프로젝트");
     ProjectMemberHandler memberHandler = new ProjectMemberHandler(userDao);
-    projectMenu.add(new MenuItem("등록", new ProjectAddCommand(projectDao, memberHandler)));
+    projectMenu.add(
+        new MenuItem("등록", new ProjectAddCommand(projectDao, memberHandler)));
     projectMenu.add(new MenuItem("목록", new ProjectListCommand(projectDao)));
     projectMenu.add(new MenuItem("조회", new ProjectViewCommand(projectDao)));
     projectMenu.add(new MenuItem("변경", new ProjectUpdateCommand(projectDao, memberHandler)));

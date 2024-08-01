@@ -1,14 +1,14 @@
 package bitcamp.myapp.dao.skel;
 
+import static bitcamp.net.ResponseStatus.ERROR;
+import static bitcamp.net.ResponseStatus.FAILURE;
+import static bitcamp.net.ResponseStatus.SUCCESS;
+
 import bitcamp.myapp.dao.UserDao;
 import bitcamp.myapp.vo.User;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
-
-import static bitcamp.net.ResponseStatus.ERROR;
-import static bitcamp.net.ResponseStatus.FAILURE;
-import static bitcamp.net.ResponseStatus.SUCCESS;
 
 public class UserDaoSkel {
 
@@ -20,17 +20,20 @@ public class UserDaoSkel {
 
   public void service(ObjectInputStream in, ObjectOutputStream out) throws Exception {
     String command = in.readUTF();
+
     User user = null;
     int no = 0;
 
     switch (command) {
       case "insert":
         user = (User) in.readObject();
-        if (userDao.insert(user)) {
-          out.writeUTF(SUCCESS);
-        } else {
-          out.writeUTF(FAILURE);
-        }
+        userDao.insert(user);
+        out.writeUTF(SUCCESS);
+        break;
+      case "list":
+        List<User> list = userDao.list();
+        out.writeUTF(SUCCESS);
+        out.writeObject(list);
         break;
       case "get":
         no = in.readInt();
@@ -38,15 +41,6 @@ public class UserDaoSkel {
         if (user != null) {
           out.writeUTF(SUCCESS);
           out.writeObject(user);
-        } else {
-          out.writeUTF(FAILURE);
-        }
-        break;
-      case "list":
-        List<User> list = userDao.list();
-        if (list != null) {
-          out.writeUTF(SUCCESS);
-          out.writeObject(list);
         } else {
           out.writeUTF(FAILURE);
         }
@@ -60,8 +54,8 @@ public class UserDaoSkel {
         }
         break;
       case "delete":
-        user = (User) in.readObject();
-        if (userDao.delete(user)) {
+        no = in.readInt();
+        if (userDao.delete(no)) {
           out.writeUTF(SUCCESS);
         } else {
           out.writeUTF(FAILURE);
@@ -74,4 +68,5 @@ public class UserDaoSkel {
 
     out.flush();
   }
+
 }

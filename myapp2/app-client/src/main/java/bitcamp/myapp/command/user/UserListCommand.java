@@ -18,12 +18,13 @@ public class UserListCommand implements Command {
 
     try {
       System.out.println("번호 이름 이메일");
+
       for (User user : userDao.list()) {
         System.out.printf("%d %s %s\n", user.getNo(), user.getName(), user.getEmail());
       }
+
     } catch (Exception e) {
-      System.out.println("회원 목록 조회 중 오류 발생!");
-      e.printStackTrace();
+      System.out.println("목록 조회 중 오류 발생!");
     }
   }
 }

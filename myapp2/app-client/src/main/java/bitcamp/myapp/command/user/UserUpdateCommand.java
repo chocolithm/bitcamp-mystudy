@@ -16,9 +16,9 @@ public class UserUpdateCommand implements Command {
   @Override
   public void execute(String menuName) {
     System.out.printf("[%s]\n", menuName);
+    int userNo = Prompt.inputInt("회원번호?");
 
     try {
-      int userNo = Prompt.inputInt("회원번호?");
       User user = userDao.findBy(userNo);
       if (user == null) {
         System.out.println("없는 회원입니다.");
@@ -29,10 +29,13 @@ public class UserUpdateCommand implements Command {
       user.setEmail(Prompt.input("이메일(%s)?", user.getEmail()));
       user.setPassword(Prompt.input("암호?"));
       user.setTel(Prompt.input("연락처(%s)?", user.getTel()));
+
+      userDao.update(user);
       System.out.println("변경 했습니다.");
+
     } catch (Exception e) {
-      System.out.println("회원 변경 중 오류 발생!");
-      e.printStackTrace();
+      System.out.println("변경 중 오류 발생!");
     }
   }
+
 }
