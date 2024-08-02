@@ -50,7 +50,7 @@ public class ServerApp {
         System.out.println("리스너 실행 중 오류 발생!");
       }
     }
-    
+
     userDaoSkel = (UserDaoSkel) ctx.getAttribute("userDaoSkel");
     boardDaoSkel = (BoardDaoSkel) ctx.getAttribute("boardDaoSkel");
     projectDaoSkel = (ProjectDaoSkel) ctx.getAttribute("projectDaoSkel");
@@ -63,12 +63,20 @@ public class ServerApp {
       while (true) {
         Socket socket = serverSocket.accept();
 
-        new Thread() {
+        //        new Thread() {
+        //          @Override
+        //          public void run() {
+        //            processRequest(socket);
+        //          }
+        //        }.start();
+
+        class MyThread extends Thread {
           @Override
           public void run() {
             processRequest(socket);
           }
-        }.start();
+        }
+        new MyThread().start();
       }
 
     } catch (Exception e) {
