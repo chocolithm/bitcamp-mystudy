@@ -25,25 +25,34 @@ import bitcamp.myapp.command.user.UserViewCommand;
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.dao.ProjectDao;
 import bitcamp.myapp.dao.UserDao;
-import bitcamp.myapp.dao.stub.BoardDaoStub;
-import bitcamp.myapp.dao.stub.ProjectDaoStub;
-import bitcamp.myapp.dao.stub.UserDaoStub;
+import bitcamp.myapp.dao.mysql.BoardDaoImpl;
+import bitcamp.myapp.dao.mysql.ProjectDaoImpl;
+import bitcamp.myapp.dao.mysql.UserDaoImpl;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 public class InitApplicationListener implements ApplicationListener {
 
-  UserDao userDao;
-  BoardDao boardDao;
-  ProjectDao projectDao;
+  private Connection con;
+  private UserDao userDao;
+  private BoardDao boardDao;
+  private ProjectDao projectDao;
 
   @Override
   public void onStartup(ApplicationContext ctx) throws Exception {
 
-    String host = (String) ctx.getAttribute("host");
-    int port = (int) ctx.getAttribute("port");
+    String url = (String) ctx.getAttribute("url");
+    String username = (String) ctx.getAttribute("username");
+    String password = (String) ctx.getAttribute("password");
 
-    userDao = new UserDaoStub(host, port, "users");
-    boardDao = new BoardDaoStub(host, port, "boards");
-    projectDao = new ProjectDaoStub(host, port, "projects");
+    // 1) JDBC Connection 객체 준비 = DBMS에 연결
+    con = DriverManager.getConnection(url, username, password);
+
+    // 2)
+
+    userDao = new UserDaoImpl(con);
+    boardDao = new BoardDaoImpl(con);
+    projectDao = new ProjectDaoImpl(con);
 
     MenuGroup mainMenu = ctx.getMainMenu();
 
@@ -77,5 +86,10 @@ public class InitApplicationListener implements ApplicationListener {
     mainMenu.add(new MenuItem("명령내역", new HistoryCommand()));
 
     mainMenu.setExitMenuTitle("종료");
+  }
+
+  @Override
+  public void onShutdown(ApplicationContext ctx) throws Exception {
+    con.close();
   }
 }
