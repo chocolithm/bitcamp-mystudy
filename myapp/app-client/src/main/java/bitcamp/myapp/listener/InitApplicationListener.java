@@ -52,7 +52,7 @@ public class InitApplicationListener implements ApplicationListener {
 
     userDao = new UserDaoImpl(con);
     boardDao = new BoardDaoImpl(con);
-    projectDao = new ProjectDaoImpl(con);
+    projectDao = new ProjectDaoImpl(con, userDao);
 
     MenuGroup mainMenu = ctx.getMainMenu();
 
