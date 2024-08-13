@@ -25,6 +25,7 @@ public class ProjectDeleteCommand implements Command {
         return;
       }
 
+      projectDao.deleteMembers(projectNo);
       projectDao.delete(projectNo);
       System.out.printf("%d번 프로젝트를 삭제 했습니다.\n", deletedProject.getNo());
     } catch (Exception e) {
