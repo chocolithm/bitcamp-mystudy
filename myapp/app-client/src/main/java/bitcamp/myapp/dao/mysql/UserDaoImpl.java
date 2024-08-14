@@ -72,6 +72,28 @@ public class UserDaoImpl implements UserDao {
   }
 
   @Override
+  public User findByEmailAndPassword(String email, String password) throws Exception {
+    try (Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery(
+            String.format("select * from myapp_users where email = '%s' and pwd = sha1('%s')",
+                email,
+                password))) {
+
+      if (rs.next()) {
+        User user = new User();
+        user.setNo(rs.getInt("user_id"));
+        user.setName(rs.getString("name"));
+        user.setEmail(rs.getString("email"));
+        user.setTel(rs.getString("tel"));
+
+        return user;
+      }
+
+      return null;
+    }
+  }
+
+  @Override
   public boolean update(User user) throws Exception {
     try (Statement stmt = con.createStatement()) {
       int count = stmt.executeUpdate(String.format(

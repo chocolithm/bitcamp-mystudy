@@ -10,6 +10,8 @@ public interface UserDao {
 
   User findBy(int no) throws Exception;
 
+  User findByEmailAndPassword(String email, String password) throws Exception;
+
   boolean update(User user) throws Exception;
 
   boolean delete(int no) throws Exception;

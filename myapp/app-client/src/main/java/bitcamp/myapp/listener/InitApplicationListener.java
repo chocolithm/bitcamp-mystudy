@@ -28,31 +28,37 @@ import bitcamp.myapp.dao.UserDao;
 import bitcamp.myapp.dao.mysql.BoardDaoImpl;
 import bitcamp.myapp.dao.mysql.ProjectDaoImpl;
 import bitcamp.myapp.dao.mysql.UserDaoImpl;
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.Properties;
 
 public class InitApplicationListener implements ApplicationListener {
 
   private Connection con;
-  private UserDao userDao;
-  private BoardDao boardDao;
-  private ProjectDao projectDao;
 
   @Override
-  public void onStartup(ApplicationContext ctx) throws Exception {
+  public boolean onStartup(ApplicationContext ctx) throws Exception {
 
-    String url = (String) ctx.getAttribute("url");
-    String username = (String) ctx.getAttribute("username");
-    String password = (String) ctx.getAttribute("password");
+    Properties props = new Properties();
+    props.load(new FileReader("app.properties"));
+
+    String url = props.getProperty("jdbc.url");
+    String username = props.getProperty("jdbc.username");
+    String password = props.getProperty("jdbc.password");
 
     // 1) JDBC Connection 객체 준비 = DBMS에 연결
     con = DriverManager.getConnection(url, username, password);
 
     // 2)
 
-    userDao = new UserDaoImpl(con);
-    boardDao = new BoardDaoImpl(con);
-    projectDao = new ProjectDaoImpl(con);
+    UserDao userDao = new UserDaoImpl(con);
+    BoardDao boardDao = new BoardDaoImpl(con);
+    ProjectDao projectDao = new ProjectDaoImpl(con);
+
+    ctx.setAttributes("userDao", userDao);
+    ctx.setAttributes("boardDao", boardDao);
+    ctx.setAttributes("projectDao", projectDao);
 
     MenuGroup mainMenu = ctx.getMainMenu();
 
@@ -75,17 +81,19 @@ public class InitApplicationListener implements ApplicationListener {
     mainMenu.add(projectMenu);
 
     MenuGroup boardMenu = new MenuGroup("게시판");
-    boardMenu.add(new MenuItem("등록", new BoardAddCommand(boardDao)));
+    boardMenu.add(new MenuItem("등록", new BoardAddCommand(boardDao, ctx)));
     boardMenu.add(new MenuItem("목록", new BoardListCommand(boardDao)));
     boardMenu.add(new MenuItem("조회", new BoardViewCommand(boardDao)));
-    boardMenu.add(new MenuItem("변경", new BoardUpdateCommand(boardDao)));
-    boardMenu.add(new MenuItem("삭제", new BoardDeleteCommand(boardDao)));
+    boardMenu.add(new MenuItem("변경", new BoardUpdateCommand(boardDao, ctx)));
+    boardMenu.add(new MenuItem("삭제", new BoardDeleteCommand(boardDao, ctx)));
     mainMenu.add(boardMenu);
 
     mainMenu.add(new MenuItem("도움말", new HelpCommand()));
     mainMenu.add(new MenuItem("명령내역", new HistoryCommand()));
 
     mainMenu.setExitMenuTitle("종료");
+
+    return true;
   }
 
   @Override

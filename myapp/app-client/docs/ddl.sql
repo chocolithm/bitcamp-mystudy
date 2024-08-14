@@ -25,6 +25,7 @@ create table myapp_boards(
     board_id int not null,
     title varchar(255) not null,
     content text not null,
+    user_id int not null,
     created_date datetime default now(),
     view_count int default 0
 );
@@ -32,6 +33,9 @@ create table myapp_boards(
 alter table myapp_boards
     add constraint primary key (board_id),
     modify column board_id int not null auto_increment;
+
+alter table myapp_boards
+    add constraint myapp_boards_fk foreign key (user_id) references myapp_users (user_id);
 
 
 -- myapp_projects
