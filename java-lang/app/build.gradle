@@ -8,6 +8,18 @@ repositories {
 }
 
 dependencies {
+    // Oracle JDBC Driver
+    implementation 'com.oracle.database.jdbc:ojdbc11:21.15.0.0'
+    
+    // MS-SQL (Microsoft SqlServer) JDBC Driver
+    implementation 'com.microsoft.sqlserver:mssql-jdbc:12.8.0.jre11'
+    
+    // MySQL JDBC Driver
+    implementation 'com.mysql:mysql-connector-j:8.4.0'
+    
+    // MariaDB JDBC Driver
+    implementation 'org.mariadb.jdbc:mariadb-java-client:3.4.1'
+    
     implementation 'com.drewnoakes:metadata-extractor:2.19.0'
     testImplementation libs.junit.jupiter
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
