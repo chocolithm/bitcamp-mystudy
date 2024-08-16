@@ -6,11 +6,11 @@ public class MatchMakingTestDrive {
     test.drive();
   }
 
-  public MatchMakingTestDrive() {
-    initializeDatabase();
-  }
+//  public MatchMakingTestDrive() {
+//    initializeDatabase();
+//  }
 
   public void drive() {
-    `
+
   }
 }
