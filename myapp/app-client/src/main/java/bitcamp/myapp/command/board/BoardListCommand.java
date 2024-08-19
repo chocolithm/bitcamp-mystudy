@@ -22,12 +22,13 @@ public class BoardListCommand implements Command {
         System.out.printf("%d %s %s %tY-%4$tm-%4$td %d\n",
             board.getNo(),
             board.getTitle(),
-            board.getWriter().getName(),
+            "test", //board.getWriter().getName(),
             board.getCreatedDate(),
             board.getViewCount());
       }
     } catch (Exception e) {
       System.out.println("게시글 목록 조회 중 오류 발생!");
+      e.printStackTrace();
     }
 
   }
