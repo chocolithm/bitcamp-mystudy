@@ -4,18 +4,19 @@ import bitcamp.command.Command;
 import bitcamp.myapp.dao.ProjectDao;
 import bitcamp.myapp.vo.Project;
 import bitcamp.util.Prompt;
-import java.sql.Connection;
+import org.apache.ibatis.session.SqlSession;
 
 public class ProjectAddCommand implements Command {
 
   private ProjectDao projectDao;
   private ProjectMemberHandler memberHandler;
-  private Connection con;
+  private SqlSession sqlSession;
 
-  public ProjectAddCommand(ProjectDao projectDao, ProjectMemberHandler memberHandler, Connection con) {
+  public ProjectAddCommand(ProjectDao projectDao, ProjectMemberHandler memberHandler,
+      SqlSession sqlSession) {
     this.projectDao = projectDao;
     this.memberHandler = memberHandler;
-    this.con = con;
+    this.sqlSession = sqlSession;
   }
 
   @Override
@@ -32,22 +33,15 @@ public class ProjectAddCommand implements Command {
       System.out.println("팀원:");
       memberHandler.addMembers(project);
 
-      con.setAutoCommit(false);
       projectDao.insert(project);
       projectDao.insertMembers(project.getNo(), project.getMembers());
-      con.commit();
+      sqlSession.commit();
 
       System.out.println("등록했습니다.");
     } catch (Exception e) {
-      try {
-        con.rollback();
-      } catch (Exception ignored) {}
+      sqlSession.rollback();
       System.out.println("프로젝트 데이터 등록 중 오류 발생!");
       e.printStackTrace();
-    } finally {
-      try {
-        con.setAutoCommit(true);
-      } catch (Exception ignored) {}
     }
   }
 }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProjectDao">
+
+    <select id="list" resultType="bitcamp.myapp.vo.Project">
+        select
+            project_id as no,
+            title,
+            start_date as startDate,
+            end_date as endDate
+        from
+            myapp_projects
+        order by
+            project_id asc
+    </select>
+
+    <insert id="insert" parameterType="bitcamp.myapp.vo.Project" useGeneratedKeys="true" keyProperty="no">
+        insert into myapp_projects(title, description, start_date, end_date)
+        values(#{title}, #{description}, #{startDate}, #{endDate})
+    </insert>
+
+    <select id="findBy" resultType="bitcamp.myapp.vo.Project" parameterType="int">
+        select
+            project_id as no,
+            title,
+            description,
+            start_date as startDate,
+            end_date as endDate
+        from
+            myapp_projects
+        where
+            project_id = ${no}
+    </select>
+
+    <update id="update" parameterType="bitcamp.myapp.vo.Project">
+        update myapp_projects
+        set
+            title = #{title},
+            description = #{description},
+            start_date = #{startDate},
+            end_date = #{endDate}
+        where
+            project_id = #{no}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from myapp_projects
+        where project_id = #{no}
+    </delete>
+
+    <insert id="insertMembers" parameterType="map">
+        insert into myapp_project_members(project_id, user_id)
+        values(#{projectNo}, #{userNo})
+    </insert>
+
+    <select id="getMembers" resultType="bitcamp.myapp.vo.User" parameterType="int">
+        select
+            pm.user_id as no,
+            u.name
+        from
+            myapp_project_members pm
+            inner join myapp_users u on pm.user_id = u.user_id
+        where
+            pm.project_id = #{no}
+    </select>
+
+    <delete id="deleteMembers" parameterType="int">
+        delete from myapp_project_members
+        where project_id = #{no}
+    </delete>
+</mapper>

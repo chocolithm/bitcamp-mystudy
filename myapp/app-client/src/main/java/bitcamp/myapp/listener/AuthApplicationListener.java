@@ -17,7 +17,7 @@ public class AuthApplicationListener implements ApplicationListener {
 
     User user = userDao.findByEmailAndPassword(email, password);
     if (user == null) {
-      System.out.println("로그일 실패!");
+      System.out.println("로그인 실패!");
       return false;
     }
 

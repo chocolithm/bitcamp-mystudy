@@ -1,9 +1,11 @@
 package bitcamp.myapp.dao.mysql;
 
-import bitcamp.bitbatis.SqlSession;
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.Board;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import org.apache.ibatis.session.SqlSession;
 
 public class BoardDaoImpl implements BoardDao {
 
@@ -15,71 +17,38 @@ public class BoardDaoImpl implements BoardDao {
 
   @Override
   public boolean insert(Board board) throws Exception {
-    int count = sqlSession.insert(
-        "insert into myapp_boards(title, content, user_id) values (?, ?, ?)",
-        board.getTitle(),
-        board.getContent(),
-        board.getWriter().getNo());
+    int count = sqlSession.insert("BoardDao.insert", board);
     return count > 0;
   }
 
   @Override
   public List<Board> list() throws Exception {
-    return sqlSession.selectList(
-        "select "
-            + " b.board_id as no,"
-            + " b.title,"
-            + " b.created_date as createdDate,"
-            + " b.view_count as viewCount,"
-            + " u.user_id as writer_no,"
-            + " u.name as writer_name"
-            + " from myapp_boards b inner join myapp_users u on b.user_id=u.user_id"
-            + " order by b.board_id asc",
-        Board.class);
+    return sqlSession.selectList("BoardDao.list");
   }
 
   @Override
   public Board findBy(int no) throws Exception {
-    return sqlSession.selectOne(
-        "select "
-            + " b.board_id as no,"
-            + " b.title,"
-            + " b.content,"
-            + " b.created_date as createdDate,"
-            + " b.view_count as viewCount,"
-            + " u.user_id as writer_no,"
-            + " u.name as writer_name"
-            + " from myapp_boards b inner join myapp_users u on b.user_id=u.user_id"
-            + " where b.board_id=?",
-        Board.class,
-        no);
+    return sqlSession.selectOne("BoardDao.findBy", no);
   }
 
   @Override
   public boolean update(Board board) throws Exception {
-    int count = sqlSession.update(
-        "update myapp_boards set"
-            + " title=?,"
-            + " content=?"
-            + " where board_id=?",
-        board.getTitle(),
-        board.getContent(),
-        board.getNo());
+    int count = sqlSession.update("BoardDao.update", board);
     return count > 0;
   }
 
   @Override
   public boolean delete(int no) throws Exception {
-    int count = sqlSession.delete("delete from myapp_boards where board_id=?", no);
+    int count = sqlSession.delete("BoardDao.delete", no);
     return count > 0;
   }
 
   @Override
   public void updateViewCount(int boardNo, int count) throws Exception {
-    sqlSession.update("update myapp_boards set"
-            + " view_count=?"
-            + " where board_id=?",
-        count,
-        boardNo);
+    Map<String, Object> values = new HashMap<>();
+    values.put("boardNo", boardNo);
+    values.put("count", count);
+
+    sqlSession.update("BoardDao.updateViewCount", values);
   }
 }

@@ -22,7 +22,7 @@ public class BoardListCommand implements Command {
         System.out.printf("%d %s %s %tY-%4$tm-%4$td %d\n",
             board.getNo(),
             board.getTitle(),
-            "test", //board.getWriter().getName(),
+            board.getWriter().getName(),
             board.getCreatedDate(),
             board.getViewCount());
       }
