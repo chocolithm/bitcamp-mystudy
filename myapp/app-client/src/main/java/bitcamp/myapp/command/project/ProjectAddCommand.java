@@ -34,7 +34,9 @@ public class ProjectAddCommand implements Command {
       memberHandler.addMembers(project);
 
       projectDao.insert(project);
-      projectDao.insertMembers(project.getNo(), project.getMembers());
+      if (project.getMembers() != null && !project.getMembers().isEmpty()) {
+        projectDao.insertMembers(project.getNo(), project.getMembers());
+      }
       sqlSession.commit();
 
       System.out.println("등록했습니다.");

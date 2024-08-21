@@ -4,13 +4,16 @@ import bitcamp.command.Command;
 import bitcamp.myapp.dao.UserDao;
 import bitcamp.myapp.vo.User;
 import bitcamp.util.Prompt;
+import org.apache.ibatis.session.SqlSession;
 
 public class UserUpdateCommand implements Command {
 
   private UserDao userDao;
+  private SqlSession sqlSession;
 
-  public UserUpdateCommand(UserDao userDao) {
+  public UserUpdateCommand(UserDao userDao, SqlSession sqlSession) {
     this.userDao = userDao;
+    this.sqlSession = sqlSession;
   }
 
   @Override
@@ -31,9 +34,11 @@ public class UserUpdateCommand implements Command {
       user.setTel(Prompt.input("연락처(%s)?", user.getTel()));
 
       userDao.update(user);
+      sqlSession.commit();
       System.out.println("변경 했습니다.");
 
     } catch (Exception e) {
+      sqlSession.rollback();
       System.out.println("변경 중 오류 발생!");
     }
   }

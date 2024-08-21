@@ -4,16 +4,21 @@ import bitcamp.command.Command;
 import bitcamp.myapp.dao.ProjectDao;
 import bitcamp.myapp.vo.Project;
 import bitcamp.util.Prompt;
+import org.apache.ibatis.session.SqlSession;
 
 public class ProjectUpdateCommand implements Command {
 
   private ProjectDao projectDao;
   private ProjectMemberHandler memberHandler;
+  private SqlSession sqlSession;
 
   public ProjectUpdateCommand(ProjectDao projectDao,
-      ProjectMemberHandler memberHandler) {
+      ProjectMemberHandler memberHandler,
+      SqlSession sqlSession) {
+
     this.projectDao = projectDao;
     this.memberHandler = memberHandler;
+    this.sqlSession = sqlSession;
   }
 
   @Override
@@ -30,17 +35,23 @@ public class ProjectUpdateCommand implements Command {
 
       project.setTitle(Prompt.input("프로젝트명(%s)?", project.getTitle()));
       project.setDescription(Prompt.input("설명(%s)?", project.getDescription()));
-      project.setStartDate(Prompt.input("시작일(%s)?", project.getStartDate()));
-      project.setEndDate(Prompt.input("종료일(%s)?", project.getEndDate()));
+      project.setStartDate(Prompt.inputDate("시작일(%s)?(예: 2024-01-24)", project.getStartDate()));
+      project.setEndDate(Prompt.inputDate("종료일(%s)?(예: 2024-02-15)", project.getEndDate()));
 
       System.out.println("팀원:");
       memberHandler.deleteMembers(project);
       memberHandler.addMembers(project);
 
       projectDao.update(project);
+      if (project.getMembers() != null && !project.getMembers().isEmpty()) {
+        projectDao.deleteMembers(projectNo);
+        projectDao.insertMembers(projectNo, project.getMembers());
+      }
+      sqlSession.commit();
       System.out.println("변경 했습니다.");
 
     } catch (Exception e) {
+      sqlSession.rollback();
       System.out.println("변경 중 오류 발생!");
     }
   }

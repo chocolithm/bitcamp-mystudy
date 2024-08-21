@@ -48,12 +48,9 @@ public class ProjectDaoImpl implements ProjectDao {
   public boolean insertMembers(int projectNo, List<User> members) throws Exception {
     Map<String, Object> values = new HashMap<>();
     values.put("projectNo", projectNo);
+    values.put("members", members);
 
-    for (User user : members) {
-      values.put("userNo", user.getNo());
-      sqlSession.insert("ProjectDao.insertMembers", values);
-    }
-
+    sqlSession.insert("ProjectDao.insertMembers", values);
     return true;
   }
 

@@ -42,7 +42,7 @@ public class InitApplicationListener implements ApplicationListener {
   @Override
   public boolean onStartup(ApplicationContext ctx) throws Exception {
 
-    InputStream inputStream = Resources.getResourceAsStream("mybatis-config.xml");
+    InputStream inputStream = Resources.getResourceAsStream("config/mybatis-config.xml");
     SqlSessionFactoryBuilder sqlSessionFactoryBuilder = new SqlSessionFactoryBuilder();
     SqlSessionFactory sqlSessionFactory = sqlSessionFactoryBuilder.build(inputStream);
     SqlSession sqlSession = sqlSessionFactory.openSession(false);

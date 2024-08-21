@@ -4,13 +4,16 @@ import bitcamp.command.Command;
 import bitcamp.myapp.dao.UserDao;
 import bitcamp.myapp.vo.User;
 import bitcamp.util.Prompt;
+import org.apache.ibatis.session.SqlSession;
 
 public class UserDeleteCommand implements Command {
 
   private UserDao userDao;
+  private SqlSession sqlSession;
 
-  public UserDeleteCommand(UserDao userDao) {
+  public UserDeleteCommand(UserDao userDao, SqlSession sqlSession) {
     this.userDao = userDao;
+    this.sqlSession = sqlSession;
   }
 
   @Override
@@ -26,9 +29,11 @@ public class UserDeleteCommand implements Command {
       }
 
       userDao.delete(userNo);
+      sqlSession.commit();
       System.out.printf("'%s' 회원을 삭제 했습니다.\n", deletedUser.getName());
 
     } catch (Exception e) {
+      sqlSession.rollback();
       System.out.println("삭제 중 오류 발생!");
     }
   }
