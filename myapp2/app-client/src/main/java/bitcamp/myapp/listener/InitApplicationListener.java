@@ -23,11 +23,9 @@ import bitcamp.myapp.command.user.UserListCommand;
 import bitcamp.myapp.command.user.UserUpdateCommand;
 import bitcamp.myapp.command.user.UserViewCommand;
 import bitcamp.myapp.dao.BoardDao;
+import bitcamp.myapp.dao.DaoFactory;
 import bitcamp.myapp.dao.ProjectDao;
 import bitcamp.myapp.dao.UserDao;
-import bitcamp.myapp.dao.mysql.BoardDaoImpl;
-import bitcamp.myapp.dao.mysql.ProjectDaoImpl;
-import bitcamp.myapp.dao.mysql.UserDaoImpl;
 import java.io.InputStream;
 import java.sql.Connection;
 import org.apache.ibatis.io.Resources;
@@ -47,9 +45,11 @@ public class InitApplicationListener implements ApplicationListener {
         new SqlSessionFactoryBuilder().build(inputStream);
     SqlSession sqlSession = sqlSessionFactory.openSession(false);
 
-    UserDao userDao = new UserDaoImpl(sqlSession);
-    ProjectDao projectDao = new ProjectDaoImpl(sqlSession);
-    BoardDao boardDao = new BoardDaoImpl(sqlSession);
+    DaoFactory daoFactory = new DaoFactory(sqlSession);
+
+    UserDao userDao = daoFactory.createObject(UserDao.class);
+    ProjectDao projectDao = daoFactory.createObject(ProjectDao.class);
+    BoardDao boardDao = daoFactory.createObject(BoardDao.class);
 
     ctx.setAttribute("userDao", userDao);
     ctx.setAttribute("boardDao", boardDao);

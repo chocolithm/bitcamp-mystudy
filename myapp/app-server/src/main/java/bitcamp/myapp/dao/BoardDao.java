@@ -4,7 +4,6 @@ import bitcamp.myapp.vo.Board;
 import java.util.List;
 
 public interface BoardDao {
-
   boolean insert(Board board) throws Exception;
 
   List<Board> list() throws Exception;

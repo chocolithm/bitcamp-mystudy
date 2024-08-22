@@ -4,7 +4,6 @@ import bitcamp.myapp.vo.User;
 import java.util.List;
 
 public interface UserDao {
-
   boolean insert(User user) throws Exception;
 
   List<User> list() throws Exception;
@@ -17,5 +16,4 @@ public interface UserDao {
   boolean update(User user) throws Exception;
 
   boolean delete(int no) throws Exception;
-
 }
