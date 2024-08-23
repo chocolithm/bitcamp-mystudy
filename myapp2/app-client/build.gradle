@@ -9,13 +9,6 @@ repositories {
 dependencies {
     implementation project(':app-common')
 
-    implementation 'com.mysql:mysql-connector-j:8.4.0'
-    //implementation 'com.google.code.gson:gson:2.11.0'
-
-    // https://mvnrepository.com/artifact/org.mybatis/mybatis
-    implementation 'org.mybatis:mybatis:3.5.16'
-
-
     testImplementation libs.junit.jupiter
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation libs.guava

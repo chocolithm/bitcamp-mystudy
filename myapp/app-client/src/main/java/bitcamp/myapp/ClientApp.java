@@ -7,6 +7,7 @@ import java.net.Socket;
 
 public class ClientApp {
 
+  private static final String GOODBYE = "<[goodbye!!]>";
 
   public static void main(String[] args) {
     ClientApp app = new ClientApp();
@@ -23,7 +24,8 @@ public class ClientApp {
 
       while (true) {
         String message = in.readUTF();
-        if (message.equals("<[goodbye!!]>")) {
+        if (message.endsWith(GOODBYE)) {
+          System.out.println(message.substring(0, message.indexOf(GOODBYE)));
           System.out.println("종료합니다.");
           break;
         }

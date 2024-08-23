@@ -1,29 +1,26 @@
 package bitcamp.myapp.command.board;
 
 import bitcamp.command.Command;
-import bitcamp.context.ApplicationContext;
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.User;
 import bitcamp.net.Prompt;
-import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 public class BoardUpdateCommand implements Command {
 
   private BoardDao boardDao;
-  private ApplicationContext ctx;
-  private SqlSession sqlSession;
+  private SqlSessionFactory sqlSessionFactory;
 
-  public BoardUpdateCommand(BoardDao boardDao, ApplicationContext ctx, SqlSession sqlSession) {
+  public BoardUpdateCommand(BoardDao boardDao, SqlSessionFactory sqlSessionFactory) {
     this.boardDao = boardDao;
-    this.ctx = ctx;
-    this.sqlSession = sqlSession;
+    this.sqlSessionFactory = sqlSessionFactory;
   }
 
   @Override
   public void execute(String menuName, Prompt prompt) {
     try {
-      User loginUser = (User) ctx.getAttribute("loginUser");
+      User loginUser = (User) prompt.getAttribute("loginUser");
 
       prompt.printf("[%s]\n", menuName);
       int boardNo = prompt.inputInt("게시글 번호?");
@@ -41,10 +38,10 @@ public class BoardUpdateCommand implements Command {
       board.setContent(prompt.input("내용(%s)?", board.getContent()));
 
       boardDao.update(board);
-      sqlSession.commit();
+      sqlSessionFactory.openSession(false).commit();
       prompt.println("변경 했습니다.");
     } catch (Exception e) {
-      sqlSession.rollback();
+      sqlSessionFactory.openSession(false).rollback();
       prompt.println("게시글 데이터 변경 중 오류 발생!");
       e.printStackTrace();
     }

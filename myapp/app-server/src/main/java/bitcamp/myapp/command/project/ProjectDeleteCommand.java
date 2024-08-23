@@ -4,16 +4,16 @@ import bitcamp.command.Command;
 import bitcamp.myapp.dao.ProjectDao;
 import bitcamp.myapp.vo.Project;
 import bitcamp.net.Prompt;
-import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 public class ProjectDeleteCommand implements Command {
 
   private ProjectDao projectDao;
-  private SqlSession sqlSession;
+  private SqlSessionFactory sqlSessionFactory;
 
-  public ProjectDeleteCommand(ProjectDao projectDao, SqlSession sqlSession) {
+  public ProjectDeleteCommand(ProjectDao projectDao, SqlSessionFactory sqlSessionFactory) {
     this.projectDao = projectDao;
-    this.sqlSession = sqlSession;
+    this.sqlSessionFactory = sqlSessionFactory;
   }
 
   @Override
@@ -30,11 +30,11 @@ public class ProjectDeleteCommand implements Command {
 
       projectDao.deleteMembers(projectNo);
       projectDao.delete(projectNo);
-      sqlSession.commit();
+      sqlSessionFactory.openSession(false).commit();
 
       prompt.printf("%d번 프로젝트를 삭제 했습니다.\n", deletedProject.getNo());
     } catch (Exception e) {
-      sqlSession.rollback();
+      sqlSessionFactory.openSession(false).rollback();
       prompt.println("프로젝트 데이터 삭제 중 오류 발생!");
       e.printStackTrace();
     }

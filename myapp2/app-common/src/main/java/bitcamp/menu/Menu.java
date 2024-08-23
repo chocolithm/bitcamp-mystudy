@@ -1,8 +1,10 @@
 package bitcamp.menu;
 
+import bitcamp.net.Prompt;
+
 public interface Menu {
 
   String getTitle();
 
-  void execute();
+  void execute(Prompt prompt) throws Exception;
 }

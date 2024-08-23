@@ -1,30 +1,27 @@
 package bitcamp.myapp.command.board;
 
 import bitcamp.command.Command;
-import bitcamp.context.ApplicationContext;
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.User;
+import bitcamp.mybatis.SqlSessionFactoryProxy;
 import bitcamp.net.Prompt;
-import org.apache.ibatis.session.SqlSession;
 
 public class BoardDeleteCommand implements Command {
 
   private BoardDao boardDao;
-  private ApplicationContext ctx;
-  private SqlSession sqlSession;
+  private SqlSessionFactoryProxy sqlSessionFactoryProxy;
 
-  public BoardDeleteCommand(BoardDao boardDao, ApplicationContext ctx, SqlSession sqlSession) {
+  public BoardDeleteCommand(BoardDao boardDao, SqlSessionFactoryProxy sqlSessionFactoryProxy) {
     this.boardDao = boardDao;
-    this.ctx = ctx;
-    this.sqlSession = sqlSession;
+    this.sqlSessionFactoryProxy = sqlSessionFactoryProxy;
   }
 
   @Override
   public void execute(String menuName, Prompt prompt) {
     try {
-      User loginUser = (User) ctx.getAttribute("loginUser");
-      
+      User loginUser = (User) prompt.getAttribute("loginUser");
+
       prompt.printf("[%s]\n", menuName);
       int boardNo = prompt.inputInt("게시글 번호?");
 
@@ -38,10 +35,10 @@ public class BoardDeleteCommand implements Command {
       }
 
       boardDao.delete(boardNo);
-      sqlSession.commit();
+      sqlSessionFactoryProxy.openSession(false).commit();
       prompt.printf("%d번 게시글을 삭제 했습니다.\n", deletedBoard.getNo());
     } catch (Exception e) {
-      sqlSession.rollback();
+      sqlSessionFactoryProxy.openSession(false).rollback();
       prompt.println("게시글 데이터 삭제 중 오류 발생!");
       e.printStackTrace();
     }

@@ -6,12 +6,13 @@ import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 public class DaoFactory {
-  private SqlSession sqlSession;
+  private SqlSessionFactory sqlSessionFactory;
 
-  public DaoFactory(SqlSession sqlSession) {
-    this.sqlSession = sqlSession;
+  public DaoFactory(SqlSessionFactory sqlSessionFactory) {
+    this.sqlSessionFactory = sqlSessionFactory;
   }
 
   public <T> T createObject(Class<T> daoType) throws Exception {
@@ -44,6 +45,7 @@ public class DaoFactory {
     }
 
     Class<?> returnType = method.getReturnType();
+    SqlSession sqlSession = sqlSessionFactory.openSession(false);
 
     if (returnType == List.class) {
       return sqlSession.selectList(statement, paramValue);
