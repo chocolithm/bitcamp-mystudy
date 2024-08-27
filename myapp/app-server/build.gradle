@@ -16,6 +16,9 @@ dependencies {
     // Persistence Framework
     implementation 'org.mybatis:mybatis:3.5.16'
 
+    // Tomcat Embedded Server Library
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.93'
+
     testImplementation libs.junit.jupiter
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation libs.guava

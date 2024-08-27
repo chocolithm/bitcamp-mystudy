@@ -10,7 +10,5 @@ plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
 }
 
-rootProject.name = 'myapp'
-//include('app-client')
-include('app-server')
-include('app-common')
+rootProject.name = 'java-web'
+include('app')

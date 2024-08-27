@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+    id 'eclipse' // Eclipse IDE 관련 작업을 수행할 수 있는 플러그인
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    // Tomcat Embedded Server 라이브러리
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.93'
+    
+    testImplementation libs.junit.jupiter
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation libs.guava
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// eclipse 프로젝트 이름을 설정하기
+eclipse {
+    project {
+        name = "java-web" // 프로젝트 이름을 지정하지 않으면 폴더 이름(예: app)을 사용한다.
+    }
+    jdt {
+      sourceCompatibility = 21
+      targetCompatibility = 21
+      javaRuntimeName = "JavaSE-21"
+    }
+}
