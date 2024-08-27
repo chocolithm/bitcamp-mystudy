@@ -19,8 +19,8 @@ public class UserAddCommand implements Command {
 
   @Override
   public void execute(String menuName, Prompt prompt) {
-    prompt.printf("[%s]\n", menuName);
     try {
+      prompt.printf("[%s]\n", menuName);
       User user = new User();
       user.setName(prompt.input("이름?"));
       user.setEmail(prompt.input("이메일?"));

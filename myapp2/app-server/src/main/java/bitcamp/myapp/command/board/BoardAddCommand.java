@@ -20,8 +20,8 @@ public class BoardAddCommand implements Command {
 
   @Override
   public void execute(String menuName, Prompt prompt) {
-    prompt.printf("[%s]\n", menuName);
     try {
+      prompt.printf("[%s]\n", menuName);
       Board board = new Board();
       board.setTitle(prompt.input("제목?"));
       board.setContent(prompt.input("내용?"));

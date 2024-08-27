@@ -1,12 +1,13 @@
 package bitcamp.myapp.dao;
 
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.List;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 
 public class DaoFactory {
 
@@ -18,9 +19,9 @@ public class DaoFactory {
 
   public <T> T createObject(Class<T> daoType) throws Exception {
     return (T) Proxy.newProxyInstance(
-        this.getClass().getClassLoader(),
-        new Class[] {daoType},
-        this::invoke);
+            this.getClass().getClassLoader(),
+            new Class[]{daoType},
+            this::invoke);
   }
 
   public Object invoke(Object proxy, Method method, Object[] args) throws Exception {
@@ -45,6 +46,7 @@ public class DaoFactory {
 
     Class<?> returnType = method.getReturnType();
 
+    // 현재 스레드에 보관된 SqlSession 을 꺼낸다.
     SqlSession sqlSession = sqlSessionFactory.openSession(false);
 
     if (returnType == List.class) {

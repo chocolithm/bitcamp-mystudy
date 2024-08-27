@@ -13,6 +13,7 @@ public class BoardUpdateCommand implements Command {
   private SqlSessionFactory sqlSessionFactory;
 
   public BoardUpdateCommand(BoardDao boardDao, SqlSessionFactory sqlSessionFactory) {
+
     this.boardDao = boardDao;
     this.sqlSessionFactory = sqlSessionFactory;
   }

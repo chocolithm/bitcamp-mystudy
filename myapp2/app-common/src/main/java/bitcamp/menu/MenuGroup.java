@@ -1,6 +1,7 @@
 package bitcamp.menu;
 
 import bitcamp.net.Prompt;
+
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -15,34 +16,38 @@ public class MenuGroup extends AbstractMenu {
   }
 
   @Override
-  public void execute(Prompt prompt) throws Exception {
+  public void execute(Prompt prompt) {
+    try {
+      String menuPath = getMenuPath();
 
-    String menuPath = getMenuPath();
+      printMenus(prompt);
 
-    printMenus(prompt);
-
-    while (true) {
-      String command = prompt.input("%s>", menuPath);
-      if (command.equals("menu")) {
-        printMenus(prompt);
-        continue;
-      } else if (command.equals("0")) { // 이전 메뉴 선택
-        return;
-      }
-
-      try {
-        int menuNo = Integer.parseInt(command);
-        Menu menu = getMenu(menuNo - 1);
-        if (menu == null) {
-          prompt.println("유효한 메뉴 번호가 아닙니다.");
+      while (true) {
+        String command = prompt.input("%s>", menuPath);
+        if (command.equals("menu")) {
+          printMenus(prompt);
           continue;
+        } else if (command.equals("0")) { // 이전 메뉴 선택
+          return;
         }
 
-        menu.execute(prompt);
+        try {
+          int menuNo = Integer.parseInt(command);
+          Menu menu = getMenu(menuNo - 1);
+          if (menu == null) {
+            prompt.println("유효한 메뉴 번호가 아닙니다.");
+            continue;
+          }
 
-      } catch (NumberFormatException ex) {
-        prompt.println("숫자로 메뉴 번호를 입력하세요.");
+          menu.execute(prompt);
+
+        } catch (NumberFormatException ex) {
+          prompt.println("숫자로 메뉴 번호를 입력하세요.");
+        }
       }
+    } catch (Exception e) {
+      e.printStackTrace();
+      prompt.println("실행 오류!");
     }
   }
 

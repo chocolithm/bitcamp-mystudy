@@ -4,6 +4,7 @@ import bitcamp.myapp.dao.UserDao;
 import bitcamp.myapp.vo.Project;
 import bitcamp.myapp.vo.User;
 import bitcamp.net.Prompt;
+
 import java.util.ArrayList;
 
 public class ProjectMemberHandler {
@@ -40,26 +41,21 @@ public class ProjectMemberHandler {
     }
   }
 
-  public void deleteMembers(Project project, Prompt prompt) {
-    try {
-      if (project.getMembers() == null || project.getMembers().size() == 0) {
-        return;
-      }
+  public void deleteMembers(Project project, Prompt prompt) throws Exception {
+    if (project.getMembers() == null || project.getMembers().size() == 0) {
+      return;
+    }
 
-      Object[] members = project.getMembers().toArray();
-      for (Object obj : members) {
-        User member = (User) obj;
-        String str = prompt.input("팀원(%s) 삭제?", member.getName());
-        if (str.equalsIgnoreCase("y")) {
-          project.getMembers().remove(member);
-          prompt.printf("'%s' 팀원을 삭제합니다.\n", member.getName());
-        } else {
-          prompt.printf("'%s' 팀원을 유지합니다.\n", member.getName());
-        }
+    Object[] members = project.getMembers().toArray();
+    for (Object obj : members) {
+      User member = (User) obj;
+      String str = prompt.input("팀원(%s) 삭제?", member.getName());
+      if (str.equalsIgnoreCase("y")) {
+        project.getMembers().remove(member);
+        prompt.printf("'%s' 팀원을 삭제합니다.\n", member.getName());
+      } else {
+        prompt.printf("'%s' 팀원을 유지합니다.\n", member.getName());
       }
-    } catch (Exception e) {
-      prompt.print("멤버 삭제 중 오류 발생!");
-      e.printStackTrace();
     }
   }
 }

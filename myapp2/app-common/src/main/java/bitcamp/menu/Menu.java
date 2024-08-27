@@ -6,5 +6,5 @@ public interface Menu {
 
   String getTitle();
 
-  void execute(Prompt prompt) throws Exception;
+  void execute(Prompt prompt);
 }

@@ -13,7 +13,7 @@ public class ProjectAddCommand implements Command {
   private SqlSessionFactory sqlSessionFactory;
 
   public ProjectAddCommand(ProjectDao projectDao, ProjectMemberHandler memberHandler,
-      SqlSessionFactory sqlSessionFactory) {
+                           SqlSessionFactory sqlSessionFactory) {
     this.projectDao = projectDao;
     this.memberHandler = memberHandler;
     this.sqlSessionFactory = sqlSessionFactory;
@@ -34,8 +34,10 @@ public class ProjectAddCommand implements Command {
       memberHandler.addMembers(project, prompt);
 
       projectDao.insert(project);
+      Thread.sleep(30000);
       if (project.getMembers() != null && project.getMembers().size() > 0) {
         projectDao.insertMembers(project.getNo(), project.getMembers());
+        //throw new Exception("그냥 오류 발생!");
       }
       sqlSessionFactory.openSession(false).commit();
 
