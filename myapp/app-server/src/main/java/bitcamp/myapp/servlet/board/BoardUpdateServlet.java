@@ -2,6 +2,7 @@ package bitcamp.myapp.servlet.board;
 
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.Board;
+import bitcamp.myapp.vo.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -11,9 +12,11 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/board/view")
-public class BoardViewServlet extends GenericServlet {
+@WebServlet("/board/update")
+public class BoardUpdateServlet extends GenericServlet {
 
   private BoardDao boardDao;
   private SqlSessionFactory sqlSessionFactory;
@@ -33,43 +36,39 @@ public class BoardViewServlet extends GenericServlet {
     PrintWriter out = res.getWriter();
 
     req.getRequestDispatcher("/header").include(req, res);
+    ((HttpServletResponse) res).setHeader("Refresh", "1;url=/board/list");
 
     try {
 
-      out.printf("<h1>게시글 조회</h1>");
+      out.println("<p>게시글 변경 결과</p>");
+
+      User loginUser = (User) ((HttpServletRequest) req).getSession().getAttribute("loginUser");
 
       int boardNo = Integer.parseInt(req.getParameter("no"));
-
       Board board = boardDao.findBy(boardNo);
+
       if (board == null) {
         out.println("<p>없는 게시글입니다.</p>");
         out.println("</body>");
         out.println("</html>");
         return;
+      } else if (loginUser == null || (loginUser.getNo() > 10 && !loginUser.equals(
+          board.getWriter()))) {
+        out.println("<p>변경 권한이 없습니다.</p>");
+        out.println("</body>");
+        out.println("</html>");
+        return;
       }
 
-      board.setViewCount(board.getViewCount() + 1);
-      boardDao.updateViewCount(board.getNo(), board.getViewCount());
+      board.setTitle(req.getParameter("title"));
+      board.setContent(req.getParameter("content"));
+      boardDao.update(board);
       sqlSessionFactory.openSession(false).commit();
-
-      out.println("<form action='/board/update'>");
-      out.printf("    번호: <input name='no' readonly type='text' value=%d><br>\n", board.getNo());
-      out.printf("    제목: <input name='title' type='text' value=%s><br>\n", board.getTitle());
-      out.printf("    내용: <textarea name='content'>%s</textarea><br>\n", board.getContent());
-      out.printf(
-          "    작성일: <input readonly type='text' value='%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS'><br>\n",
-          board.getCreatedDate());
-      out.printf("    조회수: <input readonly type='text' value=%d><br>\n", board.getViewCount());
-      out.printf("    작성자: <input readonly type='text' value=%s><br>\n", board.getWriter().getName());
-      out.println("   <button>변경</button>");
-      out.printf(
-          "   <button type='button' onclick='location.href=\"/board/delete?no=%d\"'>삭제</button>\n",
-          board.getNo());
-      out.println("</form>");
+      out.println("<p>변경 했습니다.</p>");
 
     } catch (Exception e) {
       sqlSessionFactory.openSession(false).rollback();
-      out.println("<p>게시글 데이터 조회 중 오류 발생!</p>");
+      out.println("게시글 데이터 변경 중 오류 발생!");
       e.printStackTrace();
     }
 

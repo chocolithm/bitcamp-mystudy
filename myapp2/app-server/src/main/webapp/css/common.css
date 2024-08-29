@@ -1,0 +1,98 @@
+/* header */
+header {
+    border2: 1px solid red;
+    position: relative;
+}
+
+header > h1 {
+    border2: 1px solid red;
+    display: inline;
+    font-size: 14px;
+}
+
+header img {
+    vertical-align: middle;
+    height: 20px;
+}
+
+header > nav {
+    border2: 1px solid red;
+    display: inline;
+}
+
+header > nav > ul {
+    list-style-type: none;
+    display: inline;
+}
+
+header li {
+    border2: 1px solid blue;
+}
+
+header a {
+    border2: 1px solid blue;
+}
+
+.btn {
+    display: inline-block;
+    width: 70px;
+    height: 14px;
+    text-align: center;
+    padding-top: 3px;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    font-size: 10px;
+}
+
+.btn a {
+    text-decoration: none;
+    color: black;
+}
+
+.btn-default {
+    background-color: darkgrey;
+}
+
+.btn-light {
+    background-color: white;
+}
+
+.btn-primary {
+    background-color: navy;
+    color: white;
+}
+
+.btn-secondary {
+    background-color: darkgreen;
+    color: white;
+}
+
+.pos-right {
+    position: absolute;
+    right: 0px;
+}
+
+.login-state {
+    display: inline;
+}
+
+
+/* table */
+table {
+    border-collapse: separate;
+    border-spacing: 2px;
+}
+
+table, tr, td {
+    border: 1px solid black;
+}
+
+th {
+    background-color: #c2c2c2;
+    padding: 5px;
+}
+
+td {
+    padding: 5px;
+}

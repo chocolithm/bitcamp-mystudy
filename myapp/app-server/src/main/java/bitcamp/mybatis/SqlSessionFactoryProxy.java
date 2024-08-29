@@ -70,4 +70,16 @@ public class SqlSessionFactoryProxy implements SqlSessionFactory {
   public Configuration getConfiguration() {
     return original.getConfiguration();
   }
+
+  public void clearSession() {
+    try {
+      SqlSession sqlSession = sqlSessionThreadLocal.get();
+      if (sqlSession != null) {
+        sqlSession.close();
+      }
+    } catch (Exception e) {
+
+    }
+    sqlSessionThreadLocal.remove();
+  }
 }

@@ -32,18 +32,15 @@ public class ProjectListServlet implements Servlet {
     res.setContentType("text/html;charset=UTF-8");
     PrintWriter out = res.getWriter();
 
-    out.println("<!doctype html>");
-    out.println("<html>");
-    out.println("<head>");
-    out.println("   <meta charset='UTF-8'>");
-    out.println("   <title>Document</title>");
-    out.println("</head>");
-    out.println("<body>");
+    req.getRequestDispatcher("/header").include(req, res);
 
     try {
-      out.println("<h1>[프로젝트 목록]</h1>");
 
-      out.println("<table border='1'>");
+      out.println("<h1>프로젝트 목록</h1>");
+
+      out.println("<p><a href='/project/form'>새 프로젝트</a></p>");
+
+      out.println("<table>");
       out.println("   <thead>");
       out.println("       <tr><th>번호</th><th>프로젝트</th><th>기간</th></tr>");
       out.println("   </thead>");

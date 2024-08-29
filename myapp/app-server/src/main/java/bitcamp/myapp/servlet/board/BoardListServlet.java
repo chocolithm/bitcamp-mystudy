@@ -32,17 +32,14 @@ public class BoardListServlet implements Servlet {
     res.setContentType("text/html;charset=UTF-8");
     PrintWriter out = res.getWriter();
 
-    out.println("<!doctype html>");
-    out.println("<html>");
-    out.println("<head>");
-    out.println("   <meta charset='UTF-8'>");
-    out.println("   <title>Document</title>");
-    out.println("</head>");
-    out.println("<body>");
+    req.getRequestDispatcher("/header").include(req, res);
 
     try {
-      out.println("<h1>[게시글 목록]</h1>");
-      out.println("<table border='1'>");
+
+      out.println("<h1>게시글 목록</h1>");
+
+      out.println("<p><a href='/board/form'>새 게시글</a></p>");
+      out.println("<table>");
       out.println("   <thead>");
       out.println("       <tr><th>번호</th><th>제목</th><th>작성자</th><th>작성일</th><th>조회수</th></tr>");
       out.println("   </thead>");

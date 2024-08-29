@@ -5,6 +5,7 @@ import bitcamp.myapp.vo.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -43,18 +44,15 @@ public class UserListServlet implements Servlet {
     res.setContentType("text/html;charset=UTF-8");
     PrintWriter out = res.getWriter();
 
-    out.println("<!doctype html>");
-    out.println("<html>");
-    out.println("<head>");
-    out.println("   <meta charset='UTF-8'>");
-    out.println("   <title>Document</title>");
-    out.println("</head>");
-    out.println("<body>");
-
+    // header에게 req, res를 전달하고 header의 service()를 실행
+    RequestDispatcher requestDispatcher = req.getRequestDispatcher("/header");
+    requestDispatcher.include(req, res);
 
     try {
-      out.println("<h1>[회원 목록]</h1>");
-      out.println("<table border='1'>");
+
+      out.println("<h1>회원 목록</h1>");
+      out.println("<p><a href='/user/form'>새 회원</a></p>");
+      out.println("<table>");
       out.println("   <thead>");
       out.println("       <tr><th>번호</th><th>이름</th><th>이메일</th></tr>");
       out.println("   </thead>");
