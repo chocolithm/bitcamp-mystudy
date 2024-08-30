@@ -1,9 +1,7 @@
 package bitcamp.myapp.servlet.project;
 
 import bitcamp.myapp.dao.ProjectDao;
-import bitcamp.myapp.vo.Project;
 import java.io.IOException;
-import java.io.PrintWriter;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import javax.servlet.GenericServlet;
@@ -27,37 +25,22 @@ public class ProjectDeleteServlet extends GenericServlet {
   }
 
   @Override
-  public void service(ServletRequest req, ServletResponse res)
-      throws ServletException, IOException {
-
-    res.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = res.getWriter();
-
-    req.getRequestDispatcher("/header").include(req, res);
-    ((HttpServletResponse) res).setHeader("Refresh", "1;url=/project/list");
-
+  public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
     try {
-
-      out.printf("<h1>프로젝트 삭제 결과</h1>");
-
       int projectNo = Integer.parseInt(req.getParameter("no"));
-      Project deletedProject = projectDao.findBy(projectNo);
 
       projectDao.deleteMembers(projectNo);
       if (projectDao.delete(projectNo)) {
         sqlSessionFactory.openSession(false).commit();
-        out.println("<p>삭제 했습니다.</p>");
+        ((HttpServletResponse) res).sendRedirect("/project/list");
       } else {
-        out.println("<p>없는 프로젝트입니다.</p>");
+        throw new Exception("없는 프로젝트입니다.");
       }
 
     } catch (Exception e) {
       sqlSessionFactory.openSession(false).rollback();
-      out.println("<p>프로젝트 데이터 삭제 중 오류 발생!</p>");
-      e.printStackTrace();
+      req.setAttribute("exception", e);
+      req.getRequestDispatcher("/error.jsp").forward(req, res);
     }
-
-    out.println("</body>");
-    out.println("</html>");
   }
 }

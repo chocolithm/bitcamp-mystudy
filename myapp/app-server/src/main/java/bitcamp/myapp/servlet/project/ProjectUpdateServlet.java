@@ -4,7 +4,6 @@ import bitcamp.myapp.dao.ProjectDao;
 import bitcamp.myapp.vo.Project;
 import bitcamp.myapp.vo.User;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,19 +30,8 @@ public class ProjectUpdateServlet extends GenericServlet {
   }
 
   @Override
-  public void service(ServletRequest req, ServletResponse res)
-      throws ServletException, IOException {
-
-    res.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = res.getWriter();
-
-    req.getRequestDispatcher("/header").include(req, res);
-    ((HttpServletResponse) res).setHeader("Refresh", "1;url=/project/list");
-
+  public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
     try {
-
-      out.printf("<h1>프로젝트 변경 결과</h1>");
-
       Project project = new Project();
       project.setNo(Integer.parseInt(req.getParameter("no")));
       project.setTitle(req.getParameter("title"));
@@ -61,10 +49,7 @@ public class ProjectUpdateServlet extends GenericServlet {
       }
 
       if (!projectDao.update(project)) {
-        out.println("<p>없는 프로젝트입니다.</p>");
-        out.println("</body>");
-        out.println("</html>");
-        return;
+        throw new Exception("없는 프로젝트입니다.");
       }
 
       projectDao.deleteMembers(project.getNo());
@@ -72,15 +57,12 @@ public class ProjectUpdateServlet extends GenericServlet {
         projectDao.insertMembers(project.getNo(), project.getMembers());
       }
       sqlSessionFactory.openSession(false).commit();
-      out.println("<p>변경 했습니다.</p>");
+      ((HttpServletResponse) res).sendRedirect("/project/list");
 
     } catch (Exception e) {
       sqlSessionFactory.openSession(false).rollback();
-      out.println("<p>프로젝트 데이터 변경 중 오류 발생!</p>");
-      e.printStackTrace();
+      req.setAttribute("exception", e);
+      req.getRequestDispatcher("/error.jsp").forward(req, res);
     }
-
-    out.println("</body>");
-    out.println("</html>");
   }
 }

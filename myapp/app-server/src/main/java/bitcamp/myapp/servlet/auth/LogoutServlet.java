@@ -14,9 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 public class LogoutServlet extends GenericServlet {
 
   @Override
-  public void service(ServletRequest req, ServletResponse res)
-      throws ServletException, IOException {
-
+  public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
     ((HttpServletRequest) req).getSession().invalidate();
     ((HttpServletResponse) res).sendRedirect("/");
   }

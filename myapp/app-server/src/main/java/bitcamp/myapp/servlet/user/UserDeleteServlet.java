@@ -2,7 +2,6 @@ package bitcamp.myapp.servlet.user;
 
 import bitcamp.myapp.dao.UserDao;
 import java.io.IOException;
-import java.io.PrintWriter;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import javax.servlet.GenericServlet;
@@ -26,30 +25,21 @@ public class UserDeleteServlet extends GenericServlet {
   }
 
   @Override
-  public void service(ServletRequest req, ServletResponse res)
-      throws ServletException, IOException {
-
-    res.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = res.getWriter();
-
-    req.getRequestDispatcher("/header").include(req, res);
-    ((HttpServletResponse) res).setHeader("Refresh", "1;url=/user/list");
+  public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
 
     try {
-      out.println("<h1>회원 삭제 결과</h1>");
-
       int userNo = Integer.parseInt(req.getParameter("no"));
-
       if (userDao.delete(userNo)) {
         sqlSessionFactory.openSession(false).commit();
-        out.println("<p>삭제 했습니다.</p>");
+        ((HttpServletResponse) res).sendRedirect("/user/list");
       } else {
-        out.println("<p>없는 회원입니다.</p>");
+        throw new Exception("없는 회원입니다.");
       }
 
     } catch (Exception e) {
       sqlSessionFactory.openSession(false).rollback();
-      out.println("<p>회원 데이터 삭제 중 오류 발생!</p>");
+      req.setAttribute("exception", e);
+      req.getRequestDispatcher("/error.jsp").forward(req, res);
     }
   }
 }
