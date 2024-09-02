@@ -6,7 +6,7 @@
 <%@ page import="bitcamp.myapp.vo.User" %>
 <%@ page import="java.util.List"  %>
 
-<jsp:include page="/header"/>
+<jsp:include page="/header.jsp"/>
 
 <h1>회원 목록</h1>
 <p><a href='/user/form'>새 회원</a></p>

@@ -6,6 +6,8 @@
 <%@ page import="bitcamp.myapp.vo.User" %>
 <%@ page import="java.util.List" %>
 
+<jsp:include page="/header.jsp"/>
+
 <h1>프로젝트 등록</h1>
 
 <form action='/project/add'>

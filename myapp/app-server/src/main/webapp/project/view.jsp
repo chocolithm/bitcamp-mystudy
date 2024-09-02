@@ -7,6 +7,8 @@
 <%@ page import="bitcamp.myapp.vo.User" %>
 <%@ page import="java.util.List" %>
 
+<jsp:include page="/header.jsp"/>
+
 <%!
 private boolean isMember(List<User> members, User user) {
     for (User member : members) {
@@ -17,8 +19,6 @@ private boolean isMember(List<User> members, User user) {
     return false;
   }
 %>
-
-<jsp:include page="/header"/>
 
 <h1>프로젝트 조회</h1>
 

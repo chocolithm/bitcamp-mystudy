@@ -4,7 +4,7 @@
     pageEncoding="UTF-8"
     trimDirectiveWhitespaces="true" %>
 
-<jsp:include page="/header"/>
+<jsp:include page="/header.jsp"/>
 
 <h1>로그인</h1>
 <form action='/auth/login'>

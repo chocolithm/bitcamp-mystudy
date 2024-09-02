@@ -6,7 +6,7 @@
 <%@ page import="bitcamp.myapp.vo.Board" %>
 <%@ page import="java.util.List"  %>
 
-<jsp:include page="/header"/>
+<jsp:include page="/header.jsp"/>
 
 <h1>게시글 목록</h1>
 <p><a href='/board/form'>새 게시글</a></p>
