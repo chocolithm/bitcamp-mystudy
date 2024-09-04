@@ -55,7 +55,7 @@ public class Servlet04 extends GenericServlet {
     //    - 실무에서 예전에 많이 사용했다.
     // 3) Servlet 3.0 부터 제공하는 기능을 이용한다.
     //    - 실무에서는 아직도 apache.org에서 제공하는 라이브러리를 계속 사용하는 곳도 있다.
-    //      그래서 Servlet 3.0에서 제공하는 방법뿐만아니라 
+    //      그래서 Servlet 3.0에서 제공하는 방법뿐만아니라
     //      2) 번 방법도 알고 있어야 한다.
     // 4) Spring WebMVC를 사용한다면 해당 프레임워크에서 제공하는 기능을 이용한다.
     //    - Spring WebMVC를 설명할 때 실습하겠다.
@@ -77,16 +77,16 @@ public class Servlet04 extends GenericServlet {
     // 2) Apache commons-fileupload 문서에 따라 코딩한다.
     //
     // DiskFileItemFactory
-    // => 각 파트 데이터를 분석하여 
+    // => 각 파트 데이터를 분석하여
     //    - 파라미터이름과 값을 추출한다.
     //    - 파일인 경우 임시 폴더에 저장한다.
-    //    - 그런 후 FileItem 객체에 분석한 정보를 담아서 리턴한다. 
+    //    - 그런 후 FileItem 객체에 분석한 정보를 담아서 리턴한다.
     // => ServletFileUpload 객체의 일을 도와준다.
     DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
 
     // ServletFileUpload
     // => 클라이언트가 보낸 멀티 파트 형식의 HTTP 요청 프로토콜을 분석하는 일을 한다.
-    // => 생성자에 주입된 FileItemFactory 객체를 사용하여 
+    // => 생성자에 주입된 FileItemFactory 객체를 사용하여
     //    각 파트의 데이터를 사용하기 좋게 FileItem 객체로 만든다.
     ServletFileUpload multipartDataHandler = new ServletFileUpload(fileItemFactory);
 
@@ -121,6 +121,9 @@ public class Servlet04 extends GenericServlet {
 
           // 임시 폴더에 저장된 파일을 지정된 파일 경로로 옮긴다.
           part.write(file);
+
+          // original file name
+          System.out.printf("%s %s\n", part.getFieldName(), part.getName());
 
           paramMap.put(part.getFieldName(), // 클라이언트가 보낸 파라미터 이름
               filename // 파일 이름

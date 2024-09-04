@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-
+    implementation 'commons-fileupload:commons-fileupload:1.5'
     // Tomcat Embedded Server 라이브러리
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.93'
     

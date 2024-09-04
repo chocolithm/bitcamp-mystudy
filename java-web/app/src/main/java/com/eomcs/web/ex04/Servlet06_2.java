@@ -36,8 +36,10 @@ public class Servlet06_2 extends GenericServlet {
     res.setContentType("text/plain;charset=UTF-8");
     PrintWriter out = res.getWriter();
     out.println("선택한 장르:");
-    for (String genre : genres) {
-      out.println(genreData[Integer.parseInt(genre)]);
+    if (genres != null) {
+      for (String genre : genres) {
+        out.println(genreData[Integer.parseInt(genre)]);
+      }
     }
     // 같은 값을 여러 개 입력 받아야 하는 경우
     // 같은 이름을 사용하라.
