@@ -5,14 +5,14 @@ import bitcamp.myapp.vo.Board;
 import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.GenericServlet;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/board/list")
-public class BoardListServlet extends GenericServlet {
+public class BoardListServlet extends HttpServlet {
 
   private BoardDao boardDao;
 
@@ -22,8 +22,7 @@ public class BoardListServlet extends GenericServlet {
   }
 
   @Override
-  public void service(ServletRequest req, ServletResponse res)
-      throws ServletException, IOException {
+  protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     try {
       List<Board> list = boardDao.list();
       req.setAttribute("list", list);

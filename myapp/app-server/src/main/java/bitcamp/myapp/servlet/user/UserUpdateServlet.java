@@ -5,15 +5,14 @@ import bitcamp.myapp.vo.User;
 import java.io.IOException;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import javax.servlet.GenericServlet;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/user/update")
-public class UserUpdateServlet extends GenericServlet {
+public class UserUpdateServlet extends HttpServlet {
 
   private UserDao userDao;
   private SqlSessionFactory sqlSessionFactory;
@@ -26,8 +25,10 @@ public class UserUpdateServlet extends GenericServlet {
   }
 
   @Override
-  public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
+  protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     try {
+      req.setCharacterEncoding("UTF-8");
+      
       User user = new User();
       user.setNo(Integer.parseInt(req.getParameter("no")));
       user.setName(req.getParameter("name"));
@@ -37,7 +38,7 @@ public class UserUpdateServlet extends GenericServlet {
 
       if (userDao.update(user)) {
         sqlSessionFactory.openSession(false).commit();
-        ((HttpServletResponse) res).sendRedirect("/user/list");
+        res.sendRedirect("/user/list");
       } else {
         throw new Exception("없는 회원입니다.");
       }

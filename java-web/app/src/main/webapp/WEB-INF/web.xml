@@ -6,6 +6,25 @@
   version="4.0"
   metadata-complete="false">
   
+  <!-- 
+    <context-param>
+        <param-name>jdbc2.driver</param-name>
+        <param-value>com.mysql.driver.Driver</param-value>
+    </context-param>
+    <context-param>
+        <param-name>jdbc2.url</param-name>
+        <param-value>jdbc:mysql://localhost:studydb</param-value>
+    </context-param>
+    <context-param>
+        <param-name>jdbc2.username</param-name>
+        <param-value>study</param-value>
+    </context-param>
+    <context-param>
+        <param-name>jdbc2.password</param-name>
+        <param-value>1111</param-value>
+    </context-param>
+     -->
+    
     <!-- 리스터 등록 -->
     <!-- 
     <listener>
@@ -42,5 +61,29 @@
         <url-pattern>/ex02/*</url-pattern>
     </filter-mapping>
     -->
+    
+    <!-- 
+    <servlet>
+        <servlet-name>ex06.s3</servlet-name>
+        <servlet-class>com.eomcs.web.ex06.Servlet03</servlet-class>
+        <init-param>
+            <param-name>jdbc.driver</param-name>
+            <param-value>com.mysql.driver.Driver</param-value>
+        </init-param>
+        <init-param>
+            <param-name>jdbc.url</param-name>
+            <param-value>jdbc:mysql://localhost:studydb</param-value>
+        </init-param>
+        <init-param>
+            <param-name>jdbc.username</param-name>
+            <param-value>study</param-value>
+        </init-param>
+        <init-param>
+            <param-name>jdbc.password</param-name>
+            <param-value>1111</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+     -->
     
 </web-app>

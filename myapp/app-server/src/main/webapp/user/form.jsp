@@ -9,7 +9,7 @@
 
 <h1>회원 등록</h1>
 
-<form action='/user/add'>
+<form action='/user/add' method="post">
     이름: <input name='name' type='text'><br>
     이메일: <input name='email' type='email'><br>
     암호: <input name='password' type='password'><br>

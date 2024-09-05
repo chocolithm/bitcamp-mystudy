@@ -13,12 +13,11 @@ public class Solution {
       } else {}
       map.put(cloth[1], map.get(cloth[1]) + 1);
     }
-  }
 
-  for (Integer value : map.values()) {
-    answer *= value;
-  }
+    for (Integer value : map.values()) {
+      answer *= value;
+    }
 
-  return answer - 1;
-}
+    return answer - 1;
+  }
 }

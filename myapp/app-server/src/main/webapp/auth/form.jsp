@@ -7,7 +7,7 @@
 <jsp:include page="/header.jsp"/>
 
 <h1>로그인</h1>
-<form action='/auth/login'>
+<form action='/auth/login' method="post">
     이메일: <input name='email' type='email'><br>
     암호: <input name='password' type='password'><br>
     <input type='submit' value='로그인'>

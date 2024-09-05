@@ -31,7 +31,7 @@ private boolean isMember(List<User> members, User user) {
     } else {
 %>
 
-<form action='/project/update'>
+<form action='/project/update' method="post">
     번호: <input name='no' readonly type='text' value='<%=project.getNo()%>'><br>
     프로젝트명: <input name='title' type='text' value='<%=project.getTitle()%>'><br>
     설명: <textarea name='description'><%=project.getDescription()%></textarea><br>

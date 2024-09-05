@@ -6,16 +6,14 @@ import bitcamp.myapp.vo.User;
 import java.io.IOException;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import javax.servlet.GenericServlet;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/board/add")
-public class BoardAddServlet extends GenericServlet {
+public class BoardAddServlet extends HttpServlet {
 
   private BoardDao boardDao;
   private SqlSessionFactory sqlSessionFactory;
@@ -28,8 +26,16 @@ public class BoardAddServlet extends GenericServlet {
   }
 
   @Override
-  public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
+  protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+    res.setContentType("text/html;charset=UTF-8");
+    req.getRequestDispatcher("/board/form.jsp").include(req, res);
+  }
+
+  @Override
+  protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     try {
+      req.setCharacterEncoding("UTF-8");
+
       Board board = new Board();
       board.setTitle(req.getParameter("title"));
       board.setContent(req.getParameter("content"));
@@ -39,7 +45,7 @@ public class BoardAddServlet extends GenericServlet {
 
       boardDao.insert(board);
       sqlSessionFactory.openSession(false).commit();
-      ((HttpServletResponse) res).sendRedirect("/board/list");
+      res.sendRedirect("/board/list");
 
     } catch (Exception e) {
       sqlSessionFactory.openSession(false).rollback();

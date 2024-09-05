@@ -10,7 +10,7 @@
 
 <h1>프로젝트 등록</h1>
 
-<form action='/project/add'>
+<form action='/project/add' method="post">
      프로젝트명: <input name='title' type='text'><br>
      설명: <textarea name='description'></textarea><br>
      기간: <input name='startDate' type='date'> ~ <input name='endDate' type='date'><br>

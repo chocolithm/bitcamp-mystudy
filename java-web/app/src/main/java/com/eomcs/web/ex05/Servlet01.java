@@ -48,6 +48,9 @@ public class Servlet01 extends GenericServlet {
     } else if (httpReq.getMethod().equals("POST")) {
       out.println("POST 요청입니다.");
 
+    }else if (httpReq.getMethod().equals("PUT")) {
+      out.println("PUT 요청입니다.");
+
     } else {
       out.println("이 서블릿이 다루지 못하는 요청 방식입니다.");
     }
