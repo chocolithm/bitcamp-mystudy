@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,8 +42,17 @@ public class LoginServlet extends HttpServlet {
         return;
       }
 
-      HttpServletRequest httpReq = req;
-      HttpSession session = httpReq.getSession();
+      if (req.getParameter("saveEmail") != null) {
+        Cookie cookie = new Cookie("email", email);
+        cookie.setMaxAge(60 * 60 * 24 * 7);
+        res.addCookie(cookie);
+      } else {
+        Cookie cookie = new Cookie("email", "test@test.com");
+        cookie.setMaxAge(0);
+        res.addCookie(cookie);
+      }
+
+      HttpSession session = req.getSession();
       session.setAttribute("loginUser", user);
       res.sendRedirect("/");
 

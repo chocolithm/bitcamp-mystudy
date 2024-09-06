@@ -9,7 +9,7 @@
 <jsp:include page="/header.jsp"/>
 
 <h1>프로젝트 목록</h1>
-<p><a href='/project/add'>새 프로젝트</a></p>
+<p><a href='/project/form1'>새 프로젝트</a></p>
 <table>
      <thead>
         <tr>

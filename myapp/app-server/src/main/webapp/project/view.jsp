@@ -26,7 +26,7 @@ private boolean isMember(List<User> members, User user) {
     Project project = (Project) request.getAttribute("project");
     if (project == null) {
 %>
-        <p>없는 프로젝트입니다.</p>
+    <p>없는 프로젝트입니다.</p>
 <%
     } else {
 %>
