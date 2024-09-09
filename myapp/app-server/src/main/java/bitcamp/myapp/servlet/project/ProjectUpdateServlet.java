@@ -31,8 +31,6 @@ public class ProjectUpdateServlet extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     try {
-      req.setCharacterEncoding("UTF-8");
-      
       Project project = new Project();
       project.setNo(Integer.parseInt(req.getParameter("no")));
       project.setTitle(req.getParameter("title"));

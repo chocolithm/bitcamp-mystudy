@@ -18,7 +18,7 @@
   - 권기윤 : Homez96
   - 김민수 : Minsoo2u
   - 김재우 : stereokim123
-  - 양지윤 
+  - 양지윤 : j1yunn
   - 이우성 : Nari-Lee
 
 ## 향후 논의사항

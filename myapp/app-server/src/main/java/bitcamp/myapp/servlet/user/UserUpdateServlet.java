@@ -27,8 +27,6 @@ public class UserUpdateServlet extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     try {
-      req.setCharacterEncoding("UTF-8");
-      
       User user = new User();
       user.setNo(Integer.parseInt(req.getParameter("no")));
       user.setName(req.getParameter("name"));

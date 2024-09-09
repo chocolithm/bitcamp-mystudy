@@ -34,8 +34,6 @@ public class UserAddServlet extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     try {
-      req.setCharacterEncoding("UTF-8");
-      
       User user = new User();
       user.setName(req.getParameter("name"));
       user.setEmail(req.getParameter("email"));
