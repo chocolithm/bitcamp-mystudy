@@ -11,10 +11,25 @@
     <result column="content" property="content"/>
     <result column="created_date" property="createdDate"/>
     <result column="view_count" property="viewCount"/>
+
     <association property="writer" javaType="user">
       <id column="user_id" property="no"/>
       <result column="name" property="name"/>
     </association>
+
+    <collection property="attachedFiles" ofType="attachedFile">
+      <id column="board_file_id" property="fileNo"/>
+      <result column="filename" property="filename"/>
+      <result column="origin_filename" property="originFilename"/>
+    </collection>
+  </resultMap>
+
+
+  <resultMap id="AttachedFileMap" type="attachedFile">
+    <id column="board_file_id" property="fileNo"/>
+    <result column="filename" property="filename"/>
+    <result column="origin_filename" property="originFilename"/>
+    <result column="board_id" property="boardNo"/>
   </resultMap>
 
   <select id="list" resultMap="BoardMap">
@@ -32,7 +47,7 @@
       b.board_id asc
   </select>
 
-  <insert id="insert" parameterType="board">
+  <insert id="insert" parameterType="board" useGeneratedKeys="true" keyColumn="board_id" keyProperty="no">
     insert into myapp_boards(title, content, user_id)
     values (#{title}, #{content}, #{writer.no})
   </insert>
@@ -45,10 +60,14 @@
       b.created_date,
       b.view_count,
       u.user_id,
-      u.name
+      u.name,
+      bf.board_file_id,
+      bf.filename,
+      bf.origin_filename
     from
       myapp_boards b
       inner join myapp_users u on b.user_id = u.user_id
+      left outer join myapp_board_files bf on b.board_id = bf.board_id
     where
       b.board_id = #{no}
   </select>
@@ -75,4 +94,38 @@
     where
       board_id= #{no}
   </update>
+
+  <insert id="insertFiles" parameterType="board">
+    insert into myapp_board_files(filename, origin_filename, board_id)
+    values
+    <foreach collection="attachedFiles" item="attachedFile" separator=",">
+      (#{attachedFile.filename}, #{attachedFile.originFilename}, #{no})
+    </foreach>
+  </insert>
+
+  <select id="getFile" parameterType="int" resultMap="AttachedFileMap">
+    select
+      board_file_id,
+      filename,
+      origin_filename,
+      board_id
+    from
+      myapp_board_files
+    where
+      board_file_id = #{fileNo}
+  </select>
+
+  <delete id="deleteFile" parameterType="int">
+    delete
+      from myapp_board_files
+    where
+      board_file_id = #{fileNo}
+  </delete>
+
+  <delete id="deleteFiles" parameterType="int">
+    delete
+      from myapp_board_files
+    where
+      board_id = #{boardNo}
+  </delete>
 </mapper>

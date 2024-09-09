@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/board/delete")
-public class BoardDeleteServlet extends HttpServlet {
+@WebServlet("/board/file/delete")
+public class BoardFileDeleteServlet extends HttpServlet {
 
   private BoardDao boardDao;
   private SqlSessionFactory sqlSessionFactory;
@@ -33,27 +33,30 @@ public class BoardDeleteServlet extends HttpServlet {
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     try {
       User loginUser = (User) req.getSession().getAttribute("loginUser");
+      if (loginUser == null) {
+        throw new Exception("로그인하지 않았습니다.");
+      }
 
-      int boardNo = Integer.parseInt(req.getParameter("no"));
-      Board board = boardDao.findBy(boardNo);
+      int fileNo = Integer.parseInt(req.getParameter("fileNo"));
+      AttachedFile attachedFile = boardDao.getFile(fileNo);
+      if (attachedFile == null) {
+        throw new Exception("없는 첨부파일입니다.");
+      }
 
+      Board board = boardDao.findBy(attachedFile.getBoardNo());
       if (board == null) {
         throw new Exception("없는 게시글입니다.");
       } else if (loginUser == null || (loginUser.getNo() > 10 && !loginUser.equals(board.getWriter()))) {
         throw new Exception("삭제 권한이 없습니다.");
       }
 
-      for (AttachedFile attachedFile : board.getAttachedFiles()) {
-        File file = new File(uploadDir + "/" + attachedFile.getFilename());
-        if (file.exists()) {
-          file.delete();
-        }
+      File file = new File(uploadDir + "/" + attachedFile.getFilename());
+      if (file.exists()) {
+        file.delete();
       }
-
-      boardDao.deleteFiles(boardNo);
-      boardDao.delete(boardNo);
+      boardDao.deleteFile(fileNo);
       sqlSessionFactory.openSession(false).commit();
-      res.sendRedirect("/board/list");
+      res.sendRedirect("/board/view?no=" + board.getNo());
 
     } catch (Exception e) {
       sqlSessionFactory.openSession(false).rollback();
