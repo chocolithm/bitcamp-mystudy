@@ -1,6 +1,6 @@
 package bitcamp.myapp.servlet.board;
 
-import bitcamp.myapp.dao.BoardDao;
+import bitcamp.myapp.service.BoardService;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.User;
@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
-import org.apache.ibatis.session.SqlSessionFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -25,14 +24,12 @@ import javax.servlet.http.Part;
 @WebServlet("/board/add")
 public class BoardAddServlet extends HttpServlet {
 
-  private BoardDao boardDao;
-  private SqlSessionFactory sqlSessionFactory;
+  private BoardService boardService;
   private String uploadDir;
 
   @Override
   public void init() throws ServletException {
-    boardDao = (BoardDao) this.getServletContext().getAttribute("boardDao");
-    sqlSessionFactory = (SqlSessionFactory) this.getServletContext().getAttribute("sqlSessionFactory");
+    boardService = (BoardService) this.getServletContext().getAttribute("boardService");
     uploadDir = this.getServletContext().getRealPath("/upload/board");
   }
 
@@ -45,7 +42,6 @@ public class BoardAddServlet extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     try {
-
       User loginUser = (User) req.getSession().getAttribute("loginUser");
       if (loginUser == null) {
         throw new Exception("로그인하지 않았습니다.");
@@ -74,15 +70,10 @@ public class BoardAddServlet extends HttpServlet {
 
       board.setAttachedFiles(attachedFiles);
 
-      boardDao.insert(board);
-      if (board.getAttachedFiles().size() > 0) {
-        boardDao.insertFiles(board);
-      }
-      sqlSessionFactory.openSession(false).commit();
+      boardService.add(board);
       res.sendRedirect("/board/list");
 
     } catch (Exception e) {
-      sqlSessionFactory.openSession(false).rollback();
       req.setAttribute("exception", e);
       req.getRequestDispatcher("/error.jsp").forward(req, res);
     }

@@ -4,6 +4,12 @@ import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.dao.DaoFactory;
 import bitcamp.myapp.dao.ProjectDao;
 import bitcamp.myapp.dao.UserDao;
+import bitcamp.myapp.service.BoardService;
+import bitcamp.myapp.service.DefaultBoardService;
+import bitcamp.myapp.service.DefaultProjectService;
+import bitcamp.myapp.service.DefaultUserService;
+import bitcamp.myapp.service.ProjectService;
+import bitcamp.myapp.service.UserService;
 import bitcamp.mybatis.SqlSessionFactoryProxy;
 import java.io.InputStream;
 import org.apache.ibatis.io.Resources;
@@ -36,11 +42,15 @@ public class ContextLoaderListener implements ServletContextListener {
       BoardDao boardDao = daoFactory.createObject(BoardDao.class);
       ProjectDao projectDao = daoFactory.createObject(ProjectDao.class);
 
+      UserService userService = new DefaultUserService(userDao, sqlSessionFactoryProxy);
+      BoardService boardService = new DefaultBoardService(boardDao, sqlSessionFactoryProxy);
+      ProjectService projectService = new DefaultProjectService(projectDao, sqlSessionFactoryProxy);
+
       ServletContext ctx = sce.getServletContext();
       ctx.setAttribute("sqlSessionFactory", sqlSessionFactoryProxy);
-      ctx.setAttribute("userDao", userDao);
-      ctx.setAttribute("boardDao", boardDao);
-      ctx.setAttribute("projectDao", projectDao);
+      ctx.setAttribute("userService", userService);
+      ctx.setAttribute("boardService", boardService);
+      ctx.setAttribute("projectService", projectService);
 
     } catch (Exception e) {
       System.out.println("서비스 객체 준비 중 오류 발생!");

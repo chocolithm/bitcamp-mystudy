@@ -1,6 +1,6 @@
 package bitcamp.myapp.servlet.user;
 
-import bitcamp.myapp.dao.UserDao;
+import bitcamp.myapp.service.UserService;
 import bitcamp.myapp.vo.User;
 import java.io.IOException;
 import java.util.List;
@@ -14,17 +14,17 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/user/list")
 public class UserListServlet extends HttpServlet {
 
-  private UserDao userDao;
+  private UserService userService;
 
   @Override
   public void init() throws ServletException {
-    userDao = (UserDao) this.getServletContext().getAttribute("userDao");
+    userService = (UserService) this.getServletContext().getAttribute("userService");
   }
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     try {
-      List<User> list = userDao.list();
+      List<User> list = userService.list();
       req.setAttribute("list", list);
 
       // 콘텐트 타입은 include() 호출 전에 실행

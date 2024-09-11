@@ -1,6 +1,6 @@
 package bitcamp.myapp.servlet.board;
 
-import bitcamp.myapp.dao.BoardDao;
+import bitcamp.myapp.service.BoardService;
 import bitcamp.myapp.vo.Board;
 import java.io.IOException;
 import java.util.List;
@@ -14,17 +14,17 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/board/list")
 public class BoardListServlet extends HttpServlet {
 
-  private BoardDao boardDao;
+  private BoardService boardService;
 
   @Override
   public void init() throws ServletException {
-    boardDao = (BoardDao) this.getServletContext().getAttribute("boardDao");
+    boardService = (BoardService) this.getServletContext().getAttribute("boardService");
   }
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     try {
-      List<Board> list = boardDao.list();
+      List<Board> list = boardService.list();
       req.setAttribute("list", list);
 
       // 콘텐트 타입은 include() 호출 전에 실행

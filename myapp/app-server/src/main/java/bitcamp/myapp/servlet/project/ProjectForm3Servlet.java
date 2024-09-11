@@ -1,6 +1,6 @@
 package bitcamp.myapp.servlet.project;
 
-import bitcamp.myapp.dao.UserDao;
+import bitcamp.myapp.service.UserService;
 import bitcamp.myapp.vo.Project;
 import bitcamp.myapp.vo.User;
 import java.io.IOException;
@@ -16,11 +16,11 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/project/form3")
 public class ProjectForm3Servlet extends HttpServlet {
 
-  private UserDao userDao;
+  private UserService userService;
 
   @Override
   public void init() throws ServletException {
-    userDao = (UserDao) this.getServletContext().getAttribute("userDao");
+    userService = (UserService) this.getServletContext().getAttribute("userService");
   }
 
   @Override
@@ -32,7 +32,7 @@ public class ProjectForm3Servlet extends HttpServlet {
       if (memberNos != null) {
         List<User> members = new ArrayList<>();
         for (String memberNo : memberNos) {
-          User user = userDao.findBy(Integer.parseInt(memberNo));
+          User user = userService.get(Integer.parseInt(memberNo));
           members.add(user);
         }
         project.setMembers(members);

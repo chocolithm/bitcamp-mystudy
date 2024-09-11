@@ -3,8 +3,8 @@
     contentType="text/html;charset=UTF-8"
     pageEncoding="UTF-8"
     trimDirectiveWhitespaces="true" %>
-<%@ page import="bitcamp.myapp.vo.Board" %>
-<%@ page import="java.util.List"  %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <jsp:include page="/header.jsp"/>
 
@@ -21,21 +21,15 @@
         </tr>
     </thead>
     <tbody>
-
-<%
-    List<Board> list = (List<Board>) request.getAttribute("list");
-    for (Board board : list) {
-%>
-<tr>
-    <td><%=board.getNo()%></td>
-    <td><a href='/board/view?no=<%=board.getNo()%>'><%=board.getTitle()%></a></td>
-    <td><%=board.getWriter().getName()%></td>
-    <td><%=String.format("%tY-%1$tm-%1$td", board.getCreatedDate())%></td>
-    <td><%=board.getViewCount()%></td>
-</tr>
-<%
-}   
-%>
+        <c:forEach items="${list}" var="board">
+            <tr>
+                <td>${board.no}</td>
+                <td><a href='/board/view?no=${board.no}'>${board.title}</a></td>
+                <td>${board.writer.name}</td>
+                <td><fmt:formatDate value="${board.createdDate}" pattern="yyyy-MM-dd" /></td>
+                <td>${board.viewCount}</td>
+            </tr>
+        </c:forEach>
     </tbody>
 </table>
 

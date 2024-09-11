@@ -11,14 +11,14 @@
 <title>ex09</title>
 </head>
 <body>
-<h1>지시문(directive element) - tablib</h1>
+<h1>지시문(directive element) - taglib</h1>
 <c:forEach items="홍길동,임꺽정,유관순,안중근,윤봉길,김구,김원봉" var="n">
 이름=<%=pageContext.getAttribute("n")%>, ${n}<br>
 </c:forEach>
 </body>
 </html>
 <%-- 
-tablib 지시문
+taglib 지시문
 => 외부에 따로 정의된 JSP 확장 태그를 가져올 때 사용한다.
 => JSP 확장 태그
    1) JSTL(JSP Standard Tag Library)

@@ -3,44 +3,42 @@
     contentType="text/html;charset=UTF-8"
     pageEncoding="UTF-8"
     trimDirectiveWhitespaces="true" %>
-<%@ page import="bitcamp.myapp.vo.Board" %>
-<%@ page import="bitcamp.myapp.vo.AttachedFile" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <jsp:include page="/header.jsp"/>
 
 <h1>게시글 조회</h1>
 
-<%
-    Board board = (Board) request.getAttribute("board");
-    if (board == null) {
-%>
-        <p>없는 게시글입니다.</p>
-<% } else { %>
+<c:if test="${empty board}">
+    <p>없는 게시글입니다.</p>
+</c:if>
 
-<form action='/board/update' method="post" encType="multipart/form-data">
-    번호: <input name='no' readonly type='text' value='<%=board.getNo()%>'><br>
-    제목: <input name='title' type='text' value='<%=board.getTitle()%>'><br>
-    내용: <textarea name='content'><%=board.getContent()%></textarea><br>
-    작성일: <input readonly type='text' value='<%=String.format("%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS", board.getCreatedDate())%>'><br>
-    조회수: <input readonly type='text' value='<%=board.getViewCount()%>'><br>
-    작성자: <input readonly type='text' value='<%=board.getWriter().getName()%>'><br>
-    첨부파일: <br>
-<% if (board.getAttachedFiles().size() > 0) { %>
-        <ul>
-<%      for (AttachedFile attachedFile : board.getAttachedFiles()) { %>
-        <li>
-            <a href="/download?path=board&fileNo=<%=attachedFile.getFileNo()%>"><%=attachedFile.getOriginFilename()%></a>
-            <a href="/board/file/delete?fileNo=<%=attachedFile.getFileNo()%>">삭제</a>
-        </li>
-<%      } %>
-        </ul>
-<% } %>
-    <input name="files" type="file" multiple><br>
-    <button>변경</button>
-    <button type='button' onclick='location.href="/board/delete?no=<%=board.getNo()%>"'>삭제</button>
-</form>
-
-<% } %>
+<c:if test="${not empty board}">
+    <form action='/board/update' method="post" encType="multipart/form-data">
+        번호: <input name='no' readonly type='text' value='${board.no}'><br>
+        제목: <input name='title' type='text' value='${board.title}'><br>
+        내용: <textarea name='content'>${board.content}</textarea><br>
+        작성일: <input readonly type='text' value='<fmt:formatDate value="${board.createdDate}" pattern="yyyy-MM-dd" />'><br>
+        조회수: <input readonly type='text' value='${board.viewCount}'><br>
+        작성자: <input readonly type='text' value='${board.writer.name}'><br>
+        첨부파일: <br>
+        
+        <c:if test="${board.attachedFiles.size() > 0}">
+            <ul>
+                <c:forEach items="${board.attachedFiles}" var="attachedFile">
+                    <li>
+                        <a href="/download?path=board&fileNo=${attachedFile.fileNo}">${attachedFile.originFilename}</a>
+                        <a href="/board/file/delete?fileNo=${attachedFile.fileNo}">삭제</a>
+                    </li>
+                </c:forEach>
+            </ul>
+        </c:if>
+        <input name="files" type="file" multiple><br>
+        <button>변경</button>
+        <button type='button' onclick='location.href="/board/delete?no=${board.no}"'>삭제</button>
+    </form>
+</c:if>
 
 </body>
 </html>

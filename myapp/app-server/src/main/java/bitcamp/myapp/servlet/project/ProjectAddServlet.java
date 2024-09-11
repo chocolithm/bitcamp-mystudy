@@ -1,9 +1,8 @@
 package bitcamp.myapp.servlet.project;
 
-import bitcamp.myapp.dao.ProjectDao;
+import bitcamp.myapp.service.ProjectService;
 import bitcamp.myapp.vo.Project;
 import java.io.IOException;
-import org.apache.ibatis.session.SqlSessionFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,14 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/project/add")
 public class ProjectAddServlet extends HttpServlet {
 
-  private ProjectDao projectDao;
-  private SqlSessionFactory sqlSessionFactory;
+  private ProjectService projectService;
 
   @Override
   public void init() throws ServletException {
-    projectDao = (ProjectDao) this.getServletContext().getAttribute("projectDao");
-    sqlSessionFactory =
-        (SqlSessionFactory) this.getServletContext().getAttribute("sqlSessionFactory");
+    projectService = (ProjectService) this.getServletContext().getAttribute("projectService");
   }
 
   @Override
@@ -29,17 +25,11 @@ public class ProjectAddServlet extends HttpServlet {
     try {
       Project project = (Project) req.getSession().getAttribute("project");
 
-      projectDao.insert(project);
-      if (project.getMembers() != null && !project.getMembers().isEmpty()) {
-        projectDao.insertMembers(project.getNo(), project.getMembers());
-      }
-      sqlSessionFactory.openSession(false).commit();
+      projectService.add(project);
       res.sendRedirect("/project/list");
-
       req.getSession().removeAttribute("project");
 
     } catch (Exception e) {
-      sqlSessionFactory.openSession(false).rollback();
       req.setAttribute("exception", e);
       req.getRequestDispatcher("/error.jsp").forward(req, res);
     }
