@@ -41,10 +41,10 @@ public class DefaultProjectService implements ProjectService {
   }
 
   @Override
-  public void update(Project project) throws Exception {
+  public boolean update(Project project) throws Exception {
     try {
       if (!projectDao.update(project)) {
-        throw new Exception("없는 프로젝트입니다.");
+        return false;
       }
 
       projectDao.deleteMembers(project.getNo());
@@ -52,6 +52,7 @@ public class DefaultProjectService implements ProjectService {
         projectDao.insertMembers(project.getNo(), project.getMembers());
       }
       sqlSessionFactory.openSession(false).commit();
+      return true;
 
     } catch (Exception e) {
       sqlSessionFactory.openSession(false).rollback();
@@ -60,14 +61,14 @@ public class DefaultProjectService implements ProjectService {
   }
 
   @Override
-  public void delete(int projectNo) throws Exception {
+  public boolean delete(int projectNo) throws Exception {
     try {
       projectDao.deleteMembers(projectNo);
-      if (projectDao.delete(projectNo)) {
-        sqlSessionFactory.openSession(false).commit();
-      } else {
-        throw new Exception("없는 프로젝트입니다.");
+      if (!projectDao.delete(projectNo)) {
+        return false;
       }
+      sqlSessionFactory.openSession(false).commit();
+      return true;
 
     } catch (Exception e) {
       sqlSessionFactory.openSession(false).rollback();

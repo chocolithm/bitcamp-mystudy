@@ -43,7 +43,9 @@ public class ProjectUpdateServlet extends HttpServlet {
         project.setMembers(members);
       }
 
-      projectService.update(project);
+      if (!projectService.update(project)) {
+        throw new Exception("없는 프로젝트입니다!");
+      }
       res.sendRedirect("/project/list");
 
     } catch (Exception e) {

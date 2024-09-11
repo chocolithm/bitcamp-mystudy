@@ -11,7 +11,7 @@ public interface ProjectService {
 
   Project get(int projectNo) throws Exception;
 
-  void update(Project project) throws Exception;
+  boolean update(Project project) throws Exception;
 
-  void delete(int projectNo) throws Exception;
+  boolean delete(int projectNo) throws Exception;
 }

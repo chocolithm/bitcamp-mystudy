@@ -24,8 +24,11 @@ public class ProjectDeleteServlet extends HttpServlet {
     try {
       int projectNo = Integer.parseInt(req.getParameter("no"));
 
-      projectService.delete(projectNo);
-      res.sendRedirect("/project/list");
+      if (projectService.delete(projectNo)) {
+        res.sendRedirect("/project/list");
+      } else {
+        throw new Exception("없는 프로젝트입니다.");
+      }
 
     } catch (Exception e) {
       req.setAttribute("exception", e);
