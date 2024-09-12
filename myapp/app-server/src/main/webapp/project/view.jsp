@@ -14,7 +14,7 @@
 </c:if>
 
 <c:if test="${not empty project}">
-    <form action='/project/update' method="post">
+    <form action='update' method="post">
         번호: <input name='no' readonly type='text' value='${project.no}'><br>
         프로젝트명: <input name='title' type='text' value='${project.title}'><br>
         설명: <textarea name='description'>${project.description}</textarea><br>
@@ -30,7 +30,7 @@
         </c:forEach>
         </ul>
         <button>변경</button>
-        <button type='button' onclick='location.href="/project/delete?no=${project.no}"'>삭제</button>
+        <button type='button' onclick='location.href="delete?no=${project.no}"'>삭제</button>
     </form>
 </c:if>
 

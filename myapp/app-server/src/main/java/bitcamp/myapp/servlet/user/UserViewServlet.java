@@ -26,13 +26,10 @@ public class UserViewServlet extends HttpServlet {
       int userNo = Integer.parseInt(req.getParameter("no"));
       User user = userService.get(userNo);
       req.setAttribute("user", user);
-
-      res.setContentType("text/html;charset=UTF-8");
-      req.getRequestDispatcher("/user/view.jsp").include(req, res);
+      req.setAttribute("viewName", "/user/view.jsp");
 
     } catch (Exception e) {
       req.setAttribute("exception", e);
-      req.getRequestDispatcher("/error.jsp").forward(req, res);
     }
   }
 }

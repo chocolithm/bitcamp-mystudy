@@ -7,7 +7,7 @@
 <jsp:include page="/header.jsp"/>
 
 <h1>로그인</h1>
-<form action='/auth/login' method="post">
+<form action='login' method="post">
     이메일: <input name='email' type='email' value="${cookie.email.value}"><br>
     암호: <input name='password' type='password'><br>
     <input type="checkbox" name="saveEmail" ${empty cookie.email.value ? "" : "checked"}> 이메일 저장<br>

@@ -15,7 +15,7 @@
 </c:if>
 
 <c:if test="${not empty board}">
-    <form action='/board/update' method="post" encType="multipart/form-data">
+    <form action='update' method="post" encType="multipart/form-data">
         번호: <input name='no' readonly type='text' value='${board.no}'><br>
         제목: <input name='title' type='text' value='${board.title}'><br>
         내용: <textarea name='content'>${board.content}</textarea><br>
@@ -29,14 +29,14 @@
                 <c:forEach items="${board.attachedFiles}" var="attachedFile">
                     <li>
                         <a href="/download?path=board&fileNo=${attachedFile.fileNo}">${attachedFile.originFilename}</a>
-                        <a href="/board/file/delete?fileNo=${attachedFile.fileNo}">삭제</a>
+                        <a href="file/delete?fileNo=${attachedFile.fileNo}">삭제</a>
                     </li>
                 </c:forEach>
             </ul>
         </c:if>
         <input name="files" type="file" multiple><br>
         <button>변경</button>
-        <button type='button' onclick='location.href="/board/delete?no=${board.no}"'>삭제</button>
+        <button type='button' onclick='location.href="delete?no=${board.no}"'>삭제</button>
     </form>
 </c:if>
 

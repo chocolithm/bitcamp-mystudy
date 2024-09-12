@@ -8,7 +8,7 @@
 
 <h1>로그인</h1>
 <p>이메일 또는 암호가 맞지 않습니다.</p>
-<form action='/auth/login' method="post">
+<form action='login' method="post">
     이메일: <input name='email' type='email'><br>
     암호: <input name='password' type='password'><br>
     <input type='submit' value='로그인'>

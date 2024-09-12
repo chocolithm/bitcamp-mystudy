@@ -31,13 +31,12 @@ public class UserUpdateServlet extends HttpServlet {
       user.setTel(req.getParameter("tel"));
 
       if (userService.update(user)) {
-        res.sendRedirect("/user/list");
+       req.setAttribute("viewName", "redirect:list");
       } else {
         throw new Exception("없는 회원입니다.");
       }
     } catch (Exception e) {
       req.setAttribute("exception", e);
-      req.getRequestDispatcher("/error.jsp").forward(req, res);
     }
   }
 }

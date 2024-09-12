@@ -47,11 +47,10 @@ public class BoardDeleteServlet extends HttpServlet {
       }
 
       boardService.delete(boardNo);
-      res.sendRedirect("/board/list");
+      req.setAttribute("viewName", "redirect:list");
 
     } catch (Exception e) {
       req.setAttribute("exception", e);
-      req.getRequestDispatcher("/error.jsp").forward(req, res);
     }
   }
 }

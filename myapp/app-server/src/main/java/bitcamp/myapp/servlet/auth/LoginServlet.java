@@ -24,8 +24,7 @@ public class LoginServlet extends HttpServlet {
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-    res.setContentType("text/html;charset=UTF-8");
-    req.getRequestDispatcher("/auth/form.jsp").include(req, res);
+    req.setAttribute("viewName", "/auth/form.jsp");
   }
 
   @Override
@@ -36,29 +35,27 @@ public class LoginServlet extends HttpServlet {
 
       User user = userService.exists(email, password);
       if (user == null) {
-        res.setHeader("Refresh", "1;url=/auth/login");
-        res.setContentType("text/html;charset=UTF-8");
-        req.getRequestDispatcher("/auth/fail.jsp").include(req, res);
+        req.setAttribute("refresh", "2; url=login");
+        req.setAttribute("viewName", "/auth/fail.jsp");
         return;
       }
 
       if (req.getParameter("saveEmail") != null) {
         Cookie cookie = new Cookie("email", email);
         cookie.setMaxAge(60 * 60 * 24 * 7);
-        res.addCookie(cookie);
+        req.setAttribute("email", cookie);
       } else {
         Cookie cookie = new Cookie("email", "test@test.com");
         cookie.setMaxAge(0);
-        res.addCookie(cookie);
+        req.setAttribute("email", cookie);
       }
 
       HttpSession session = req.getSession();
       session.setAttribute("loginUser", user);
-      res.sendRedirect("/");
+      req.setAttribute("viewName", "redirect:/");
 
     } catch (Exception e) {
       req.setAttribute("exception", e);
-      req.getRequestDispatcher("/error.jsp").forward(req, res);
     }
   }
 }

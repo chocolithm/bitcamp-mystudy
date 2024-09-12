@@ -32,12 +32,10 @@ public class BoardViewServlet extends HttpServlet {
       boardService.increaseViewCount(board.getNo());
       req.setAttribute("board", board);
 
-      res.setContentType("text/html;charset=UTF-8");
-      req.getRequestDispatcher("/board/view.jsp").include(req, res);
+      req.setAttribute("viewName", "/board/view.jsp");
 
     } catch (Exception e) {
       req.setAttribute("exception", e);
-      req.getRequestDispatcher("/error.jsp").forward(req, res);
     }
   }
 }

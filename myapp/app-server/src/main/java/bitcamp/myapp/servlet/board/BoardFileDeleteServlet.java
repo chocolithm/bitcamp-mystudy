@@ -49,11 +49,10 @@ public class BoardFileDeleteServlet extends HttpServlet {
         file.delete();
       }
       boardService.deleteAttachedFile(fileNo);
-      res.sendRedirect("/board/view?no=" + board.getNo());
+      req.setAttribute("viewName", "redirect:../view?no=" + board.getNo());
 
     } catch (Exception e) {
       req.setAttribute("exception", e);
-      req.getRequestDispatcher("/error.jsp").forward(req, res);
     }
   }
 }

@@ -17,10 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-@MultipartConfig(
-    maxFileSize = 1024 * 1024 * 60,
-    maxRequestSize = 1024 * 1024 * 100
-)
 @WebServlet("/board/update")
 public class BoardUpdateServlet extends HttpServlet {
 
@@ -69,11 +65,10 @@ public class BoardUpdateServlet extends HttpServlet {
       board.setAttachedFiles(attachedFiles);
 
       boardService.update(board);
-      res.sendRedirect("/board/list");
+      req.setAttribute("viewName", "redirect:list");
 
     } catch (Exception e) {
       req.setAttribute("exception", e);
-      req.getRequestDispatcher("/error.jsp").forward(req, res);
     }
   }
 }

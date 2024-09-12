@@ -8,7 +8,7 @@
 <jsp:include page="/header.jsp"/>
 
 <h1>프로젝트 목록</h1>
-<p><a href='/project/form1'>새 프로젝트</a></p>
+<p><a href='form1'>새 프로젝트</a></p>
 <table>
      <thead>
         <tr>
@@ -21,7 +21,7 @@
         <c:forEach items="${list}" var="project">
             <tr>
                 <td>${project.no}</td>
-                <td><a href='/project/view?no=${project.no}'>${project.title}</a></td>
+                <td><a href='view?no=${project.no}'>${project.title}</a></td>
                 <td>${project.startDate} ~ ${project.endDate}</td>
             </tr>
         </c:forEach>

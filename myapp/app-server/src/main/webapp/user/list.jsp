@@ -7,7 +7,7 @@
 <jsp:include page="/header.jsp"/>
 
 <h1>회원 목록</h1>
-<p><a href='/user/add'>새 회원</a></p>
+<p><a href='add'>새 회원</a></p>
 <table>
      <thead>
         <tr>
@@ -20,7 +20,7 @@
         <c:forEach items="${list}" var="user">
             <tr>
                 <td>${user.no}</td>
-                <td><a href='/user/view?no=${user.no}'>${user.name}</a></td>
+                <td><a href='view?no=${user.no}'>${user.name}</a></td>
                 <td>${user.email}</td>
             </tr>
         </c:forEach>

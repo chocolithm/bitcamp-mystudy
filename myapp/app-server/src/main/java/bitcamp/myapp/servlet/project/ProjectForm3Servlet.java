@@ -38,12 +38,10 @@ public class ProjectForm3Servlet extends HttpServlet {
         project.setMembers(members);
       }
 
-      res.setContentType("text/html;charset=UTF-8");
-      req.getRequestDispatcher("/project/form3.jsp").include(req, res);
+      req.setAttribute("viewName", "/project/form3.jsp");
 
     } catch (Exception e) {
       req.setAttribute("exception", e);
-      req.getRequestDispatcher("/error.jsp").forward(req, res);
     }
   }
 }
