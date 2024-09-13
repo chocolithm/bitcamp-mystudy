@@ -1,20 +1,13 @@
 package bitcamp.myapp.servlet;
 
-import bitcamp.myapp.dao.BoardDao;
-import bitcamp.myapp.vo.AttachedFile;
-import bitcamp.myapp.vo.User;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
+import bitcamp.myapp.annotation.RequestMapping;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import javax.servlet.RequestDispatcher;
+import java.lang.reflect.Method;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,35 +18,51 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/app/*")
 public class FrontDispatcherServlet extends HttpServlet {
 
+  private List<Object> controllers;
+
+  @Override
+  public void init() throws ServletException {
+    controllers = (List<Object>) this.getServletContext().getAttribute("controllers");
+  }
+
   @Override
   protected void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     try {
-      req.getRequestDispatcher(req.getPathInfo()).include(req, res);
+      String controllerPath = req.getPathInfo();
 
-      Exception exception = (Exception) req.getAttribute("exception");
-      if (exception != null) {
-        throw exception;
-      }
+      Object pageController = null;
+      Method requestHandler = null;
 
-      Enumeration<String> attrNames = req.getHeaderNames();
-      while (attrNames.hasMoreElements()) {
-        Object attrValue = req.getAttribute(attrNames.nextElement());
-        if (attrValue instanceof Cookie) {
-          res.addCookie((Cookie) attrValue);
+      loop:
+      for (Object controller : controllers) {
+        Method[] methods = controller.getClass().getDeclaredMethods(); // 현재 클래스의 메서드만
+        for (Method m : methods) {
+          RequestMapping requestMapping = m.getAnnotation(RequestMapping.class);
+          if (requestMapping == null || !requestMapping.value().equals(controllerPath)) {
+            continue;
+          }
+
+          requestHandler = m;
+          pageController = controller;
+          break loop;
         }
       }
 
-      String viewName = (String) req.getAttribute("viewName");
+      if (pageController == null) {
+        throw new Exception("해당 URL의 처리할 수 없습니다.");
+      }
 
-      if (viewName == null) {
+      if (requestHandler.getReturnType() == void.class) {
+        requestHandler.invoke(pageController, req, res);
         return;
-      } else if (viewName.startsWith("redirect:")) {
+      }
+
+      String viewName = (String) requestHandler.invoke(pageController, req, res);
+
+      if (viewName.startsWith("redirect:")) {
         res.sendRedirect(viewName.substring(9));
+
       } else {
-        String refresh = (String) req.getAttribute("refresh");
-        if (refresh != null) {
-          res.setHeader("Refresh", refresh);
-        }
         req.getRequestDispatcher(viewName).forward(req, res);
       }
 

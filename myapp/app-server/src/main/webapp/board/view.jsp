@@ -28,7 +28,7 @@
             <ul>
                 <c:forEach items="${board.attachedFiles}" var="attachedFile">
                     <li>
-                        <a href="/download?path=board&fileNo=${attachedFile.fileNo}">${attachedFile.originFilename}</a>
+                        <a href="../download?path=board&fileNo=${attachedFile.fileNo}">${attachedFile.originFilename}</a>
                         <a href="file/delete?fileNo=${attachedFile.fileNo}">삭제</a>
                     </li>
                 </c:forEach>
