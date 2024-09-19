@@ -9,7 +9,7 @@
 <jsp:include page="/header.jsp"/>
 
 <h1>게시글 목록</h1>
-<p><a href='add'>새 게시글</a></p>
+<p><a href='form'>새 게시글</a></p>
 <table>
     <thead>
          <tr>

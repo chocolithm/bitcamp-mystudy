@@ -31,7 +31,7 @@
 User loginUser = (User) ((HttpServletRequest) request).getSession().getAttribute("loginUser");
 if (loginUser == null) {
 %>
-    <a class='btn btn-primary' href='/app/auth/login'>로그인</a>
+    <a class='btn btn-primary' href='/app/auth/form'>로그인</a>
 <% } else { %>
     <a class='btn btn-light' href='/app/user/view?no=<%=loginUser.getNo()%>'><%=loginUser.getName()%></a>
     <a class='btn btn-secondary' href='/app/auth/logout'>로그아웃</a>
