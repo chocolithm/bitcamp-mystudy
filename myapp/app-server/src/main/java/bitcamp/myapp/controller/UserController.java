@@ -1,5 +1,6 @@
 package bitcamp.myapp.controller;
 
+import bitcamp.myapp.annotation.Controller;
 import bitcamp.myapp.annotation.RequestMapping;
 import bitcamp.myapp.annotation.RequestParam;
 import bitcamp.myapp.service.UserService;
@@ -7,6 +8,7 @@ import bitcamp.myapp.vo.User;
 import java.util.List;
 import java.util.Map;
 
+@Controller
 public class UserController {
 
   private UserService userService;

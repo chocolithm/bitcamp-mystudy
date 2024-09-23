@@ -1,5 +1,6 @@
 package bitcamp.myapp.controller;
 
+import bitcamp.myapp.annotation.Controller;
 import bitcamp.myapp.annotation.RequestMapping;
 import bitcamp.myapp.annotation.RequestParam;
 import bitcamp.myapp.service.BoardService;
@@ -15,6 +16,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+@Controller
 public class DownloadController {
 
   private BoardService boardService;
@@ -33,7 +35,7 @@ public class DownloadController {
       @RequestParam("fileNo") int fileNo,
       HttpSession session,
       HttpServletResponse res) throws Exception {
-    
+
     User loginUser = (User) session.getAttribute("loginUser");
     if (loginUser == null) {
       throw new Exception("로그인 하지 않았습니다.");

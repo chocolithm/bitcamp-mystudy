@@ -8,17 +8,15 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 
-@WebFilter(
-    urlPatterns = "/*",
-    initParams = @WebInitParam(name = "encoding", value = "UTF-8")
-)
 public class CharacterEncodingFilter implements Filter {
 
-  private String encoding = "UTF-8";
+  private String encoding;
+
+  public CharacterEncodingFilter(String encoding) {
+    this.encoding = encoding;
+  }
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {

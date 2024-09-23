@@ -1,5 +1,6 @@
 package bitcamp.myapp.controller;
 
+import bitcamp.myapp.annotation.Controller;
 import bitcamp.myapp.annotation.RequestMapping;
 import bitcamp.myapp.annotation.RequestParam;
 import bitcamp.myapp.service.BoardService;
@@ -20,6 +21,7 @@ import javax.servlet.http.Part;
 @MultipartConfig(
     maxFileSize = 1024 * 1024 * 60,
     maxRequestSize = 1024 * 1024 * 100)
+@Controller
 public class BoardController {
 
   private BoardService boardService;

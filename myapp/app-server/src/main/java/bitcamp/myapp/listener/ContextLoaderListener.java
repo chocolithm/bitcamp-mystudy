@@ -1,70 +1,54 @@
 package bitcamp.myapp.listener;
 
-import bitcamp.myapp.controller.AuthController;
-import bitcamp.myapp.controller.BoardController;
-import bitcamp.myapp.controller.DownloadController;
-import bitcamp.myapp.controller.ProjectController;
-import bitcamp.myapp.controller.UserController;
-import bitcamp.myapp.dao.BoardDao;
-import bitcamp.myapp.dao.DaoFactory;
-import bitcamp.myapp.dao.ProjectDao;
-import bitcamp.myapp.dao.UserDao;
-import bitcamp.myapp.service.BoardService;
-import bitcamp.myapp.service.DefaultBoardService;
-import bitcamp.myapp.service.DefaultProjectService;
-import bitcamp.myapp.service.DefaultUserService;
-import bitcamp.myapp.service.ProjectService;
-import bitcamp.myapp.service.UserService;
-import bitcamp.mybatis.SqlSessionFactoryProxy;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.ibatis.io.Resources;
+import bitcamp.myapp.config.AppConfig;
+import bitcamp.myapp.context.ApplicationContext;
+import bitcamp.myapp.filter.CharacterEncodingFilter;
+import bitcamp.myapp.servlet.DispatcherServlet;
+import java.io.File;
+import java.util.EnumSet;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
+import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.ServletRegistration;
 import javax.servlet.annotation.WebListener;
 
 @WebListener // 서블릿 컨테이너에 이 클래스를 배치하는 태그
 public class ContextLoaderListener implements ServletContextListener {
 
+
   @Override
   public void contextInitialized(ServletContextEvent sce) {
-    // 서블릿 컨테이너가 실행될 때 호출된다.
+
     try {
-      System.out.println("서비스 관련 객체 준비!");
-
-      InputStream inputStream = Resources.getResourceAsStream("config/mybatis-config.xml");
-      SqlSessionFactoryBuilder sqlSessionFactoryBuilder = new SqlSessionFactoryBuilder();
-      SqlSessionFactory sqlSessionFactory = sqlSessionFactoryBuilder.build(inputStream);
-
-      SqlSessionFactoryProxy sqlSessionFactoryProxy = new SqlSessionFactoryProxy(sqlSessionFactory);
-
-      DaoFactory daoFactory = new DaoFactory(sqlSessionFactoryProxy);
-
-      UserDao userDao = daoFactory.createObject(UserDao.class);
-      BoardDao boardDao = daoFactory.createObject(BoardDao.class);
-      ProjectDao projectDao = daoFactory.createObject(ProjectDao.class);
-
-      UserService userService = new DefaultUserService(userDao, sqlSessionFactoryProxy);
-      BoardService boardService = new DefaultBoardService(boardDao, sqlSessionFactoryProxy);
-      ProjectService projectService = new DefaultProjectService(projectDao, sqlSessionFactoryProxy);
-
       ServletContext ctx = sce.getServletContext();
-      ctx.setAttribute("sqlSessionFactory", sqlSessionFactoryProxy);
 
-      List<Object> controllers = new ArrayList<>();
+      ApplicationContext iocContainer = new ApplicationContext(ctx, AppConfig.class);
 
-      controllers.add(new AuthController(userService));
-      controllers.add(new UserController(userService));
-      controllers.add(new ProjectController(userService, projectService));
-      controllers.add(new BoardController(boardService, ctx));
-      controllers.add(new DownloadController(boardService, ctx));
+      ctx.setAttribute("sqlSessionFactory", iocContainer.getBean(SqlSessionFactory.class));
 
-      ctx.setAttribute("controllers", controllers);
+      DispatcherServlet dispatcherServlet = new DispatcherServlet(iocContainer);
+      ServletRegistration.Dynamic servletRegistration = ctx.addServlet("app", dispatcherServlet);
+      servletRegistration.addMapping("/app/*");
+      servletRegistration.setLoadOnStartup(1);
+      servletRegistration.setMultipartConfig(new MultipartConfigElement(
+          new File("./temp/").getAbsolutePath(),
+          1024 * 1024 * 20,
+          1024 * 1024 * 100,
+          1024 * 1024
+      ));
+
+      CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter("UTF-8");
+      FilterRegistration.Dynamic filterRegistration = ctx.addFilter("characterEncodingFilter", characterEncodingFilter);
+      filterRegistration.addMappingForServletNames(
+          EnumSet.of(DispatcherType.REQUEST, DispatcherType.INCLUDE, DispatcherType.FORWARD),
+          false,
+          "app"
+      );
 
     } catch (Exception e) {
       System.out.println("서비스 객체 준비 중 오류 발생!");
