@@ -5,12 +5,6 @@ import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.dao.DaoFactory;
 import bitcamp.myapp.dao.ProjectDao;
 import bitcamp.myapp.dao.UserDao;
-import bitcamp.myapp.service.BoardService;
-import bitcamp.myapp.service.DefaultBoardService;
-import bitcamp.myapp.service.DefaultProjectService;
-import bitcamp.myapp.service.DefaultUserService;
-import bitcamp.myapp.service.ProjectService;
-import bitcamp.myapp.service.UserService;
 import bitcamp.mybatis.SqlSessionFactoryProxy;
 import java.io.InputStream;
 import org.apache.ibatis.io.Resources;
@@ -45,21 +39,5 @@ public class AppConfig {
   @Bean
   public ProjectDao createProjectDao(DaoFactory daoFactory) throws Exception {
     return daoFactory.createObject(ProjectDao.class);
-  }
-
-  @Bean
-  public UserService createUserService(UserDao userDao, SqlSessionFactory sqlSessionFactory) throws Exception {
-    return new DefaultUserService(userDao, sqlSessionFactory);
-  }
-
-  @Bean
-  public BoardService createBoardService(BoardDao boardDao, SqlSessionFactory sqlSessionFactory) throws Exception {
-    return new DefaultBoardService(boardDao, sqlSessionFactory);
-  }
-
-  @Bean
-  public ProjectService createProjectService(ProjectDao projectDao, SqlSessionFactory sqlSessionFactory)
-      throws Exception {
-    return new DefaultProjectService(projectDao, sqlSessionFactory);
   }
 }

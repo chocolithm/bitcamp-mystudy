@@ -1,11 +1,14 @@
 package bitcamp.myapp.context;
 
 import bitcamp.myapp.annotation.Bean;
+import bitcamp.myapp.annotation.Component;
 import bitcamp.myapp.annotation.Controller;
 import java.io.File;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +25,8 @@ public class ApplicationContext {
       dependencyMap.put(ServletContext.class, ctx);
 
       processBeanAnnotation(configClass);
+
+      createComponents();
 
       createControllers();
 
@@ -92,14 +97,36 @@ public class ApplicationContext {
     return controllers;
   }
 
+  private void createComponents() throws Exception {
+    // 컴파일된 클래스 파일이 놓이는 폴더에서 클래스 파일을 찾는다.
+    File dir = new File("build/classes/java/main");
+
+    List<Class<?>> classes = new ArrayList<>();
+    searchClasses(classes, dir, "", Component.class);
+
+    for (Class clazz : classes) {
+      dependencyMap.put(clazz, createObject(clazz));
+    }
+  }
+
   private void createControllers() throws Exception {
     // 컴파일된 클래스 파일이 놓이는 폴더에서 클래스 파일을 찾는다.
     File dir = new File("build/classes/java/main");
 
-    searchClasses(dir, "");
+    List<Class<?>> classes = new ArrayList<>();
+    searchClasses(classes, dir, "", Controller.class);
+
+    for (Class clazz : classes) {
+      controllers.add(createObject(clazz));
+    }
   }
 
-  private void searchClasses(File dir, String packageName) throws Exception {
+  private void searchClasses(
+      List<Class<?>> classes,
+      File dir,
+      String packageName,
+      Class<? extends Annotation> annoType) throws Exception {
+
     File[] files = dir.listFiles();
 
     if (packageName.length() > 0) {
@@ -108,7 +135,7 @@ public class ApplicationContext {
 
     for (File file : files) {
       if (file.isDirectory()) {
-        searchClasses(file, packageName + file.getName());
+        searchClasses(classes, file, packageName + file.getName(), annoType);
       } else {
         if (file.getName().contains("$")) {
           continue;
@@ -116,34 +143,46 @@ public class ApplicationContext {
         String className = packageName + file.getName().replace(".class", "");
 
         Class<?> clazz = Class.forName(className);
-        Controller controllerAnno = clazz.getAnnotation(Controller.class);
-        if (controllerAnno == null) {
-          continue;
-        }
 
-        createObject(clazz);
+        Annotation[] annos = clazz.getAnnotations();
+        for (Annotation anno : annos) {
+          if (anno.annotationType() == annoType) {
+            classes.add(clazz);
+            break;
+          }
+        }
       }
     }
   }
 
-  private void createObject(Class<?> clazz) throws Exception {
+  private Object createObject(Class<?> clazz) throws Exception {
     Constructor<?> constructor = clazz.getConstructors()[0];
 
     Class<?>[] paramTypes = constructor.getParameterTypes();
     Object[] args = prepareMethodArguments(paramTypes);
 
-    controllers.add(constructor.newInstance(args));
+    return constructor.newInstance(args);
   }
 
   private Object[] prepareMethodArguments(Class<?>[] paramTypes) throws Exception {
     Object[] args = new Object[paramTypes.length];
     for (int i = 0; i < paramTypes.length; i++) {
-      Object arg = dependencyMap.get(paramTypes[i]);
+      Object arg = findObjectByType(paramTypes[i]);
       if (arg == null) {
         throw new Exception("해당 타입의 값을 찾을 수 없습니다.");
       }
       args[i] = arg;
     }
     return args;
+  }
+
+  private Object findObjectByType(Class<?> type) {
+    Collection<Object> objs = dependencyMap.values();
+    for (Object obj : objs) {
+      if (type.isInstance(obj)) {
+        return obj;
+      }
+    }
+    return null;
   }
 }

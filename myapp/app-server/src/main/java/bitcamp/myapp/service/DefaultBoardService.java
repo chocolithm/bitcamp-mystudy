@@ -1,11 +1,13 @@
 package bitcamp.myapp.service;
 
+import bitcamp.myapp.annotation.Component;
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
 import java.util.List;
 import org.apache.ibatis.session.SqlSessionFactory;
 
+@Component
 public class DefaultBoardService implements BoardService {
 
   private BoardDao boardDao;
