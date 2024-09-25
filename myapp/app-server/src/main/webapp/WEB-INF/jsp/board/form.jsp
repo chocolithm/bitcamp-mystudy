@@ -4,7 +4,7 @@
     pageEncoding="UTF-8"
     trimDirectiveWhitespaces="true" %>
 
-<jsp:include page="/header.jsp"/>
+<jsp:include page="../header.jsp"/>
 
 <h1>게시글 등록</h1>
       

@@ -5,7 +5,7 @@
     trimDirectiveWhitespaces="true" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<jsp:include page="/header.jsp"/>
+<jsp:include page="../header.jsp"/>
 
 <h1>프로젝트 목록</h1>
 <p><a href='form1'>새 프로젝트</a></p>

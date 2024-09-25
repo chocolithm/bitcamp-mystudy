@@ -1,8 +1,5 @@
 package bitcamp.myapp.controller;
 
-import bitcamp.myapp.annotation.Controller;
-import bitcamp.myapp.annotation.RequestMapping;
-import bitcamp.myapp.annotation.RequestParam;
 import bitcamp.myapp.service.BoardService;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
@@ -10,17 +7,17 @@ import bitcamp.myapp.vo.User;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
-@MultipartConfig(
-    maxFileSize = 1024 * 1024 * 60,
-    maxRequestSize = 1024 * 1024 * 100)
 @Controller
 public class BoardController {
 
@@ -32,16 +29,16 @@ public class BoardController {
     this.uploadDir = ctx.getRealPath("/upload/board");
   }
 
-  @RequestMapping("/board/form")
-  public String form() throws Exception {
-    return "/board/form.jsp";
+  @GetMapping("/board/form")
+  public void form() {
   }
 
-  @RequestMapping("/board/add")
+  @PostMapping("/board/add")
   public String add(
       Board board,
-      @RequestParam("files") Part[] parts,
+      MultipartFile[] files,
       HttpSession session) throws Exception {
+
     User loginUser = (User) session.getAttribute("loginUser");
     if (loginUser == null) {
       throw new Exception("로그인 하지 않았습니다.");
@@ -51,16 +48,16 @@ public class BoardController {
 
     ArrayList<AttachedFile> attachedFiles = new ArrayList<>();
 
-    for (Part part : parts) {
-      if (part.getSize() == 0) {
+    for (MultipartFile file : files) {
+      if (file.getSize() == 0) {
         continue;
       }
 
       AttachedFile attachedFile = new AttachedFile();
       attachedFile.setFilename(UUID.randomUUID().toString());
-      attachedFile.setOriginFilename(part.getSubmittedFileName());
+      attachedFile.setOriginFilename(file.getOriginalFilename());
 
-      part.write(this.uploadDir + "/" + attachedFile.getFilename());
+      file.transferTo(new File(this.uploadDir + "/" + attachedFile.getFilename()));
 
       attachedFiles.add(attachedFile);
     }
@@ -71,31 +68,29 @@ public class BoardController {
     return "redirect:list";
   }
 
-  @RequestMapping("/board/list")
-  public String list(Map<String, Object> map) throws Exception {
+  @GetMapping("/board/list")
+  public void list(Model model) throws Exception {
     List<Board> list = boardService.list();
-    map.put("list", list);
-    return "/board/list.jsp";
+    model.addAttribute("list", list);
   }
 
-  @RequestMapping("/board/view")
-  public String view(@RequestParam("no") int no, Map<String, Object> map) throws Exception {
+  @GetMapping("/board/view")
+  public void view(int no, Model model) throws Exception {
     Board board = boardService.get(no);
     if (board == null) {
       throw new Exception("게시글이 존재하지 않습니다.");
     }
 
     boardService.increaseViewCount(board.getNo());
-    map.put("board", board);
-    return "/board/view.jsp";
+    model.addAttribute("board", board);
   }
 
-  @RequestMapping("/board/update")
+  @PostMapping("/board/update")
   public String update(
-      @RequestParam("no") int no,
-      @RequestParam("title") String title,
-      @RequestParam("content") String content,
-      @RequestParam("files") Part[] parts,
+      int no,
+      String title,
+      String content,
+      Part[] files,
       HttpSession session) throws Exception {
     User loginUser = (User) session.getAttribute("loginUser");
 
@@ -111,7 +106,7 @@ public class BoardController {
     board.setContent(content);
 
     ArrayList<AttachedFile> attachedFiles = new ArrayList<>();
-    for (Part part : parts) {
+    for (Part part : files) {
       if (part.getSize() == 0) {
         continue;
       }
@@ -131,9 +126,9 @@ public class BoardController {
     return "redirect:list";
   }
 
-  @RequestMapping("/board/delete")
+  @GetMapping("/board/delete")
   public String delete(
-      @RequestParam("no") int no,
+      int no,
       HttpSession session) throws Exception {
     User loginUser = (User) session.getAttribute("loginUser");
 
@@ -156,10 +151,8 @@ public class BoardController {
     return "redirect:list";
   }
 
-  @RequestMapping("/board/file/delete")
-  public String fileDelete(
-      @RequestParam("fileNo") int fileNo,
-      HttpSession session) throws Exception {
+  @GetMapping("/board/file/delete")
+  public String fileDelete(int fileNo, HttpSession session) throws Exception {
 
     User loginUser = (User) session.getAttribute("loginUser");
     if (loginUser == null) {
@@ -180,6 +173,7 @@ public class BoardController {
     if (file.exists()) {
       file.delete();
     }
+
     boardService.deleteAttachedFile(fileNo);
     return "redirect:../view?no=" + board.getNo();
   }

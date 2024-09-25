@@ -5,7 +5,7 @@
     trimDirectiveWhitespaces="true" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<jsp:include page="/header.jsp"/>
+<jsp:include page="../header.jsp"/>
 
 <h1>프로젝트 등록 - 팀원</h1>
 
@@ -14,7 +14,7 @@
 
     <ul>
     <c:forEach items="${users}" var="user">
-        <li><input name='member' value='${user.no}' type='checkbox'>${user.name}</li>
+        <li><input name='memberNos' value='${user.no}' type='checkbox'>${user.name}</li>
     </c:forEach>
     </ul>
 

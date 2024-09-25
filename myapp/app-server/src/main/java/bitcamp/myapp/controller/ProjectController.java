@@ -1,19 +1,21 @@
 package bitcamp.myapp.controller;
 
-import bitcamp.myapp.annotation.Controller;
-import bitcamp.myapp.annotation.RequestMapping;
-import bitcamp.myapp.annotation.RequestParam;
 import bitcamp.myapp.service.ProjectService;
 import bitcamp.myapp.service.UserService;
 import bitcamp.myapp.vo.Project;
 import bitcamp.myapp.vo.User;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpSession;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@SessionAttributes("project") // "project"로 model이나 map에 저장되는 객체가 있으면 session에도 저장하라
 public class ProjectController {
 
   private UserService userService;
@@ -24,26 +26,29 @@ public class ProjectController {
     this.projectService = projectService;
   }
 
-  @RequestMapping("/project/form1")
-  public String form1() throws Exception {
-    return "/project/form1.jsp";
+  @GetMapping("/project/form1")
+  public String form1() {
+    return "project/form1";
   }
 
-  @RequestMapping("/project/form2")
-  public String form2(Project project, Map<String, Object> map, HttpSession session) throws Exception {
-    session.setAttribute("project", project);
-
+  @PostMapping("/project/form2")
+  public ModelAndView form2(Project project) throws Exception {
     List<User> users = userService.list();
-    map.put("users", users);
+    ModelAndView mv = new ModelAndView();
 
-    return "/project/form2.jsp";
+    mv.addObject("users", users);
+    mv.addObject("project", project); // @SessionAttributes가 활성화되었기 때문에 세션에 저장됨
+    mv.setViewName("project/form2");
+
+    return mv;
   }
 
-  @RequestMapping("/project/form3")
+  @PostMapping("/project/form3")
   public String form3(
-      @RequestParam("member") int[] memberNos,
-      HttpSession session) throws Exception {
-    Project project = (Project) session.getAttribute("project");
+      int[] memberNos,
+      @ModelAttribute Project project) throws Exception {
+    // session에 "project"로 저장된 객체를 꺼내라
+
     if (memberNos.length > 0) {
       List<User> members = new ArrayList<>();
       for (int memberNo : memberNos) {
@@ -53,36 +58,41 @@ public class ProjectController {
       project.setMembers(members);
     }
 
-    return "/project/form3.jsp";
+    return "project/form3";
   }
 
-  @RequestMapping("/project/add")
-  public String add(HttpSession session) throws Exception {
-    Project project = (Project) session.getAttribute("project");
+  @PostMapping("/project/add")
+  public String add(@ModelAttribute Project project, SessionStatus sessionStatus) throws Exception {
     projectService.add(project);
-    session.removeAttribute("project");
+    sessionStatus.setComplete(); // @SessionAttributes로 등록된 값을 제거
     return "redirect:list";
   }
 
-  @RequestMapping("/project/list")
-  public String list(Map<String, Object> map) throws Exception {
+  @GetMapping("/project/list")
+  public ModelAndView list() throws Exception {
     List<Project> list = projectService.list();
-    map.put("list", list);
-    return "/project/list.jsp";
+    ModelAndView mv = new ModelAndView();
+    mv.addObject("list", list);
+    mv.setViewName("project/list");
+    return mv;
   }
 
-  @RequestMapping("/project/view")
-  public String view(@RequestParam("no") int no, Map<String, Object> map) throws Exception {
+  @GetMapping("/project/view")
+  public ModelAndView view(int no) throws Exception {
+    ModelAndView mv = new ModelAndView();
+
     Project project = projectService.get(no);
     List<User> users = userService.list();
 
-    map.put("project", project);
-    map.put("users", users);
-    return "/project/view.jsp";
+    mv.addObject("project", project);
+    mv.addObject("users", users);
+    mv.setViewName("project/view");
+
+    return mv;
   }
 
-  @RequestMapping("/project/update")
-  public String update(Project project, @RequestParam("member") int[] memberNos) throws Exception {
+  @PostMapping("/project/update")
+  public String update(Project project, int[] memberNos) throws Exception {
     if (memberNos.length > 0) {
       List<User> members = new ArrayList<>();
       for (int memberNo : memberNos) {
@@ -97,8 +107,8 @@ public class ProjectController {
     return "redirect:list";
   }
 
-  @RequestMapping("/project/delete")
-  public String delete(@RequestParam("no") int no) throws Exception {
+  @GetMapping("/project/delete")
+  public String delete(int no) throws Exception {
     if (projectService.delete(no)) {
       return "redirect:list";
     } else {

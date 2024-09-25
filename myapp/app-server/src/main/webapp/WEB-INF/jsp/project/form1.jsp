@@ -4,7 +4,7 @@
     pageEncoding="UTF-8"
     trimDirectiveWhitespaces="true" %>
 
-<jsp:include page="/header.jsp"/>
+<jsp:include page="../header.jsp"/>
 
 <h1>프로젝트 등록 - 기본 정보</h1>
 

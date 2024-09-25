@@ -5,7 +5,7 @@
     trimDirectiveWhitespaces="true" %>
 <%@ page import="bitcamp.myapp.vo.User" %>
 
-<jsp:include page="/header.jsp"/>
+<jsp:include page="../header.jsp"/>
 
 <h1>회원 등록</h1>
 

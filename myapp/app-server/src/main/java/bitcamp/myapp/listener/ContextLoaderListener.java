@@ -1,12 +1,12 @@
 package bitcamp.myapp.listener;
 
 import bitcamp.myapp.config.AppConfig;
-import bitcamp.myapp.context.ApplicationContext;
-import bitcamp.myapp.filter.CharacterEncodingFilter;
-import bitcamp.myapp.servlet.DispatcherServlet;
 import java.io.File;
 import java.util.EnumSet;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
@@ -27,7 +27,10 @@ public class ContextLoaderListener implements ServletContextListener {
     try {
       ServletContext ctx = sce.getServletContext();
 
-      ApplicationContext iocContainer = new ApplicationContext(ctx, AppConfig.class);
+      AnnotationConfigWebApplicationContext iocContainer = new AnnotationConfigWebApplicationContext();
+      iocContainer.register(AppConfig.class);
+      iocContainer.setServletContext(ctx);
+      iocContainer.refresh(); // register한 후 refresh를 통해 객체 준비
 
       ctx.setAttribute("sqlSessionFactory", iocContainer.getBean(SqlSessionFactory.class));
 

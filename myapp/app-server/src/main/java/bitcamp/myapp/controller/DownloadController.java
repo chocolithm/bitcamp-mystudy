@@ -1,8 +1,5 @@
 package bitcamp.myapp.controller;
 
-import bitcamp.myapp.annotation.Controller;
-import bitcamp.myapp.annotation.RequestMapping;
-import bitcamp.myapp.annotation.RequestParam;
 import bitcamp.myapp.service.BoardService;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.User;
@@ -11,9 +8,11 @@ import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -29,12 +28,14 @@ public class DownloadController {
     this.downloadPathMap.put("project", ctx.getRealPath("/upload/project"));
   }
 
-  @RequestMapping("/download")
-  public void download(
-      @RequestParam("path") String path,
-      @RequestParam("fileNo") int fileNo,
+  @GetMapping("/download")
+  public HttpHeaders download(
+      String path,
+      int fileNo,
       HttpSession session,
-      HttpServletResponse res) throws Exception {
+      OutputStream out) throws Exception {
+
+    HttpHeaders headers = new HttpHeaders();
 
     User loginUser = (User) session.getAttribute("loginUser");
     if (loginUser == null) {
@@ -46,14 +47,13 @@ public class DownloadController {
     if (path.equals("board")) {
       AttachedFile attachedFile = boardService.getAttachedFile(fileNo);
 
-      res.setHeader(
+      headers.add(
           "Content-Disposition",
           String.format("attachment; filename=\"%s\"", attachedFile.getOriginFilename())
       );
 
       BufferedInputStream downloadFileIn = new BufferedInputStream(
           new FileInputStream(downloadDir + "/" + attachedFile.getFilename()));
-      OutputStream out = res.getOutputStream();
 
       int b;
       while ((b = downloadFileIn.read()) != -1) {
@@ -68,5 +68,7 @@ public class DownloadController {
     } else {
 
     }
+
+    return headers;
   }
 }

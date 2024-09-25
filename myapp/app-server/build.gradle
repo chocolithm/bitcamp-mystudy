@@ -20,6 +20,12 @@ dependencies {
     // Tomcat Embedded Server Library
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.93'
 
+    // https://mvnrepository.com/artifact/org.mybatis/mybatis-spring
+    implementation 'org.mybatis:mybatis-spring:2.1.2'
+
+    // https://mvnrepository.com/artifact/org.springframework/spring-webmvc
+    implementation 'org.springframework:spring-webmvc:5.3.39'
+
     testImplementation libs.junit.jupiter
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation libs.guava

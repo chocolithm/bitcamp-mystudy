@@ -1,10 +1,10 @@
 package bitcamp.myapp.service;
 
-import bitcamp.myapp.annotation.Component;
 import bitcamp.myapp.dao.UserDao;
 import bitcamp.myapp.vo.User;
 import java.util.List;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.stereotype.Component;
 
 @Component
 public class DefaultUserService implements UserService {

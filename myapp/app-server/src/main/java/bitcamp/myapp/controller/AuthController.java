@@ -1,10 +1,10 @@
 package bitcamp.myapp.controller;
 
-import bitcamp.myapp.annotation.Controller;
-import bitcamp.myapp.annotation.RequestMapping;
-import bitcamp.myapp.annotation.RequestParam;
 import bitcamp.myapp.service.UserService;
 import bitcamp.myapp.vo.User;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -19,23 +19,22 @@ public class AuthController {
     this.userService = userService;
   }
 
-  @RequestMapping("/auth/form")
-  public String form() throws Exception {
-    return "/auth/form.jsp";
+  @GetMapping("/auth/form")
+  public void form() {
   }
 
-  @RequestMapping("/auth/login")
+  @PostMapping("/auth/login")
   public String login(
-      @RequestParam("email") String email,
-      @RequestParam("password") String password,
-      @RequestParam("saveEmail") boolean saveEmail,
+      String email,
+      String password,
+      boolean saveEmail,
       HttpServletResponse res,
       HttpSession session) throws Exception {
 
     User user = userService.exists(email, password);
     if (user == null) {
-      res.setHeader("Refresh", "2; url=login");
-      return "/auth/fail.jsp";
+      res.setHeader("Refresh", "2; url=form");
+      return "auth/fail";
     }
 
     if (saveEmail) {
@@ -52,8 +51,8 @@ public class AuthController {
     return "redirect:/";
   }
 
-  @RequestMapping("/auth/logout")
-  public String logout(HttpSession session) throws Exception {
+  @GetMapping("/auth/logout")
+  public String logout(HttpSession session) {
     session.invalidate();
     return "redirect:/";
   }
