@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="BoardDao">
+<mapper namespace="bitcamp.myapp.dao.BoardDao">
 
   <resultMap id="BoardMap" type="board">
     <id column="board_id" property="no"/>
@@ -87,7 +87,7 @@
       board_id = #{no}
   </delete>
 
-  <update id="updateViewCount" parameterType="map">
+  <update id="updateViewCount">
     update myapp_boards
     set
       view_count = #{count}

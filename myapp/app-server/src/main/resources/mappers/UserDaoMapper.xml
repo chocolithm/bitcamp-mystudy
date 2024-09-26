@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="UserDao">
+<mapper namespace="bitcamp.myapp.dao.UserDao">
 
   <resultMap id="UserMap" type="user">
     <id column="user_id" property="no"/>
@@ -41,7 +41,7 @@
       user_id = #{no}
   </select>
 
-  <select id="findByEmailAndPassword" resultMap="UserMap" parameterType="map">
+  <select id="findByEmailAndPassword" resultMap="UserMap">
     select
       user_id,
       name,

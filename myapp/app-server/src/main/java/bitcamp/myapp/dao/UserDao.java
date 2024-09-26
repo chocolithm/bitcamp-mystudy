@@ -2,6 +2,7 @@ package bitcamp.myapp.dao;
 
 import bitcamp.myapp.vo.User;
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface UserDao {
   boolean insert(User user) throws Exception;
@@ -10,8 +11,7 @@ public interface UserDao {
 
   User findBy(int no) throws Exception;
 
-  User findByEmailAndPassword(@Param("email") String email, @Param("password") String password)
-      throws Exception;
+  User findByEmailAndPassword(@Param("email") String email, @Param("password") String password) throws Exception;
 
   boolean update(User user) throws Exception;
 

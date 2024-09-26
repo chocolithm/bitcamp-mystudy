@@ -3,29 +3,21 @@ package bitcamp.myapp.service;
 import bitcamp.myapp.dao.UserDao;
 import bitcamp.myapp.vo.User;
 import java.util.List;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@Component
+@Service
 public class DefaultUserService implements UserService {
 
   private UserDao userDao;
-  private SqlSessionFactory sqlSessionFactory;
 
-  public DefaultUserService(UserDao userDao, SqlSessionFactory sqlSessionFactory) {
+  public DefaultUserService(UserDao userDao) {
     this.userDao = userDao;
-    this.sqlSessionFactory = sqlSessionFactory;
   }
 
+  @Transactional
   public void add(User user) throws Exception {
-    try {
-      userDao.insert(user);
-      sqlSessionFactory.openSession(false).commit();
-
-    } catch (Exception e) {
-      sqlSessionFactory.openSession(false).rollback();
-      throw e;
-    }
+    userDao.insert(user);
   }
 
   public List<User> list() throws Exception {
@@ -36,38 +28,17 @@ public class DefaultUserService implements UserService {
     return userDao.findBy(userNo);
   }
 
-  @Override
   public User exists(String email, String password) throws Exception {
     return userDao.findByEmailAndPassword(email, password);
   }
 
+  @Transactional
   public boolean update(User user) throws Exception {
-    try {
-      if (userDao.update(user)) {
-        sqlSessionFactory.openSession(false).commit();
-        return true;
-      } else {
-        return false;
-      }
-
-    } catch (Exception e) {
-      sqlSessionFactory.openSession(false).rollback();
-      throw e;
-    }
+    return userDao.update(user);
   }
 
+  @Transactional
   public boolean delete(int userNo) throws Exception {
-    try {
-      if (userDao.delete(userNo)) {
-        sqlSessionFactory.openSession(false).commit();
-        return true;
-      } else {
-        return false;
-      }
-
-    } catch (Exception e) {
-      sqlSessionFactory.openSession(false).rollback();
-      throw e;
-    }
+    return userDao.delete(userNo);
   }
 }
