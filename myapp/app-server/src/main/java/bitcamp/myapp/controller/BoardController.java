@@ -4,10 +4,19 @@ import bitcamp.myapp.service.BoardService;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.User;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.client.builder.AwsClientBuilder;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,12 +30,29 @@ import javax.servlet.http.Part;
 @Controller
 public class BoardController {
 
+  private AmazonS3 s3;
+  @Value("${ncp.storage.bucketName}")
+  private String bucketName;
+  private String folderName = "board/";
+
   private BoardService boardService;
   private String uploadDir;
 
-  public BoardController(BoardService boardService, ServletContext ctx) {
+  public BoardController(
+      BoardService boardService,
+      ServletContext ctx,
+      @Value("${ncp.storage.endPoint}") String endPoint,
+      @Value("${ncp.storage.regionName}") String regionName,
+      @Value("${ncp.accessKey}") String accessKey,
+      @Value("${ncp.secretKey}") String secretKey) {
+
     this.boardService = boardService;
     this.uploadDir = ctx.getRealPath("/upload/board");
+
+    s3 = AmazonS3ClientBuilder.standard()
+        .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
+        .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
+        .build();
   }
 
   @GetMapping("/board/form")
@@ -57,7 +83,22 @@ public class BoardController {
       attachedFile.setFilename(UUID.randomUUID().toString());
       attachedFile.setOriginFilename(file.getOriginalFilename());
 
-      file.transferTo(new File(this.uploadDir + "/" + attachedFile.getFilename()));
+      try {
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentType(file.getContentType());
+
+        PutObjectRequest putObjectRequest = new PutObjectRequest(
+            bucketName,
+            folderName + attachedFile.getFilename(),
+            file.getInputStream(),
+            objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead);
+
+        s3.putObject(putObjectRequest);
+
+      } catch (Exception e) {
+        e.printStackTrace();
+        throw e;
+      }
 
       attachedFiles.add(attachedFile);
     }
