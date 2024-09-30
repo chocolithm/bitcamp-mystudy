@@ -1,58 +1,35 @@
 package bitcamp.myapp.controller;
 
 import bitcamp.myapp.service.BoardService;
+import bitcamp.myapp.service.StorageService;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.User;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.client.builder.AwsClientBuilder;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 @Controller
 public class BoardController {
 
-  private AmazonS3 s3;
-  @Value("${ncp.storage.bucketName}")
-  private String bucketName;
+  private BoardService boardService;
+  private StorageService storageService;
+
   private String folderName = "board/";
 
-  private BoardService boardService;
-  private String uploadDir;
-
-  public BoardController(
-      BoardService boardService,
-      ServletContext ctx,
-      @Value("${ncp.storage.endPoint}") String endPoint,
-      @Value("${ncp.storage.regionName}") String regionName,
-      @Value("${ncp.accessKey}") String accessKey,
-      @Value("${ncp.secretKey}") String secretKey) {
-
+  public BoardController(BoardService boardService, StorageService storageService) {
     this.boardService = boardService;
-    this.uploadDir = ctx.getRealPath("/upload/board");
-
-    s3 = AmazonS3ClientBuilder.standard()
-        .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
-        .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
-        .build();
+    this.storageService = storageService;
   }
 
   @GetMapping("/board/form")
@@ -83,22 +60,13 @@ public class BoardController {
       attachedFile.setFilename(UUID.randomUUID().toString());
       attachedFile.setOriginFilename(file.getOriginalFilename());
 
-      try {
-        ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentType(file.getContentType());
+      Map<String, Object> options = new HashMap<>();
+      options.put(StorageService.CONTENT_TYPE, file.getContentType());
 
-        PutObjectRequest putObjectRequest = new PutObjectRequest(
-            bucketName,
-            folderName + attachedFile.getFilename(),
-            file.getInputStream(),
-            objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead);
-
-        s3.putObject(putObjectRequest);
-
-      } catch (Exception e) {
-        e.printStackTrace();
-        throw e;
-      }
+      storageService.upload(
+          folderName + attachedFile.getFilename(),
+          file.getInputStream(),
+          options);
 
       attachedFiles.add(attachedFile);
     }
@@ -156,7 +124,13 @@ public class BoardController {
       attachedFile.setFilename(UUID.randomUUID().toString());
       attachedFile.setOriginFilename(part.getSubmittedFileName());
 
-      part.write(uploadDir + "/" + attachedFile.getFilename());
+      Map<String, Object> options = new HashMap<>();
+      options.put(StorageService.CONTENT_TYPE, part.getContentType());
+
+      storageService.upload(
+          folderName + attachedFile.getFilename(),
+          part.getInputStream(),
+          options);
 
       attachedFiles.add(attachedFile);
     }
@@ -182,9 +156,10 @@ public class BoardController {
     }
 
     for (AttachedFile attachedFile : board.getAttachedFiles()) {
-      File file = new File(uploadDir + "/" + attachedFile.getFilename());
-      if (file.exists()) {
-        file.delete();
+      try {
+        storageService.delete(folderName + attachedFile.getFilename());
+      } catch (Exception e) {
+        System.out.printf("%s 파일 삭제 실패\n", folderName + attachedFile.getFilename());
       }
     }
 
@@ -210,9 +185,10 @@ public class BoardController {
       throw new Exception("삭제 권한이 없습니다.");
     }
 
-    File file = new File(uploadDir + "/" + attachedFile.getFilename());
-    if (file.exists()) {
-      file.delete();
+    try {
+      storageService.delete(folderName + attachedFile.getFilename());
+    } catch (Exception e) {
+      System.out.printf("%s 파일 삭제 실패\n", folderName + attachedFile.getFilename());
     }
 
     boardService.deleteAttachedFile(fileNo);
