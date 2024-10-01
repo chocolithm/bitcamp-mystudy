@@ -18,7 +18,8 @@
     select
       user_id,
       name,
-      email
+      email,
+      photo
     from
       myapp_users
     order by

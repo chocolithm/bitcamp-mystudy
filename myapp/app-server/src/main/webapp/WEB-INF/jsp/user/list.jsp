@@ -21,7 +21,10 @@
         <c:forEach items="${list}" var="user">
             <tr>
                 <td>${user.no}</td>
-                <td><a href='view?no=${user.no}'>${user.name}</a></td>
+                <td>
+                    <img src="https://cjrh1g594938.edge.naverncp.com/gkjtZfNzjz/user/${user.photo == null ? 'default.png' : user.photo}?type=f&w=20&h=20&quality=90&align=4">
+                    <a href='view?no=${user.no}'>${user.name}</a>
+                </td>
                 <td>${user.email}</td>
             </tr>
         </c:forEach>

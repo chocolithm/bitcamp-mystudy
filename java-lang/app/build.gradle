@@ -8,6 +8,10 @@ repositories {
 }
 
 dependencies {
+    // https://mvnrepository.com/artifact/org.springframework/spring-context
+    implementation 'org.springframework:spring-context:5.3.39'
+
+
     // Oracle JDBC Driver
     implementation 'com.oracle.database.jdbc:ojdbc11:21.15.0.0'
     
@@ -27,6 +31,9 @@ dependencies {
     
     // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
     implementation 'org.apache.poi:poi-ooxml:5.3.0'
+    
+    // Spring IoC 컨테이너
+    implementation 'org.springframework:spring-context:5.3.39'
 }
 
 java {
