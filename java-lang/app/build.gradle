@@ -10,13 +10,15 @@ repositories {
 dependencies {
     // https://mvnrepository.com/artifact/org.springframework/spring-context
     implementation 'org.springframework:spring-context:5.3.39'
-
+    
+    // https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api
+    implementation 'javax.annotation:javax.annotation-api:1.3.2'
 
     // Oracle JDBC Driver
-    implementation 'com.oracle.database.jdbc:ojdbc11:21.15.0.0'
+    // implementation 'com.oracle.database.jdbc:ojdbc11:21.15.0.0'
     
     // MS-SQL (Microsoft SqlServer) JDBC Driver
-    implementation 'com.microsoft.sqlserver:mssql-jdbc:12.8.0.jre11'
+    // implementation 'com.microsoft.sqlserver:mssql-jdbc:12.8.0.jre11'
     
     // MySQL JDBC Driver
     implementation 'com.mysql:mysql-connector-j:8.4.0'
@@ -24,16 +26,13 @@ dependencies {
     // MariaDB JDBC Driver
     implementation 'org.mariadb.jdbc:mariadb-java-client:3.4.1'
     
-    implementation 'com.drewnoakes:metadata-extractor:2.19.0'
+    // implementation 'com.drewnoakes:metadata-extractor:2.19.0'
     testImplementation libs.junit.jupiter
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation libs.guava
     
     // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
     implementation 'org.apache.poi:poi-ooxml:5.3.0'
-    
-    // Spring IoC 컨테이너
-    implementation 'org.springframework:spring-context:5.3.39'
 }
 
 java {
