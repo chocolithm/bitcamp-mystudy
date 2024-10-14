@@ -23,7 +23,7 @@ dependencies {
 
     implementation libs.guava
     
-    implementation files('libs/my-library.jar')
+    // implementation files('libs/my-library.jar')
 }
 
 java {
