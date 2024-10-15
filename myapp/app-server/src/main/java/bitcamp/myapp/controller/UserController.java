@@ -12,9 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
+@RequestMapping("/user")
 public class UserController {
 
   private UserService userService;
@@ -27,12 +29,12 @@ public class UserController {
     this.storageService = storageService;
   }
 
-  @GetMapping("/user/form")
+  @GetMapping("form")
   public String form() {
     return "user/form";
   }
 
-  @PostMapping("/user/add")
+  @PostMapping("add")
   public String add(User user, MultipartFile file) throws Exception {
     String fileName = UUID.randomUUID().toString();
 
@@ -49,21 +51,21 @@ public class UserController {
     return "redirect:list";
   }
 
-  @GetMapping("/user/list")
+  @GetMapping("list")
   public String list(Model model) throws Exception {
     List<User> list = userService.list();
     model.addAttribute("list", list);
     return "user/list";
   }
 
-  @GetMapping("/user/view")
+  @GetMapping("view")
   public String view(int no, Model model) throws Exception {
     User user = userService.get(no);
     model.addAttribute("user", user);
     return "user/view";
   }
 
-  @PostMapping("/user/update")
+  @PostMapping("update")
   public String update(User user, MultipartFile file) throws Exception {
     User oldUser = userService.get(user.getNo());
 
@@ -92,7 +94,7 @@ public class UserController {
   }
 
   @Transactional
-  @GetMapping("/user/delete")
+  @GetMapping("delete")
   public String delete(int no) throws Exception {
     User user = userService.get(no);
 

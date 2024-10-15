@@ -14,12 +14,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 @Controller
+@RequestMapping("/board")
 public class BoardController {
 
   private BoardService boardService;
@@ -32,11 +34,11 @@ public class BoardController {
     this.storageService = storageService;
   }
 
-  @GetMapping("/board/form")
+  @GetMapping("form")
   public void form() {
   }
 
-  @PostMapping("/board/add")
+  @PostMapping("add")
   public String add(
       Board board,
       MultipartFile[] files,
@@ -77,13 +79,13 @@ public class BoardController {
     return "redirect:list";
   }
 
-  @GetMapping("/board/list")
+  @GetMapping("list")
   public void list(Model model) throws Exception {
     List<Board> list = boardService.list();
     model.addAttribute("list", list);
   }
 
-  @GetMapping("/board/view")
+  @GetMapping("view")
   public void view(int no, Model model) throws Exception {
     Board board = boardService.get(no);
     if (board == null) {
@@ -94,7 +96,7 @@ public class BoardController {
     model.addAttribute("board", board);
   }
 
-  @PostMapping("/board/update")
+  @PostMapping("update")
   public String update(
       int no,
       String title,
@@ -141,7 +143,7 @@ public class BoardController {
     return "redirect:list";
   }
 
-  @GetMapping("/board/delete")
+  @GetMapping("delete")
   public String delete(
       int no,
       HttpSession session) throws Exception {
@@ -167,7 +169,7 @@ public class BoardController {
     return "redirect:list";
   }
 
-  @GetMapping("/board/file/delete")
+  @GetMapping("file/delete")
   public String fileDelete(int fileNo, HttpSession session) throws Exception {
 
     User loginUser = (User) session.getAttribute("loginUser");
