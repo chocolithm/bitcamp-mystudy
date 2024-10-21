@@ -44,7 +44,9 @@
       myapp_boards b
       inner join myapp_users u on b.user_id = u.user_id
     order by
-      b.board_id asc
+      b.board_id desc
+    limit
+      #{rowNo}, #{length}
   </select>
 
   <insert id="insert" parameterType="board" useGeneratedKeys="true" keyColumn="board_id" keyProperty="no">
@@ -94,6 +96,10 @@
     where
       board_id= #{no}
   </update>
+
+  <select id="countAll" resultType="int">
+    select count(*) from myapp_boards
+  </select>
 
   <insert id="insertFiles" parameterType="board">
     insert into myapp_board_files(filename, origin_filename, board_id)

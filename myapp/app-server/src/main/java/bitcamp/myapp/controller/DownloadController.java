@@ -7,24 +7,21 @@ import bitcamp.myapp.vo.User;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpSession;
 
+@RequiredArgsConstructor
 @Controller
 public class DownloadController {
 
-  private BoardService boardService;
-  private StorageService storageService;
+  private final BoardService boardService;
+  private final StorageService storageService;
 
   private Map<String, String> downloadPathMap = new HashMap<>();
-
-  public DownloadController(BoardService boardService, StorageService storageService) {
-    this.boardService = boardService;
-    this.storageService = storageService;
-  }
 
   @GetMapping("/download")
   public HttpHeaders download(

@@ -32,6 +32,22 @@
         </c:forEach>
     </tbody>
 </table>
-
+[
+<c:if test="${pageNo > 1}">
+    <a href="list?pageNo=${pageNo - 1}&pageSize=${pageSize}">이전</a>
+</c:if>
+<c:if test="${pageNo <= 1}">
+    이전
+</c:if>
+]
+${pageNo}
+[
+<c:if test="${pageNo < pageCount}">
+    <a href="list?pageNo=${pageNo + 1}&pageSize=${pageSize}">다음</a>
+</c:if>
+<c:if test="${pageNo >= pageCount}">
+    다음
+</c:if>
+]
 </body>
 </html>

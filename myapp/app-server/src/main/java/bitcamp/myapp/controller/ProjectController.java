@@ -6,6 +6,7 @@ import bitcamp.myapp.vo.Project;
 import bitcamp.myapp.vo.User;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,18 +16,14 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/project")
 @SessionAttributes("project") // "project"로 model이나 map에 저장되는 객체가 있으면 session에도 저장하라
 public class ProjectController {
 
-  private UserService userService;
-  private ProjectService projectService;
-
-  public ProjectController(UserService userService, ProjectService projectService) {
-    this.userService = userService;
-    this.projectService = projectService;
-  }
+  private final UserService userService;
+  private final ProjectService projectService;
 
   @GetMapping("form1")
   public String form1() {

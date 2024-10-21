@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -18,19 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/users")
 public class UserController {
 
-  private UserService userService;
-  private StorageService storageService;
+  private final UserService userService;
+  private final StorageService storageService;
 
   private String folderName = "user/";
-
-  public UserController(UserService userService, StorageService storageService) {
-    this.userService = userService;
-    this.storageService = storageService;
-  }
 
   @GetMapping("form")
   public String form() {
