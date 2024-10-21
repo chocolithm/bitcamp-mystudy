@@ -3,8 +3,10 @@ package bitcamp.myapp.dao;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
 import java.util.List;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+@Mapper
 public interface BoardDao {
   boolean insert(Board board) throws Exception;
 

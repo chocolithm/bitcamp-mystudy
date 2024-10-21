@@ -3,8 +3,10 @@ package bitcamp.myapp.dao;
 import bitcamp.myapp.vo.Project;
 import bitcamp.myapp.vo.User;
 import java.util.List;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+@Mapper
 public interface ProjectDao {
   boolean insert(Project project) throws Exception;
 

@@ -20,9 +20,9 @@
 
   <nav>
     <ul>
-      <li class='btn btn-default'><a href='/app/user/list'>회원</a></li>
-      <li class='btn btn-default'><a href='/app/project/list'>프로젝트</a></li>
-      <li class='btn btn-default'><a href='/app/board/list'>게시글</a></li>
+      <li class='btn btn-default'><a href='/users'>회원</a></li>
+      <li class='btn btn-default'><a href='/project/list'>프로젝트</a></li>
+      <li class='btn btn-default'><a href='/board/list'>게시글</a></li>
     </ul>
   </nav>
 
@@ -31,10 +31,10 @@
 User loginUser = (User) ((HttpServletRequest) request).getSession().getAttribute("loginUser");
 if (loginUser == null) {
 %>
-    <a class='btn btn-primary' href='/app/auth/form'>로그인</a>
+    <a class='btn btn-primary' href='/auth/form'>로그인</a>
 <% } else { %>
-    <a class='btn btn-light' href='/app/user/view?no=<%=loginUser.getNo()%>'><%=loginUser.getName()%></a>
-    <a class='btn btn-secondary' href='/app/auth/logout'>로그아웃</a>
+    <a class='btn btn-light' href='/users/<%=loginUser.getNo()%>'><%=loginUser.getName()%></a>
+    <a class='btn btn-secondary' href='/auth/logout'>로그아웃</a>
 <% } %>
 
    </div>

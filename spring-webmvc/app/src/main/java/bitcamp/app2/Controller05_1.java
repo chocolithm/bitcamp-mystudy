@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 @RequestMapping("/c05_1")
@@ -52,8 +52,9 @@ public class Controller05_1 {
   //   http://.../app2/c05_1/h2
   @GetMapping(value="h2", produces="text/plain;charset=UTF-8")
   @ResponseBody
-  public String handler2() {
-    return new Gson().toJson(this.list);
+  public String handler2() throws Exception {
+    //return new Gson().toJson(this.list);
+    return new ObjectMapper().writeValueAsString(this.list);
   }
 
 
