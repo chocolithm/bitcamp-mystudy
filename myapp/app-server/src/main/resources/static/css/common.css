@@ -1,28 +1,58 @@
-/* header */
 header {
-    border2: 1px solid red;
+    border-bottom: 1px solid gray;
     position: relative;
 }
 
-header > h1 {
+header img {
+    height: 20px;
+    vertical-align: middle;
+}
+
+table {
+    border-collapse: separate;
+    /* 테두리 사이에 여백을 허용 */
+    border-spacing: 2px;
+    /* 셀 사이의 여백을 설정 */
+}
+
+/* 테이블 경계선 스타일 */
+table,
+th,
+td {
+    border: 1px solid black;
+    /* 테두리 두께와 색상 설정 */
+}
+
+th {
+    background-color: #c2c2c2;
+    /* 헤더 배경색 설정 (선택적) */
+    padding: 5px;
+    /* 셀 안의 여백 설정 */
+}
+
+td {
+    padding: 5px;
+}
+
+header {
+    border2: 1px solid red;
+}
+
+header>h1 {
     border2: 1px solid red;
     display: inline;
     font-size: 14px;
 }
 
-header img {
-    vertical-align: middle;
-    height: 20px;
-}
-
-header > nav {
+header>nav {
     border2: 1px solid red;
     display: inline;
 }
 
-header > nav > ul {
-    list-style-type: none;
+header>nav>ul {
+    border2: 1px solid black;
     display: inline;
+    list-style-type: none;
 }
 
 header li {
@@ -51,7 +81,7 @@ header a {
 }
 
 .btn-default {
-    background-color: darkgrey;
+    background-color: DarkGray;
 }
 
 .btn-light {
@@ -75,24 +105,4 @@ header a {
 
 .login-state {
     display: inline;
-}
-
-
-/* table */
-table {
-    border-collapse: separate;
-    border-spacing: 2px;
-}
-
-table, tr, td {
-    border: 1px solid black;
-}
-
-th {
-    background-color: #c2c2c2;
-    padding: 5px;
-}
-
-td {
-    padding: 5px;
 }

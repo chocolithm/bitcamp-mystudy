@@ -12,4 +12,5 @@ public interface StorageService {
   void delete(String filePath) throws Exception;
 
   void download(String filePath, OutputStream out) throws Exception;
+
 }

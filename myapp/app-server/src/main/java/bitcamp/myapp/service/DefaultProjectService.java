@@ -2,10 +2,11 @@ package bitcamp.myapp.service;
 
 import bitcamp.myapp.dao.ProjectDao;
 import bitcamp.myapp.vo.Project;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -16,7 +17,8 @@ public class DefaultProjectService implements ProjectService {
   @Transactional
   public void add(Project project) throws Exception {
     projectDao.insert(project);
-    if (project.getMembers() != null && !project.getMembers().isEmpty()) {
+
+    if (project.getMembers() != null && project.getMembers().size() > 0) {
       projectDao.insertMembers(project.getNo(), project.getMembers());
     }
   }
@@ -45,6 +47,9 @@ public class DefaultProjectService implements ProjectService {
   @Transactional
   public boolean delete(int projectNo) throws Exception {
     projectDao.deleteMembers(projectNo);
-    return projectDao.delete(projectNo);
+    if (!projectDao.delete(projectNo)) {
+      return false;
+    }
+    return true;
   }
 }

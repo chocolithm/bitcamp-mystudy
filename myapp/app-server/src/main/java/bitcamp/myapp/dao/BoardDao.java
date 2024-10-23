@@ -2,13 +2,15 @@ package bitcamp.myapp.dao;
 
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
-import java.util.List;
-import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+import java.util.Map;
+
 @Mapper
 public interface BoardDao {
+
   boolean insert(Board board) throws Exception;
 
   List<Board> list(Map<String, Object> options) throws Exception;

@@ -13,12 +13,12 @@ public class AdminInterceptor implements HandlerInterceptor {
     HttpSession session = request.getSession();
     User loginUser = (User) session.getAttribute("loginUser");
     if (loginUser == null) {
-      response.sendRedirect("/auth/form");
+      response.sendRedirect("/app/auth/form");
       return false;
     }
 
-    if (loginUser.getNo() > 10) {
-      throw new Exception("관리자 권한 필요");
+    if (!loginUser.getName().equals("admin")) {
+      throw new Exception("관리자 권한이 필요합니다.");
     }
 
     return true;

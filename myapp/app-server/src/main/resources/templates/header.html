@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head data-th-fragment="head">
+    <meta charset='UTF-8'>
+    <title>Title</title>
+    <link href='/css/common.css' rel='stylesheet'>
+</head>
+<body>
+
+<header id="page-header">
+  <a href='/'><img src='/images/home.png'></a>
+  <h1>프로젝트 관리 시스템</h1>
+  <nav>
+    <ul>
+      <li class='btn btn-default'><a href='/users'>회원</a></li>
+      <li class='btn btn-default'><a href='/project/list'>프로젝트</a></li>
+      <li class='btn btn-default'><a href='/board/list'>게시글</a></li>
+    </ul>
+  </nav>
+  <div class='login-state pos-right'
+       data-th-if="${session.loginUser} == null">
+    <a class='btn btn-primary' href='/auth/form'>로그인</a>
+  </div>
+  <div class='login-state pos-right'
+       data-th-unless="${session.loginUser} == null">
+    <a class='btn btn-light'
+       data-th-href="@{/users/myInfo}"
+       data-th-text="${session.loginUser.name}"
+       href="/home.html">홍길동</a>
+    <a class='btn btn-secondary' href='/auth/logout'>로그아웃</a>
+  </div>
+
+</header>
+
+</body>
+</html>

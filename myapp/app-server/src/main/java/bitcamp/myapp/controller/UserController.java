@@ -3,21 +3,17 @@ package bitcamp.myapp.controller;
 import bitcamp.myapp.service.StorageService;
 import bitcamp.myapp.service.UserService;
 import bitcamp.myapp.vo.User;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Controller
@@ -36,17 +32,18 @@ public class UserController {
 
   @PostMapping
   public String add(User user, MultipartFile file) throws Exception {
-    String fileName = UUID.randomUUID().toString();
 
-    Map<String, Object> options = new HashMap<>();
+    // 클라이언트가 보낸 파일을 저장할 때 다른 파일 이름과 충돌나지 않도록 임의의 새 파일 이름을 생성한다.
+    String filename = UUID.randomUUID().toString();
+
+    HashMap<String, Object> options = new HashMap<>();
     options.put(StorageService.CONTENT_TYPE, file.getContentType());
+    storageService.upload(folderName + filename,
+            file.getInputStream(),
+            options);
 
-    storageService.upload(
-        folderName + fileName,
-        file.getInputStream(),
-        options);
+    user.setPhoto(filename); // DB에 저장할 사진 파일 이름 설정
 
-    user.setPhoto(fileName);
     userService.add(user);
     return "redirect:../users";
   }
@@ -60,55 +57,69 @@ public class UserController {
 
   @GetMapping("{no}")
   public String view(
-      @PathVariable int no,
-      Model model) throws Exception {
+          @PathVariable int no,
+          Model model) throws Exception {
     User user = userService.get(no);
+    model.addAttribute("user", user);
+    return "user/view";
+  }
+
+  @GetMapping("myInfo")
+  public String myInfo(
+          HttpSession session,
+          Model model) throws Exception {
+    User loginUser = (User) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      throw new Exception("로그인이 필요합니다.");
+    }
+    User user = userService.get(loginUser.getNo());
     model.addAttribute("user", user);
     return "user/view";
   }
 
   @PostMapping("{no}")
   public String update(
-      @PathVariable int no,
-      User user,
-      MultipartFile file) throws Exception {
+          @PathVariable int no,
+          User user,
+          MultipartFile file) throws Exception {
 
     user.setNo(no);
-    User oldUser = userService.get(no);
+
+    User old = userService.get(no);
 
     if (file != null && file.getSize() > 0) {
-      storageService.delete(folderName + oldUser.getPhoto());
+      storageService.delete(folderName + old.getPhoto());
 
-      String fileName = UUID.randomUUID().toString();
-      Map<String, Object> options = new HashMap<>();
+      String filename = UUID.randomUUID().toString();
+      HashMap<String, Object> options = new HashMap<>();
       options.put(StorageService.CONTENT_TYPE, file.getContentType());
+      storageService.upload(folderName + filename,
+              file.getInputStream(),
+              options);
 
-      storageService.upload(
-          folderName + fileName,
-          file.getInputStream(),
-          options);
+      user.setPhoto(filename);
 
-      user.setPhoto(fileName);
     } else {
-      user.setPhoto(oldUser.getPhoto());
+      user.setPhoto(old.getPhoto());
     }
 
     if (userService.update(user)) {
       return "redirect:../users";
     } else {
-      throw new Exception("없는 회원입니다.");
+      throw new Exception("없는 회원입니다!");
     }
   }
 
   @Transactional
-  @DeleteMapping({"no"})
+  @DeleteMapping("{no}")
   @ResponseBody
   public String delete(
-      @PathVariable int no) throws Exception {
-    User user = userService.get(no);
+          @PathVariable int no) throws Exception {
+
+    User old = userService.get(no);
 
     if (userService.delete(no)) {
-      storageService.delete(folderName + user.getPhoto());
+      storageService.delete(folderName + old.getPhoto());
       return "success";
     } else {
       return "failure";

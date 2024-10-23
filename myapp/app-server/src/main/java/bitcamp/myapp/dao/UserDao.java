@@ -1,12 +1,14 @@
 package bitcamp.myapp.dao;
 
 import bitcamp.myapp.vo.User;
-import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @Mapper
 public interface UserDao {
+
   boolean insert(User user) throws Exception;
 
   List<User> list() throws Exception;
@@ -18,4 +20,5 @@ public interface UserDao {
   boolean update(User user) throws Exception;
 
   boolean delete(int no) throws Exception;
+
 }

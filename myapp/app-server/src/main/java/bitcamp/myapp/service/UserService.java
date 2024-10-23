@@ -1,6 +1,7 @@
 package bitcamp.myapp.service;
 
 import bitcamp.myapp.vo.User;
+
 import java.util.List;
 
 public interface UserService {

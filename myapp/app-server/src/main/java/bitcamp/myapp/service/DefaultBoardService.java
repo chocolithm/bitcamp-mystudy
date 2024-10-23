@@ -3,20 +3,22 @@ package bitcamp.myapp.service;
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
 public class DefaultBoardService implements BoardService {
 
   private final BoardDao boardDao;
+  private final PlatformTransactionManager txManager;
 
-  @Transactional // 에러가 뜨면 롤백
+  @Transactional
   public void add(Board board) throws Exception {
     boardDao.insert(board);
     if (board.getAttachedFiles().size() > 0) {
@@ -26,8 +28,7 @@ public class DefaultBoardService implements BoardService {
 
   public List<Board> list(int pageNo, int pageSize) throws Exception {
 
-
-    Map<String, Object> options = new HashMap<>();
+    HashMap<String, Object> options = new HashMap<>();
     options.put("rowNo", (pageNo - 1) * pageSize);
     options.put("length", pageSize);
 
@@ -52,14 +53,14 @@ public class DefaultBoardService implements BoardService {
 
   @Transactional
   public boolean update(Board board) throws Exception {
-    if (boardDao.update(board)) {
-      if (board.getAttachedFiles().size() > 0) {
-        boardDao.insertFiles(board);
-      }
-      return true;
-    } else {
+    if (!boardDao.update(board)) {
       return false;
     }
+
+    if (board.getAttachedFiles().size() > 0) {
+      boardDao.insertFiles(board);
+    }
+    return true;
   }
 
   @Transactional
@@ -74,6 +75,9 @@ public class DefaultBoardService implements BoardService {
 
   @Transactional
   public boolean deleteAttachedFile(int fileNo) throws Exception {
-    return boardDao.deleteFile(fileNo);
+    if (!boardDao.deleteFile(fileNo)) {
+      return false;
+    }
+    return true;
   }
 }

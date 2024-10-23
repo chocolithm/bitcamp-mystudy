@@ -4,15 +4,13 @@ import bitcamp.myapp.service.BoardService;
 import bitcamp.myapp.service.StorageService;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.User;
-import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpSession;
+import java.io.OutputStream;
 
 @RequiredArgsConstructor
 @Controller
@@ -21,14 +19,12 @@ public class DownloadController {
   private final BoardService boardService;
   private final StorageService storageService;
 
-  private Map<String, String> downloadPathMap = new HashMap<>();
-
   @GetMapping("/download")
   public HttpHeaders download(
-      String path,
-      int fileNo,
-      HttpSession session,
-      OutputStream out) throws Exception {
+          String path,
+          int fileNo,
+          HttpSession session,
+          OutputStream out) throws Exception {
 
     HttpHeaders headers = new HttpHeaders();
 
@@ -39,13 +35,13 @@ public class DownloadController {
 
     AttachedFile attachedFile = boardService.getAttachedFile(fileNo);
 
-    headers.add(
-        "Content-Disposition",
-        String.format("attachment; filename=\"%s\"", attachedFile.getOriginFilename())
+    headers.add("Content-Disposition",
+            String.format("attachment; filename=\"%s\"", attachedFile.getOriginFilename())
     );
 
     storageService.download(path + "/" + attachedFile.getFilename(), out);
 
     return headers;
   }
+
 }

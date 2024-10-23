@@ -19,9 +19,8 @@ public class ServerApp implements WebMvcConfigurer {
   ApplicationContext appCtx;
 
   public ServerApp() {
-
     // AWS 경고 메시지 로깅 비활성화
-    System.setProperty("aws.java.v1.disableDeprecationAnnouncement", "true");
+    System.getProperties().setProperty("aws.java.v1.disableDeprecationAnnouncement", "true");
   }
 
   public static void main(String[] args) {
@@ -30,8 +29,7 @@ public class ServerApp implements WebMvcConfigurer {
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
-    registry
-        .addInterceptor(new AdminInterceptor())
-        .addPathPatterns("/users*");
+    registry.addInterceptor(new AdminInterceptor())
+            .addPathPatterns("/users*");
   }
 }

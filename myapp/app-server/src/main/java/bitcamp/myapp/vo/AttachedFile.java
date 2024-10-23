@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class AttachedFile {
+
   private int fileNo;
   private String filename;
   private String originFilename;
